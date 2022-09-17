@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.C12RewardRecordDao">
+
+    <resultMap id="c12RewardRecordResultMap" type="com.youqiancheng.mybatis.model.C12RewardRecordDO">
+        <id column="id" property="id"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="user_id" property="userId"/>
+        <result column="money" property="money"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="status" property="status"/>
+        <result column="pay_type" property="payType"/>
+        <result column="pay_no" property="payNo"/>
+
+
+
+    </resultMap>
+
+    <sql id="c12RewardRecordColumns">
+        c12_reward_record.id AS "id",
+        c12_reward_record.shop_id AS "shopId",
+        c12_reward_record.user_id AS "userId",
+        c12_reward_record.money AS "money",
+        c12_reward_record.create_person AS "createPerson",
+        c12_reward_record.create_time AS "createTime",
+        c12_reward_record.update_person AS "updatePerson",
+        c12_reward_record.update_time AS "updateTime",
+        c12_reward_record.status AS "status",
+        c12_reward_record.pay_type AS "payType",
+        c12_reward_record.pay_no AS "payNo",
+        c12_reward_record.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="c12RewardRecordJoins">
+
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.C12RewardRecordDO">
+        SELECT
+        <include refid="c12RewardRecordColumns" />
+        FROM c12_reward_record <include refid="c12RewardRecordJoins" />
+        <where>
+        c12_reward_record.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.C12RewardRecordDO">
+        SELECT
+        <include refid="c12RewardRecordColumns" />
+        FROM c12_reward_record <include refid="c12RewardRecordJoins" />
+        <where>
+                    <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='money!= null and money !=""'> and money = #{money} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='status!= null    '> and status = #{status} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='payType!= null and payType !=""'> and pay_type = #{payType} </if>
+        <if test='payNo!= null and payNo !=""'> and pay_no = #{payNo} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.C12RewardRecordDO">
+        SELECT
+        c.*,b.pic as userLogo,b.nick,b.mobile
+        FROM c12_reward_record  c
+        left join b01_user b on b.id=c.user_id
+        <where>
+        <if test='shopId!= null and shopId !=""'> and c.shop_id = #{shopId} </if>
+        <if test='userId!= null and userId !=""'> and c.user_id = #{userId} </if>
+        <if test='money!= null and money !=""'> and c.money = #{money} </if>
+        <if test='createPerson!= null and createPerson !=""'> and c.create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and c.create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and c.update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and c.update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and c.delete_flag = #{deleteFlag} </if>
+        <if test='status!= null and status !=""'> and c.status = #{status} </if>
+        <if test='payType!= null and payType !=""'> and c.pay_type = #{payType} </if>
+        <if test='payNo!= null and payNo !=""'> and c.pay_no = #{payNo} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from c12_reward_record
+        <where>
+                    <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='money!= null and money !=""'> and money = #{money} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='payType!= null and payType !=""'> and pay_type = #{payType} </if>
+        <if test='payNo!= null and payNo !=""'> and pay_no = #{payNo} </if>
+        </where>
+    </select>
+
+
+
+    <insert id="insertBatch">
+        INSERT INTO c12_reward_record(
+                        shop_id,
+            user_id,
+            money,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+        status,
+        pay_type,
+        pay_no,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="c12RewardRecord" separator =",">
+        (
+                        #{c12RewardRecord.shopId},
+            #{c12RewardRecord.userId},
+            #{c12RewardRecord.money},
+            #{c12RewardRecord.createPerson},
+            #{c12RewardRecord.createTime},
+            #{c12RewardRecord.updatePerson},
+            #{c12RewardRecord.updateTime},
+            #{c12RewardRecord.status},
+            #{c12RewardRecord.payType},
+            #{c12RewardRecord.payNo},
+            #{c12RewardRecord.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE c12_reward_record
+            <set>
+                        <if test='item.shopId !=null and item.shopId !=""' >shop_id = #{item.shopId},</if>
+        <if test='item.userId !=null and item.userId !=""' >user_id = #{item.userId},</if>
+        <if test='item.money !=null and item.money !=""' >money = #{item.money},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null      ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null       ' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+        <if test='item.status !=null and item.status !=""' >status = #{item.status},</if>
+        <if test='item.payType !=null and item.payType !=""' >pay_type = #{item.payType},</if>
+        <if test='item.payNo !=null and item.payNo !=""' >pay_no = #{item.payNo},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE c12_reward_record
+        <set>
+                    <if test='shopId !=null and shopId !=""' >shop_id = #{shopId},</if>
+        <if test='userId !=null and userId !=""' >user_id = #{userId},</if>
+        <if test='money !=null and money !=""' >money = #{money},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        <if test='status !=null and status !=""' >status = #{status},</if>
+        <if test='payType !=null and payType !=""' >pay_type = #{payType},</if>
+        <if test='payNo !=null and payNo !=""' >pay_no = #{payNo},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

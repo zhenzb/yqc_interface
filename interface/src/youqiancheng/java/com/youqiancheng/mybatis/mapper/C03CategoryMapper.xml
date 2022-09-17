@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.C03CategoryDao">
+
+    <resultMap id="c03CategoryResultMap" type="com.youqiancheng.mybatis.model.C03CategoryDO">
+        <id column="id" property="id"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="name" property="name"/>
+        <result column="url" property="url"/>
+        <result column="order_num" property="orderNum"/>
+        <result column="status" property="status"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+
+
+
+    </resultMap>
+
+    <sql id="c03CategoryColumns">
+        c03_category.id AS "id",
+        c03_category.parent_id AS "parentId",
+        c03_category.name AS "name",
+        c03_category.url AS "url",
+        c03_category.order_num AS "orderNum",
+        c03_category.status AS "status",
+        c03_category.create_person AS "createPerson",
+        c03_category.create_time AS "createTime",
+        c03_category.update_person AS "updatePerson",
+        c03_category.update_time AS "updateTime",
+        c03_category.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="c03CategoryJoins">
+
+    </sql>
+
+<!--    <select id="get" resultType="com.youqiancheng.mybatis.model.C03CategoryDO">
+        SELECT
+        <include refid="c03CategoryColumns" />
+        FROM c03_category <include refid="c03CategoryJoins" />
+        <where>
+        c03_category.id = #{id}
+        </where>
+    </select>-->
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.C03CategoryDO">
+        SELECT
+        <include refid="c03CategoryColumns" />
+        FROM c03_category <include refid="c03CategoryJoins" />
+        <where>
+                    <if test='parentId!= null and parentId !=""'> and parent_id = #{parentId} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='url!= null and url !=""'> and url = #{url} </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by orderNum ASC
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.C03CategoryDO">
+        SELECT
+        <include refid="c03CategoryColumns" />
+        FROM c03_category <include refid="c03CategoryJoins" />
+        <where>
+            <if test='parentId!= null and parentId !=""'> and parent_id = #{parentId} </if>
+            <if test='name!= null and name !=""'> and name = #{name} </if>
+            <if test='url!= null and url !=""'> and url = #{url} </if>
+            <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+            and status != 2
+            <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+            <if test='createTime!= null   '> and create_time = #{createTime} </if>
+            <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+            <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+            <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by  order_num asc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="listFirst" resultType="com.youqiancheng.mybatis.model.C03CategoryDO">
+     SELECT * from
+         c03_category where  c03_category.parent_id=0 and delete_flag=1 order by  c03_category.id asc
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from c03_category
+        <where>
+                    <if test='parentId!= null and parentId !=""'> and parent_id = #{parentId} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='url!= null and url !=""'> and url = #{url} </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+    </select>
+    <select id="findC03CategoryDOByName" resultType="com.youqiancheng.mybatis.model.C03CategoryDO">
+        select * from   c03_category where name = #{name}
+    </select>
+
+
+    <insert id="insertBatch">
+        INSERT INTO c03_category(
+                        parent_id,
+            name,
+            url,
+            order_num,
+            status,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="c03Category" separator =",">
+        (
+                        #{c03Category.parentId},
+            #{c03Category.name},
+            #{c03Category.url},
+            #{c03Category.orderNum},
+            #{c03Category.status},
+            #{c03Category.createPerson},
+            #{c03Category.createTime},
+            #{c03Category.updatePerson},
+            #{c03Category.updateTime},
+            #{c03Category.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE c03_category
+            <set>
+                        <if test='item.parentId !=null and item.parentId !=""' >parent_id = #{item.parentId},</if>
+        <if test='item.name !=null and item.name !=""' >name = #{item.name},</if>
+        <if test='item.url !=null and item.url !=""' >url = #{item.url},</if>
+        <if test='item.orderNum !=null and item.orderNum !=""' >order_num = #{item.orderNum},</if>
+        <if test='item.status !=null and item.status !=""' >status = #{item.status},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null      ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null       ' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE c03_category
+        <set>
+                    <if test='parentId !=null and parentId !=""' >parent_id = #{parentId},</if>
+        <if test='name !=null and name !=""' >name = #{name},</if>
+        <if test='url !=null and url !=""' >url = #{url},</if>
+        <if test='orderNum !=null and orderNum !=""' >order_num = #{orderNum},</if>
+        <if test='status !=null and status !=""' >status = #{status},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

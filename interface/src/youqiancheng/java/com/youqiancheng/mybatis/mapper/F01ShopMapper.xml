@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.F01ShopDao">
+
+    <resultMap id="f01ShopResultMap" type="com.youqiancheng.mybatis.model.F01ShopDO">
+        <id column="id" property="id"/>
+        <result column="type" property="type"/>
+        <result column="main_project" property="mainProject"/>
+        <result column="project_name" property="projectName"/>
+        <result column="country_id" property="countryId"/>
+        <result column="country_name" property="countryName"/>
+        <result column="province_code" property="provinceCode"/>
+        <result column="city_code" property="cityCode"/>
+        <result column="area_code" property="areaCode"/>
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="area" property="area"/>
+        <result column="address" property="address"/>
+        <result column="longitude" property="longitude"/>
+        <result column="latitude" property="latitude"/>
+        <result column="name" property="name"/>
+        <result column="browse_volume" property="browseVolume"/>
+        <result column="contacts" property="contacts"/>
+        <result column="phone" property="phone"/>
+        <result column="logo" property="logo"/>
+        <result column="shop_desc" property="shopDesc"/>
+        <result column="order_num" property="orderNum"/>
+        <result column="examine_status" property="examineStatus"/>
+        <result column="examine_time" property="examineTime"/>
+        <result column="status" property="status"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="user_id" property="userId"/>
+        <result column="collection_volume" property="collectionVolume"/>
+        <result column="hide" property="hide"/>
+        <result column="reason" property="hide"/>
+        <result column="alipay_url" property="alipayUrl"/>
+        <result column="wechat_url" property="wechatUrl"/>
+
+
+
+    </resultMap>
+
+    <sql id="f01ShopColumns">
+        f01_shop.id AS "id",
+        f01_shop.type AS "type",
+        f01_shop.main_project AS "mainProject",
+        f01_shop.project_name AS "projectName",
+        f01_shop.country_id AS "countryId",
+        f01_shop.country_name AS "countryName",
+        f01_shop.province_code AS "provinceCode",
+        f01_shop.province AS "province",
+        f01_shop.city_code AS "cityCode",
+        f01_shop.city AS "city",
+        f01_shop.area_code AS "areaCode",
+        f01_shop.area AS "area",
+        f01_shop.address AS "address",
+        f01_shop.longitude AS "longitude",
+        f01_shop.latitude AS "latitude",
+        f01_shop.name AS "name",
+        f01_shop.browse_volume AS "browseVolume",
+        f01_shop.contacts AS "contacts",
+        f01_shop.phone AS "phone",
+        f01_shop.hide AS "hide",
+        f01_shop.reason AS "reason",
+        f01_shop.logo AS "logo",
+        f01_shop.shop_desc AS "shopDesc",
+        f01_shop.order_num AS "orderNum",
+        f01_shop.examine_status AS "examineStatus",
+        f01_shop.examine_time AS "examineTime",
+        f01_shop.status AS "status",
+        f01_shop.create_person AS "createPerson",
+        f01_shop.create_time AS "createTime",
+        f01_shop.update_person AS "updatePerson",
+        f01_shop.update_time AS "updateTime",
+        f01_shop.user_id AS "userId",
+        f01_shop.collection_volume AS "collectionVolume",
+        f01_shop.alipay_url AS "alipayUrl",
+        f01_shop.wechat_url AS "wechatUrl",
+        f01_shop.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="f01ShopJoins">
+
+    </sql>
+
+    <!--  统计本日新增数据  to_days -->
+    <select id="selectForDay" resultType="java.lang.Long">
+        select count(*) from f01_shop where to_days(create_time) = to_days(now());
+    </select>
+    <!--  统计本月新增数据  YEARWEEK -->
+    <select id="selectForMonth" resultType="java.lang.Long">
+--         SELECT count(*) FROM f01_shop WHERE YEARWEEK(create_time) = YEARWEEK(now());
+        select count(*) from f01_shop where date_format( create_time, '%y%m' ) = date_format( curdate( ) , '%y%m' )
+    </select>
+    <!--  统计所有数量 -->
+    <select id="selectForAll" resultType="java.lang.Long">
+        SELECT count(*) FROM f01_shop
+    </select>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.F01ShopDO">
+        SELECT
+        <include refid="f01ShopColumns" />
+        FROM f01_shop <include refid="f01ShopJoins" />
+        <where>
+        f01_shop.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.F01ShopDO">
+        SELECT
+        <include refid="f01ShopColumns" />
+        FROM f01_shop <include refid="f01ShopJoins" />
+        <where>
+                    <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='mainProject!= null and mainProject !=""'> and main_project = #{mainProject} </if>
+        <if test='reason!= null and reason !=""'> and reason = #{reason} </if>
+        <if test='hide!= null and hide !=""'> and hide = #{hide} </if>
+        <if test='projectName!= null and projectName !=""'> and project_name = #{projectName} </if>
+        <if test='countryId!= null and countryId !=""'> and country_id = #{countryId} </if>
+        <if test='countryName!= null and countryName !=""'> and country_name = #{countryName} </if>
+        <if test='province!= null and province !=""'> and province = #{province} </if>
+        <if test='provinceCode!= null and provinceCode !=""'> and province_code = #{provinceCode} </if>
+        <if test='cityCode!= null and cityCode !=""'> and city_code = #{cityCode} </if>
+        <if test='city!= null and city !=""'> and city = #{city} </if>
+        <if test='areaCode!= null and areaCode !=""'> and area_code = #{areaCode} </if>
+        <if test='area!= null and area !=""'> and area = #{area} </if>
+        <if test='address!= null and address !=""'> and address = #{address} </if>
+        <if test='longitude!= null and longitude !=""'> and longitude = #{longitude} </if>
+        <if test='latitude!= null and latitude !=""'> and latitude = #{latitude} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='browseVolume!= null and browseVolume !=""'> and browse_volume = #{browseVolume} </if>
+        <if test='contacts!= null and contacts !=""'> and contacts = #{contacts} </if>
+        <if test='phone!= null and phone !=""'> and phone = #{phone} </if>
+        <if test='logo!= null and logo !=""'> and logo = #{logo} </if>
+        <if test='shopDesc!= null and shopDesc !=""'> and shop_desc = #{shopDesc} </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='examineStatus!= null and examineStatus !=""'> and examine_status = #{examineStatus} </if>
+        <if test='examineTime!= null '> and examine_time = #{examineTime} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null  '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null  '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='collectionVolume!= null and collectionVolume !=""'> and collection_volume = #{collectionVolume} </if>
+        <if test='alipayUrl!= null and alipayUrl !=""'> and alipay_url = #{alipayUrl} </if>
+        <if test='wechatUrl!= null and wechatUrl !=""'> and wechat_url = #{wechatUrl} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.F01ShopDO">
+        SELECT
+        <include refid="f01ShopColumns" />
+        FROM f01_shop <include refid="f01ShopJoins" />
+        <where>
+                    <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='mainProject!= null and mainProject !=""'> and main_project = #{mainProject} </if>
+        <if test='hide!= null and hide !=""'> and hide = #{hide} </if>
+        <if test='reason!= null and reason !=""'> and reason = #{reason} </if>
+        <if test='projectName!= null and projectName !=""'> and project_name = #{projectName} </if>
+        <if test='countryId!= null and countryId !=""'> and country_id = #{countryId} </if>
+        <if test='countryName!= null and countryName !=""'> and country_name = #{countryName} </if>
+        <if test='provinceCode!= null and provinceCode !=""'> and province_code = #{provinceCode} </if>
+        <if test='province!= null and province !=""'> and province = #{province} </if>
+        <if test='cityCode!= null and cityCode !=""'> and city_code = #{cityCode} </if>
+        <if test='city!= null and city !=""'> and city = #{city} </if>
+        <if test='areaCode!= null and areaCode !=""'> and area_code = #{areaCode} </if>
+        <if test='area!= null and area !=""'> and area = #{area} </if>
+        <if test='address!= null and address !=""'> and address = #{address} </if>
+        <if test='longitude!= null and longitude !=""'> and longitude = #{longitude} </if>
+        <if test='latitude!= null and latitude !=""'> and latitude = #{latitude} </if>
+        <if test='name!= null and name !=""'> and name like CONCAT('%',#{name},'%') </if>
+        <if test='browseVolume!= null and browseVolume !=""'> and browse_volume = #{browseVolume} </if>
+        <if test='contacts!= null and contacts !=""'> and contacts = #{contacts} </if>
+        <if test='phone!= null and phone !=""'> and phone = #{phone} </if>
+        <if test='logo!= null and logo !=""'> and logo = #{logo} </if>
+        <if test='shopDesc!= null and shopDesc !=""'> and shop_desc = #{shopDesc} </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='examineStatus!= null and examineStatus !=""'> and examine_status = #{examineStatus} </if>
+        <if test='examineTime!= null  '> and examine_time = #{examineTime} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null  '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='collectionVolume!= null and collectionVolume !=""'> and collection_volume = #{collectionVolume} </if>
+        <if test='updateTime!= null  '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='alipayUrl!= null and alipayUrl !=""'> and alipay_url = #{alipayUrl} </if>
+        <if test='wechatUrl!= null and wechatUrl !=""'> and wechat_url = #{wechatUrl} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from f01_shop
+        <where>
+                    <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='mainProject!= null and mainProject !=""'> and main_project = #{mainProject} </if>
+        <if test='reason!= null and reason !=""'> and reason = #{reason} </if>
+        <if test='hide!= null and hide !=""'> and hide = #{hide} </if>
+        <if test='projectName!= null and projectName !=""'> and project_name = #{projectName} </if>
+        <if test='countryId!= null and countryId !=""'> and country_id = #{countryId} </if>
+        <if test='countryName!= null and countryName !=""'> and country_name = #{countryName} </if>
+        <if test='provinceCode!= null and provinceCode !=""'> and province_code = #{provinceCode} </if>
+        <if test='province!= null and province !=""'> and province = #{province} </if>
+        <if test='cityCode!= null and cityCode !=""'> and city_code = #{cityCode} </if>
+        <if test='city!= null and city !=""'> and city = #{city} </if>
+        <if test='areaCode!= null and areaCode !=""'> and area_code = #{areaCode} </if>
+        <if test='area!= null and area !=""'> and area = #{area} </if>
+        <if test='address!= null and address !=""'> and address = #{address} </if>
+        <if test='longitude!= null and longitude !=""'> and longitude = #{longitude} </if>
+        <if test='latitude!= null and latitude !=""'> and latitude = #{latitude} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='browseVolume!= null and browseVolume !=""'> and browse_volume = #{browseVolume} </if>
+        <if test='contacts!= null and contacts !=""'> and contacts = #{contacts} </if>
+        <if test='phone!= null and phone !=""'> and phone = #{phone} </if>
+        <if test='logo!= null and logo !=""'> and logo = #{logo} </if>
+        <if test='shopDesc!= null and shopDesc !=""'> and shop_desc = #{shopDesc} </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='examineStatus!= null and examineStatus !=""'> and examine_status = #{examineStatus} </if>
+        <if test='examineTime!= null  '> and examine_time = #{examineTime} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null  '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null  '> and update_time = #{updateTime} </if>
+        <if test='collectionVolume!= null and collectionVolume !=""'> and collection_volume = #{collectionVolume} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='alipayUrl!= null and alipayUrl !=""'> and alipay_url = #{alipayUrl} </if>
+        <if test='wechatUrl!= null and wechatUrl !=""'> and wechat_url = #{wechatUrl} </if>
+        </where>
+    </select>
+
+    <select id="listShopHDPage" resultType="com.youqiancheng.mybatis.model.F01ShopDO">
+        SELECT *
+        FROM f01_shop
+        WHERE delete_flag = 1
+        and status = 1
+        <if test="shopQueryForm.type != null and '' != shopQueryForm.type">
+            AND type = #{shopQueryForm.type}
+        </if>
+        <if test="shopQueryForm.examineStatus != null and '' != shopQueryForm.examineStatus">
+            AND examine_status = #{shopQueryForm.examineStatus}
+        </if>
+        <if test="shopQueryForm.name != null and '' != shopQueryForm.name">
+            AND name LIKE CONCAT('%',#{shopQueryForm.name},'%')
+        </if>
+        ORDER BY id
+        DESC
+    </select>
+
+
+    <insert id="insertBatch">
+        INSERT INTO f01_shop(
+                        type,
+            main_project,
+        project_name,
+        reason,
+        hide,
+            country_id,
+            country_name,
+        province_code,
+            province,
+            city_code,
+            city,
+        area_code,
+            area,
+            address,
+            longitude,
+            latitude,
+            name,
+            browse_volume,
+            contacts,
+            phone,
+            logo,
+            shop_desc,
+            order_num,
+            examine_status,
+            examine_time,
+            status,
+        user_id,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+        collection_volume,
+        alipay_url,
+        wechat_url,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="f01Shop" separator =",">
+        (
+                        #{f01Shop.type},
+            #{f01Shop.mainProject},
+            #{f01Shop.projectName},
+            #{f01Shop.reason},
+            #{f01Shop.hide},
+            #{f01Shop.countryId},
+            #{f01Shop.countryName},
+            #{f01Shop.provinceCode},
+            #{f01Shop.province},
+            #{f01Shop.cityCode},
+            #{f01Shop.city},
+            #{f01Shop.areaCode},
+            #{f01Shop.area},
+            #{f01Shop.address},
+            #{f01Shop.longitude},
+            #{f01Shop.latitude},
+            #{f01Shop.name},
+            #{f01Shop.browseVolume},
+            #{f01Shop.contacts},
+            #{f01Shop.phone},
+            #{f01Shop.logo},
+            #{f01Shop.shopDesc},
+            #{f01Shop.orderNum},
+            #{f01Shop.examineStatus},
+            #{f01Shop.examineTime},
+            #{f01Shop.status},
+            #{f01Shop.userId},
+            #{f01Shop.createPerson},
+            #{f01Shop.createTime},
+            #{f01Shop.updatePerson},
+            #{f01Shop.updateTime},
+            #{f01Shop.collectionVolume},
+            #{f01Shop.alipayUrl},
+            #{f01Shop.wechatUrl},
+            #{f01Shop.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE f01_shop
+            <set>
+                        <if test='item.type !=null and item.type !=""' >type = #{item.type},</if>
+        <if test='item.mainProject !=null and item.mainProject !=""' >main_project = #{item.mainProject},</if>
+        <if test='item.hide !=null and item.hide !=""' >hide = #{item.hide},</if>
+        <if test='item.reason !=null and item.reason !=""' >reason = #{item.reason},</if>
+        <if test='item.projectName !=null and item.projectName !=""' >project_name = #{item.projectName},</if>
+        <if test='item.countryId !=null and item.countryId !=""' >country_id = #{item.countryId},</if>
+        <if test='item.countryName !=null and item.countryName !=""' >country_name = #{item.countryName},</if>
+        <if test='item.provinceCode !=null and item.provinceCode !=""' >province_code = #{item.provinceCode},</if>
+        <if test='item.province !=null and item.province !=""' >province = #{item.province},</if>
+        <if test='item.cityCode !=null and item.cityCode !=""' >city_code = #{item.cityCode},</if>
+        <if test='item.city !=null and item.city !=""' >city = #{item.city},</if>
+        <if test='item.areaCode !=null and item.areaCode !=""' >area_code = #{item.areaCode},</if>
+        <if test='item.area !=null and item.area !=""' >area = #{item.area},</if>
+        <if test='item.address !=null and item.address !=""' >address = #{item.address},</if>
+        <if test='item.longitude !=null and item.longitude !=""' >longitude = #{item.longitude},</if>
+        <if test='item.latitude !=null and item.latitude !=""' >latitude = #{item.latitude},</if>
+        <if test='item.name !=null and item.name !=""' >name = #{item.name},</if>
+        <if test='item.browseVolume !=null and item.browseVolume !=""' >browse_volume = #{item.browseVolume},</if>
+        <if test='item.contacts !=null and item.contacts !=""' >contacts = #{item.contacts},</if>
+        <if test='item.phone !=null and item.phone !=""' >phone = #{item.phone},</if>
+        <if test='item.logo !=null and item.logo !=""' >logo = #{item.logo},</if>
+        <if test='item.shopDesc !=null and item.shopDesc !=""' >shop_desc = #{item.shopDesc},</if>
+        <if test='item.orderNum !=null and item.orderNum !=""' >order_num = #{item.orderNum},</if>
+        <if test='item.examineStatus !=null and item.examineStatus !=""' >examine_status = #{item.examineStatus},</if>
+        <if test='item.examineTime !=null and item.examine ' >examine_time = #{item.examineTime},</if>
+        <if test='item.status !=null and item.status !=""' >status = #{item.status},</if>
+        <if test='item.userId !=null and item.userId !=""' >user_id = #{item.userId},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null   ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null  ' >update_time = #{item.updateTime},</if>
+        <if test='item.collectionVolume !=null and item.collectionVolume !=""' >collection_volume = #{item.collectionVolume},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+        <if test='item.alipayUrl !=null and item.alipayUrl !=""' >alipay_url = #{item.alipayUrl},</if>
+        <if test='item.wechatUrl !=null and item.wechatUrl !=""' >wechat_url = #{item.wechatUrl},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE f01_shop
+        <set>
+                    <if test='type !=null and type !=""' >type = #{type},</if>
+        <if test='mainProject !=null and mainProject !=""' >main_project = #{mainProject},</if>
+        <if test='reason !=null and reason !=""' >reason = #{reason},</if>
+        <if test='hide !=null and hide !=""' >hide = #{hide},</if>
+        <if test='projectName !=null and projectName !=""' >project_name = #{projectName},</if>
+        <if test='countryId !=null and countryId !=""' >country_id = #{countryId},</if>
+        <if test='countryName !=null and countryName !=""' >country_name = #{countryName},</if>
+        <if test='provinceCode !=null and provinceCode !=""' >province_code = #{provinceCode},</if>
+        <if test='province !=null and province !=""' >province = #{province},</if>
+        <if test='cityCode !=null and cityCode !=""' >city_code = #{cityCode},</if>
+        <if test='city !=null and city !=""' >city = #{city},</if>
+        <if test='areaCode !=null and areaCode !=""' >area_code = #{areaCode},</if>
+        <if test='area !=null and area !=""' >area = #{area},</if>
+        <if test='address !=null and address !=""' >address = #{address},</if>
+        <if test='longitude !=null and longitude !=""' >longitude = #{longitude},</if>
+        <if test='latitude !=null and latitude !=""' >latitude = #{latitude},</if>
+        <if test='name !=null and name !=""' >name = #{name},</if>
+        <if test='browseVolume !=null and browseVolume !=""' >browse_volume = #{browseVolume},</if>
+        <if test='contacts !=null and contacts !=""' >contacts = #{contacts},</if>
+        <if test='phone !=null and phone !=""' >phone = #{phone},</if>
+        <if test='logo !=null and logo !=""' >logo = #{logo},</if>
+        <if test='shopDesc !=null and shopDesc !=""' >shop_desc = #{shopDesc},</if>
+        <if test='orderNum !=null and orderNum !=""' >order_num = #{orderNum},</if>
+        <if test='examineStatus !=null and examineStatus !=""' >examine_status = #{examineStatus},</if>
+        <if test='examineTime !=null ' >examine_time = #{examineTime},</if>
+        <if test='status !=null and status !=""' >status = #{status},</if>
+        <if test='userId !=null and userId !=""' >user_id = #{userId},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null  ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null  ' >update_time = #{updateTime},</if>
+        <if test='collectionVolume !=null and collectionVolume !=""' >collection_volume = #{collectionVolume},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        <if test='alipayUrl !=null and alipayUrl !=""' >alipay_url = #{alipayUrl},</if>
+        <if test='wechatUrl !=null and wechatUrl !=""' >wechat_url = #{wechatUrl},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="getvicinity" resultType="com.youqiancheng.mybatis.model.F01ShopDO">
+        select
+            *
+        from f01_shop
+        where
+        CONVERT(longitude,DECIMAL(27,17)) &gt;= #{minlng} and CONVERT(longitude,DECIMAL(27,17)) &lt;= #{maxlng}
+        and CONVERT(latitude,DECIMAL(27,17)) &gt;= #{minlat} and CONVERT(latitude,DECIMAL(27,17)) &lt;= #{maxlat}
+
+     </select> <select id="getvicinityByDistanceHDPage" resultType="com.youqiancheng.mybatis.model.F01ShopDO">
+
+        SELECT
+            *,
+            ROUND(
+                6378.138 * 2 * ASIN(
+                    SQRT(
+                        POW(
+                            SIN(
+                                (
+                                    #{latitude} * PI() / 180 - latitude * PI() / 180
+                                ) / 2
+                            ),
+                            2
+                        ) + COS(#{latitude} * PI() / 180) * COS(latitude * PI() / 180) * POW(
+                            SIN(
+                                (
+                                    #{longitude} * PI() / 180 - longitude * PI() / 180
+                                ) / 2
+                            ),
+                            2
+                        )
+                    )
+                ) * 1000
+            ) AS distance
+        FROM
+            f01_shop
+            where examine_status = 2
+        having distance &lt;= 1000000 and main_project=3
+        ORDER BY
+            distance ASC
+
+
+     </select>
+    <select id="getShopInfoById" resultType="com.youqiancheng.mybatis.model.F01ShopDO">
+        SELECT name,logo from f01_shop where  id=#{id}
+     </select>
+   <select id="getQRcodeimage" resultType="com.youqiancheng.mybatis.model.F01ShopDO">
+        SELECT alipay_url,wechat_url FROM f01_shop  where  id=#{shopId} and delete_flag=#{deleteFlag}
+     </select>
+
+
+
+</mapper>

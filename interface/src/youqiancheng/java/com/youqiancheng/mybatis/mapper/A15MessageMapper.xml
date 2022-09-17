@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.A15MessageDao">
+
+    <resultMap id="a15MessageResultMap" type="com.youqiancheng.mybatis.model.A15MessageDO">
+        <id column="id" property="id"/>
+        <result column="type" property="type"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="order_num" property="orderNum"/>
+        <result column="status" property="status"/>
+        <result column="recive_id" property="reciveId"/>
+        <result column="send_id" property="sendId"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="shop_order_id" property="shopOrderId"/>
+
+
+
+    </resultMap>
+
+    <sql id="a15MessageColumns">
+        a15_message.id AS "id",
+        a15_message.type AS "type",
+        a15_message.title AS "title",
+        a15_message.content AS "content",
+        a15_message.order_num AS "orderNum",
+        a15_message.status AS "status",
+        a15_message.recive_id AS "reciveId",
+        a15_message.send_id AS "sendId",
+        a15_message.create_person AS "createPerson",
+        a15_message.create_time AS "createTime",
+        a15_message.update_person AS "updatePerson",
+        a15_message.update_time AS "updateTime",
+        a15_message.shop_order_id AS "shopOrderId",
+        a15_message.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="a15MessageJoins">
+
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.A15MessageDO">
+        SELECT
+        <include refid="a15MessageColumns" />
+        FROM a15_message <include refid="a15MessageJoins" />
+        <where>
+        a15_message.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.A15MessageDO">
+        SELECT
+        <include refid="a15MessageColumns" />
+        FROM a15_message <include refid="a15MessageJoins" />
+        <where>
+                    <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='title!= null and title !=""'> and title = #{title} </if>
+        <if test='shopOrderId!= null and shopOrderId !=""'> and shop_order_id = #{shopOrderId} </if>
+        <if test='content!= null and content !=""'> and content = #{content} </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='reciveId!= null and reciveId !=""'> and recive_id = #{reciveId} </if>
+        <if test='sendId!= null and sendId !=""'> and send_id = #{sendId} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null  '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.A15MessageDO">
+        SELECT
+        <include refid="a15MessageColumns" />
+        FROM a15_message <include refid="a15MessageJoins" />
+        <where>
+                    <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='title!= null and title !=""'> and title = #{title} </if>
+        <if test='shopOrderId!= null and shopOrderId !=""'> and shop_order_id = #{shopOrderId} </if>
+        <if test='content!= null and content !=""'> and content = #{content} </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='reciveId!= null and reciveId !=""'> and recive_id = #{reciveId} </if>
+        <if test='sendId!= null and sendId !=""'> and send_id = #{sendId} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null  '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null  '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="listByUserIdAppHDPage" resultType="com.youqiancheng.vo.app.A15MessageAppVO">
+        SELECT a16.*,a17.message_id,a17.user_id,a17.is_read,a17.read_time,a17.id as relationId
+        from a15_message a16,a17_message_user a17
+        where a17.message_id=a16.id  and  a17.user_id=#{userId}
+        <if test='type!= null and type !=""'> and a16.type = #{type} </if>
+        <if test='isRead!= null and isRead !=""'> and a17.is_read = #{isRead} </if>
+        <if test='userType!= null and userType !=""'> and a17.type = #{userType} </if>
+        order by a16.create_time desc
+
+    </select>
+
+    <select id="countByUserIdApp" resultType="integer">
+        SELECT count(*)
+        from a15_message a16,a17_message_user a17
+        where a17.message_id=a16.id  and  a17.user_id=#{userId}
+        <if test='type!= null and type !=""'> and a16.type = #{type} </if>
+        <if test='isRead!= null and isRead !=""'> and a17.is_read = #{isRead} </if>
+        <if test='userType!= null and userType !=""'> and a17.type = #{userType} </if>
+        order by a16.create_time desc
+
+    </select>
+    <select id="listByUserIdClientHDPage" resultType="com.youqiancheng.vo.client.A15MessageClientVO">
+        SELECT a16.*,a17.message_id,a17.user_id,a17.is_read,a17.read_time,a17.id as relationId
+        from a15_message a16,a17_message_user a17
+        where a17.message_id=a16.id  and  a17.user_id=#{userId}
+        <if test='type!= null and type !=""'> and a16.type = #{type} </if>
+        <if test='isRead!= null and isRead !=""'> and a17.is_read = #{isRead} </if>
+        <if test='userType!= null and userType !=""'> and a17.type = #{userType} </if>
+        order by a16.create_time desc
+
+    </select>
+    <select id="countByUserIdClient" resultType="integer">
+        SELECT count(*)
+        from a15_message a16,a17_message_user a17
+        where a17.message_id=a16.id  and  a17.user_id=#{userId}
+        <if test='type!= null and type !=""'> and a16.type = #{type} </if>
+        <if test='isRead!= null and isRead !=""'> and a17.is_read = #{isRead} </if>
+        <if test='userType!= null and userType !=""'> and a17.type = #{userType} </if>
+        order by a16.create_time desc
+
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from a15_message
+        <where>
+                    <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='title!= null and title !=""'> and title = #{title} </if>
+        <if test='shopOrderId!= null and shopOrderId !=""'> and shop_order_id = #{shopOrderId} </if>
+        <if test='content!= null and content !=""'> and content = #{content} </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='reciveId!= null and reciveId !=""'> and recive_id = #{reciveId} </if>
+        <if test='sendId!= null and sendId !=""'> and send_id = #{sendId} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+    </select>
+
+
+
+    <insert id="insertBatch">
+        INSERT INTO a15_message(
+                        type,
+            title,
+            content,
+            order_num,
+            status,
+            recive_id,
+            send_id,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+        shop_order_id,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="a15Message" separator =",">
+        (
+                        #{a15Message.type},
+            #{a15Message.title},
+            #{a15Message.content},
+            #{a15Message.orderNum},
+            #{a15Message.status},
+            #{a15Message.reciveId},
+            #{a15Message.sendId},
+            #{a15Message.createPerson},
+            #{a15Message.createTime},
+            #{a15Message.updatePerson},
+            #{a15Message.updateTime},
+            #{a15Message.shopOrderId},
+            #{a15Message.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE a15_message
+            <set>
+                        <if test='item.type !=null and item.type !=""' >type = #{item.type},</if>
+        <if test='item.title !=null and item.title !=""' >title = #{item.title},</if>
+        <if test='item.shopOrderId !=null and item.shopOrderId !=""' >shop_order_id = #{item.shopOrderId},</if>
+        <if test='item.content !=null and item.content !=""' >content = #{item.content},</if>
+        <if test='item.orderNum !=null and item.orderNum !=""' >order_num = #{item.orderNum},</if>
+        <if test='item.status !=null and item.status !=""' >status = #{item.status},</if>
+        <if test='item.reciveId !=null and item.reciveId !=""' >recive_id = #{item.reciveId},</if>
+        <if test='item.sendId !=null and item.sendId !=""' >send_id = #{item.sendId},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null      ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null       ' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE a15_message
+        <set>
+                    <if test='type !=null and type !=""' >type = #{type},</if>
+        <if test='title !=null and title !=""' >title = #{title},</if>
+        <if test='shopOrderId !=null and shopOrderId !=""' >shop_order_id = #{shopOrderId},</if>
+        <if test='content !=null and content !=""' >content = #{content},</if>
+        <if test='orderNum !=null and orderNum !=""' >order_num = #{orderNum},</if>
+        <if test='status !=null and status !=""' >status = #{status},</if>
+        <if test='reciveId !=null and reciveId !=""' >recive_id = #{reciveId},</if>
+        <if test='sendId !=null and sendId !=""' >send_id = #{sendId},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.C05CommentDao">
+
+    <resultMap id="c05CommentResultMap" type="com.youqiancheng.mybatis.model.C05CommentDO">
+        <id column="id" property="id"/>
+        <result column="goods_id" property="goodsId"/>
+        <result column="goods_name" property="goodsName"/>
+        <result column="goods_icon" property="goodsIcon"/>
+        <result column="content" property="content"/>
+        <result column="reply" property="reply"/>
+        <result column="level" property="level"/>
+        <result column="user_id" property="userId"/>
+        <result column="user_name" property="userName"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+
+
+
+    </resultMap>
+
+    <sql id="c05CommentColumns">
+        c05_comment.id AS "id",
+        c05_comment.goods_id AS "goodsId",
+        c05_comment.goods_name AS "goodsName",
+        c05_comment.goods_icon AS "goodsIcon",
+        c05_comment.content AS "content",
+        c05_comment.reply AS "reply",
+        c05_comment.level AS "level",
+        c05_comment.user_id AS "userId",
+        c05_comment.user_name AS "userName",
+        c05_comment.create_person AS "createPerson",
+        c05_comment.create_time AS "createTime",
+        c05_comment.update_person AS "updatePerson",
+        c05_comment.update_time AS "updateTime",
+        c05_comment.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="c05CommentJoins">
+
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.C05CommentDO">
+        SELECT
+        <include refid="c05CommentColumns" />
+        FROM c05_comment <include refid="c05CommentJoins" />
+        <where>
+        c05_comment.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.C05CommentDO">
+        SELECT
+        <include refid="c05CommentColumns" />
+        FROM c05_comment <include refid="c05CommentJoins" />
+        <where>
+                    <if test='goodsId!= null and goodsId !=""'> and goods_id = #{goodsId} </if>
+        <if test='goodsName!= null and goodsName !=""'> and goods_name = #{goodsName} </if>
+        <if test='goodsIcon!= null and goodsIcon !=""'> and goods_icon = #{goodsIcon} </if>
+        <if test='content!= null and content !=""'> and content = #{content} </if>
+        <if test='reply!= null and reply !=""'> and reply = #{reply} </if>
+        <if test='level!= null and level !=""'> and level = #{level} </if>
+        <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='userName!= null and userName !=""'> and user_name = #{userName} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listByGoodsIdHDPage" resultType="com.youqiancheng.mybatis.model.C05CommentDO">
+        SELECT
+        c.*,b.pic,c01.shop_name as shopName,
+        (select count(*) from c14_reply_comment as crc where crc.comment_id = c.id) as replyComentNumber
+        FROM c05_comment c
+        left join b01_user b on b.id=c.user_id
+        left join c01_goods c01 on c01.id=c.goods_id
+        <where>
+                    <if test='goodsId!= null and goodsId !=""'> and c.goods_id = #{goodsId} </if>
+        <if test='goodsName!= null and goodsName !=""'> and c.goods_name = #{goodsName} </if>
+        <if test='goodsIcon!= null and goodsIcon !=""'> and c.goods_icon = #{goodsIcon} </if>
+        <if test='content!= null and content !=""'> and c.content = #{content} </if>
+        <if test='reply!= null and reply !=""'> and c.reply = #{reply} </if>
+        <if test='level!= null and level !=""'> and c.level = #{level} </if>
+        <if test='userId!= null and userId !=""'> and c.user_id = #{userId} </if>
+        <if test='userName!= null and userName !=""'> and c.user_name = #{userName} </if>
+        <if test='createPerson!= null and createPerson !=""'> and c.create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and c.create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and c.update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and c.update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and c.delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by c.id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.C05CommentDO">
+        SELECT
+        c05.*,
+        b.pic
+        FROM c05_comment c05
+        left join c10_publicity c10 on c10.id=c05.goods_id
+        left join b01_user b on b.id=c05.user_id
+        <where>
+            <if test='shopId!= null and shopId !=""'> and c10.shop_id = #{shopId} </if>
+        <if test='goodsId!= null and goodsId !=""'> and c05.goods_id = #{goodsId} </if>
+        <if test='goodsName!= null and goodsName !=""'> and c05.goods_name = #{goodsName} </if>
+        <if test='goodsIcon!= null and goodsIcon !=""'> and c05.goods_icon = #{goodsIcon} </if>
+        <if test='content!= null and content !=""'> and c05.content = #{content} </if>
+        <if test='reply!= null and reply !=""'> and c05.reply = #{reply} </if>
+        <if test='level!= null and level !=""'> and c05.level = #{level} </if>
+        <if test='userId!= null and userId !=""'> and c05.user_id = #{userId} </if>
+        <if test='userName!= null and userName !=""'> and c05.user_name = #{userName} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and c05.delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by c05.id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+
+    <select id="count" resultType="int">
+        select count(*) from c05_comment
+        <where>
+                    <if test='goodsId!= null and goodsId !=""'> and goods_id = #{goodsId} </if>
+        <if test='goodsName!= null and goodsName !=""'> and goods_name = #{goodsName} </if>
+        <if test='goodsIcon!= null and goodsIcon !=""'> and goods_icon = #{goodsIcon} </if>
+        <if test='content!= null and content !=""'> and content = #{content} </if>
+        <if test='reply!= null and reply !=""'> and reply = #{reply} </if>
+        <if test='level!= null and level !=""'> and level = #{level} </if>
+        <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='userName!= null and userName !=""'> and user_name = #{userName} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+    </select>
+
+    <select id="listCommentHDPage" resultType="com.youqiancheng.mybatis.model.C05CommentDO">
+        SELECT
+        *
+        FROM c05_comment
+        WHERE delete_flag = 1
+        <if test="commentQueryForm.goodsName != null and '' != goodsName.goodsName">
+            AND goodsName LIKE CONCAT('%',#{commentQueryForm.goodsName},'%')
+        </if>
+        ORDER BY id DESC
+    </select>
+
+
+    <insert id="insertBatch">
+        INSERT INTO c05_comment(
+                        goods_id,
+            goods_name,
+            goods_icon,
+            content,
+        reply,
+            level,
+            user_id,
+            user_name,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="c05Comment" separator =",">
+        (
+                        #{c05Comment.goodsId},
+            #{c05Comment.goodsName},
+            #{c05Comment.goodsIcon},
+            #{c05Comment.content},
+            #{c05Comment.reply},
+            #{c05Comment.level},
+            #{c05Comment.userId},
+            #{c05Comment.userName},
+            #{c05Comment.createPerson},
+            #{c05Comment.createTime},
+            #{c05Comment.updatePerson},
+            #{c05Comment.updateTime},
+            #{c05Comment.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE c05_comment
+            <set>
+                        <if test='item.goodsId !=null and item.goodsId !=""' >goods_id = #{item.goodsId},</if>
+        <if test='item.goodsName !=null and item.goodsName !=""' >goods_name = #{item.goodsName},</if>
+        <if test='item.goodsIcon !=null and item.goodsIcon !=""' >goods_icon = #{item.goodsIcon},</if>
+        <if test='item.content !=null and item.content !=""' >content = #{item.content},</if>
+        <if test='item.reply !=null and item.reply !=""' >reply = #{item.reply},</if>
+        <if test='item.level !=null and item.level !=""' >level = #{item.level},</if>
+        <if test='item.userId !=null and item.userId !=""' >user_id = #{item.userId},</if>
+        <if test='item.userName !=null and item.userName !=""' >user_name = #{item.userName},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null      ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null       ' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE c05_comment
+        <set>
+                    <if test='goodsId !=null and goodsId !=""' >goods_id = #{goodsId},</if>
+        <if test='goodsName !=null and goodsName !=""' >goods_name = #{goodsName},</if>
+        <if test='goodsIcon !=null and goodsIcon !=""' >goods_icon = #{goodsIcon},</if>
+        <if test='content !=null and content !=""' >content = #{content},</if>
+        <if test='reply !=null and reply !=""' >reply = #{reply},</if>
+        <if test='level !=null and level !=""' >level = #{level},</if>
+        <if test='userId !=null and userId !=""' >user_id = #{userId},</if>
+        <if test='userName !=null and userName !=""' >user_name = #{userName},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+
+
+
+    <select id="allCommentAndReplyCommentHDPage" resultType="com.youqiancheng.vo.client.C05CommentClientVO">
+        SELECT
+        c.*,b.pic,c01.shop_name as shopName
+        FROM c05_comment c
+        left join b01_user b on b.id=c.user_id
+        left join c01_goods c01 on c01.id=c.goods_id
+        <where>
+            <if test='goodsId!= null and goodsId !=""'> and c.goods_id = #{goodsId} </if>
+            <if test='goodsName!= null and goodsName !=""'> and c.goods_name = #{goodsName} </if>
+            <if test='goodsIcon!= null and goodsIcon !=""'> and c.goods_icon = #{goodsIcon} </if>
+            <if test='content!= null and content !=""'> and c.content = #{content} </if>
+            <if test='reply!= null and reply !=""'> and c.reply = #{reply} </if>
+            <if test='level!= null and level !=""'> and c.level = #{level} </if>
+            <if test='userId!= null and userId !=""'> and c.user_id = #{userId} </if>
+            <if test='userName!= null and userName !=""'> and c.user_name = #{userName} </if>
+            <if test='createPerson!= null and createPerson !=""'> and c.create_person = #{createPerson} </if>
+            <if test='createTime!= null   '> and c.create_time = #{createTime} </if>
+            <if test='updatePerson!= null and updatePerson !=""'> and c.update_person = #{updatePerson} </if>
+            <if test='updateTime!= null    '> and c.update_time = #{updateTime} </if>
+            <if test='deleteFlag!= null and deleteFlag !=""'> and c.delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by c.id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+</mapper>

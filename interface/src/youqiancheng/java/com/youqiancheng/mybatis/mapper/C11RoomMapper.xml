@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.C11RoomDao">
+
+    <resultMap id="c11RoomResultMap" type="com.youqiancheng.mybatis.model.C11RoomDO">
+        <id column="id" property="id"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="second_category_id" property="secondCategoryId"/>
+        <result column="third_category_id" property="thirdCategoryId"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="shop_name" property="shopName"/>
+        <result column="room_no" property="roomNo"/>
+        <result column="name" property="name"/>
+        <result column="type" property="type"/>
+        <result column="img" property="img"/>
+        <result column="goods_desc" property="goodsDesc"/>
+        <result column="order_num" property="orderNum"/>
+        <result column="public_time" property="publicTime"/>
+        <result column="is_sale" property="isSale"/>
+        <result column="examine_status" property="examineStatus"/>
+        <result column="examine_time" property="examineTime"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+
+
+
+    </resultMap>
+
+    <sql id="c11RoomColumns">
+        c11_room.id AS "id",
+        c11_room.category_id AS "categoryId",
+        c11_room.second_category_id AS "secondCategoryId",
+        c11_room.third_category_id AS "thirdCategoryId",
+        c11_room.shop_id AS "shopId",
+        c11_room.shop_name AS "shopName",
+        c11_room.room_no AS "roomNo",
+        c11_room.name AS "name",
+        c11_room.type AS "type",
+        c11_room.img AS "img",
+        c11_room.goods_desc AS "goodsDesc",
+        c11_room.order_num AS "orderNum",
+        c11_room.public_time AS "publicTime",
+        c11_room.is_sale AS "isSale",
+        c11_room.examine_status AS "examineStatus",
+        c11_room.examine_time AS "examineTime",
+        c11_room.create_person AS "createPerson",
+        c11_room.create_time AS "createTime",
+        c11_room.update_person AS "updatePerson",
+        c11_room.update_time AS "updateTime",
+        c11_room.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="c11RoomJoins">
+
+    </sql>
+
+    <!--  分页查询房间列表-->
+    <select id="listRoomHDPage" parameterType="java.util.Map" resultMap="c11RoomResultMap">
+        SELECT
+        *
+        FROM c11_room
+        WHERE delete_flag=1
+        <if test="shopRoomPageForm.roomName != null and '' != shopRoomPageForm.roomName">
+            AND name LIKE CONCAT('%',#{shopRoomPageForm.roomName},'%')
+        </if>
+        <if test="shopRoomPageForm.startTime != null and '' != shopRoomPageForm.startTime">
+            AND UNIX_TIMESTAMP(public_time) &gt;= UNIX_TIMESTAMP(#{shopRoomPageForm.startTime})
+        </if>
+        <if test="shopRoomPageForm.endTime != null and '' != shopRoomPageForm.endTime">
+            AND UNIX_TIMESTAMP(public_time) &lt;= UNIX_TIMESTAMP(#{shopRoomPageForm.endTime})
+        </if>
+        <if test="shopRoomPageForm.examineStatus != null and '' != shopRoomPageForm.examineStatus">
+            AND examine_status = #{shopRoomPageForm.examineStatus}
+        </if>
+        ORDER BY id DESC
+    </select>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.C11RoomDO">
+        SELECT
+        <include refid="c11RoomColumns" />
+        FROM c11_room <include refid="c11RoomJoins" />
+        <where>
+        c11_room.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.C11RoomDO">
+        SELECT
+        <include refid="c11RoomColumns" />
+        FROM c11_room <include refid="c11RoomJoins" />
+        <where>
+                    <if test='categoryId!= null and categoryId !=""'> and category_id = #{categoryId} </if>
+        <if test='secondCategoryId!= null and secondCategoryId !=""'> and second_category_id = #{secondCategoryId} </if>
+        <if test='thirdCategoryId!= null and thirdCategoryId !=""'> and third_category_id = #{thirdCategoryId} </if>
+        <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='shopName!= null and shopName !=""'> and shop_name = #{shopName} </if>
+        <if test='roomNo!= null and roomNo !=""'> and room_no = #{roomNo} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='img!= null and img !=""'> and img = #{img} </if>
+        <if test='goodsDesc!= null and goodsDesc !=""'> and goods_desc = #{goodsDesc} </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='publicTime!= null  '> and public_time = #{publicTime} </if>
+        <if test='isSale!= null and isSale !=""'> and is_sale = #{isSale} </if>
+        <if test='examineStatus!= null and examineStatus !=""'> and examine_status = #{examineStatus} </if>
+        <if test='examineTime!= null  '> and examine_time = #{examineTime} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.C11RoomDO">
+        SELECT
+        <include refid="c11RoomColumns" />
+        FROM c11_room <include refid="c11RoomJoins" />
+        <where>
+                    <if test='categoryId!= null and categoryId !=""'> and category_id = #{categoryId} </if>
+        <if test='secondCategoryId!= null and secondCategoryId !=""'> and second_category_id = #{secondCategoryId} </if>
+        <if test='thirdCategoryId!= null and thirdCategoryId !=""'> and third_category_id = #{thirdCategoryId} </if>
+        <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='shopName!= null and shopName !=""'> and shop_name = #{shopName} </if>
+        <if test='roomNo!= null and roomNo !=""'> and room_no = #{roomNo} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='img!= null and img !=""'> and img = #{img} </if>
+        <if test='goodsDesc!= null and goodsDesc !=""'> and goods_desc = #{goodsDesc} </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='publicTime!= null  '> and public_time = #{publicTime} </if>
+        <if test='isSale!= null and isSale !=""'> and is_sale = #{isSale} </if>
+        <if test='examineStatus!= null and examineStatus !=""'> and examine_status = #{examineStatus} </if>
+        <if test='examineTime!= null  '> and examine_time = #{examineTime} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from c11_room
+        <where>
+                    <if test='categoryId!= null and categoryId !=""'> and category_id = #{categoryId} </if>
+        <if test='secondCategoryId!= null and secondCategoryId !=""'> and second_category_id = #{secondCategoryId} </if>
+        <if test='thirdCategoryId!= null and thirdCategoryId !=""'> and third_category_id = #{thirdCategoryId} </if>
+        <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='shopName!= null and shopName !=""'> and shop_name = #{shopName} </if>
+        <if test='roomNo!= null and roomNo !=""'> and room_no = #{roomNo} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='img!= null and img !=""'> and img = #{img} </if>
+        <if test='goodsDesc!= null and goodsDesc !=""'> and goods_desc = #{goodsDesc} </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='publicTime!= null  '> and public_time = #{publicTime} </if>
+        <if test='isSale!= null and isSale !=""'> and is_sale = #{isSale} </if>
+        <if test='examineStatus!= null and examineStatus !=""'> and examine_status = #{examineStatus} </if>
+        <if test='examineTime!= null  '> and examine_time = #{examineTime} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+    </select>
+
+
+
+    <insert id="insertBatch">
+        INSERT INTO c11_room(
+                        category_id,
+            second_category_id,
+            third_category_id,
+            shop_id,
+            shop_name,
+            room_no,
+            name,
+            type,
+            img,
+            goods_desc,
+            order_num,
+            public_time,
+            is_sale,
+            examine_status,
+            examine_time,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="c11Room" separator =",">
+        (
+                        #{c11Room.categoryId},
+            #{c11Room.secondCategoryId},
+            #{c11Room.thirdCategoryId},
+            #{c11Room.shopId},
+            #{c11Room.shopName},
+            #{c11Room.roomNo},
+            #{c11Room.name},
+            #{c11Room.type},
+            #{c11Room.img},
+            #{c11Room.goodsDesc},
+            #{c11Room.orderNum},
+            #{c11Room.publicTime},
+            #{c11Room.isSale},
+            #{c11Room.examineStatus},
+            #{c11Room.examineTime},
+            #{c11Room.createPerson},
+            #{c11Room.createTime},
+            #{c11Room.updatePerson},
+            #{c11Room.updateTime},
+            #{c11Room.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE c11_room
+            <set>
+                        <if test='item.categoryId !=null and item.categoryId !=""' >category_id = #{item.categoryId},</if>
+        <if test='item.secondCategoryId !=null and item.secondCategoryId !=""' >second_category_id = #{item.secondCategoryId},</if>
+        <if test='item.thirdCategoryId !=null and item.thirdCategoryId !=""' >third_category_id = #{item.thirdCategoryId},</if>
+        <if test='item.shopId !=null and item.shopId !=""' >shop_id = #{item.shopId},</if>
+        <if test='item.shopName !=null and item.shopName !=""' >shop_name = #{item.shopName},</if>
+        <if test='item.roomNo !=null and item.roomNo !=""' >room_no = #{item.roomNo},</if>
+        <if test='item.name !=null and item.name !=""' >name = #{item.name},</if>
+        <if test='item.type !=null and item.type !=""' >type = #{item.type},</if>
+        <if test='item.img !=null and item.img !=""' >img = #{item.img},</if>
+        <if test='item.goodsDesc !=null and item.goodsDesc !=""' >goods_desc = #{item.goodsDesc},</if>
+        <if test='item.orderNum !=null and item.orderNum !=""' >order_num = #{item.orderNum},</if>
+        <if test='item.publicTime !=null     ' >public_time = #{item.publicTime},</if>
+        <if test='item.isSale !=null and item.isSale !=""' >is_sale = #{item.isSale},</if>
+        <if test='item.examineStatus !=null and item.examineStatus !=""' >examine_status = #{item.examineStatus},</if>
+        <if test='item.examineTime !=null        ' >examine_time = #{item.examineTime},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null      ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null       ' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE c11_room
+        <set>
+                    <if test='categoryId !=null and categoryId !=""' >category_id = #{categoryId},</if>
+        <if test='secondCategoryId !=null and secondCategoryId !=""' >second_category_id = #{secondCategoryId},</if>
+        <if test='thirdCategoryId !=null and thirdCategoryId !=""' >third_category_id = #{thirdCategoryId},</if>
+        <if test='shopId !=null and shopId !=""' >shop_id = #{shopId},</if>
+        <if test='shopName !=null and shopName !=""' >shop_name = #{shopName},</if>
+        <if test='roomNo !=null and roomNo !=""' >room_no = #{roomNo},</if>
+        <if test='name !=null and name !=""' >name = #{name},</if>
+        <if test='type !=null and type !=""' >type = #{type},</if>
+        <if test='img !=null and img !=""' >img = #{img},</if>
+        <if test='goodsDesc !=null and goodsDesc !=""' >goods_desc = #{goodsDesc},</if>
+        <if test='orderNum !=null and orderNum !=""' >order_num = #{orderNum},</if>
+        <if test='publicTime !=null  ' >public_time = #{publicTime},</if>
+        <if test='isSale !=null and isSale !=""' >is_sale = #{isSale},</if>
+        <if test='examineStatus !=null and examineStatus !=""' >examine_status = #{examineStatus},</if>
+        <if test='examineTime !=null  ' >examine_time = #{examineTime},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

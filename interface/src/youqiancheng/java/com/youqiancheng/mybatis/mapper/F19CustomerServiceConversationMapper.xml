@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.F19CustomerServiceConversationDao">
+
+    <resultMap id="f19CustomerServiceConversationResultMap" type="com.youqiancheng.mybatis.model.F19CustomerServiceConversationDO">
+        <id column="id" property="id"/> 
+        <result column="conversation_id" property="conversationId"/> 
+        <result column="user_id" property="userId"/> 
+        <result column="shop_id" property="shopId"/> 
+        <result column="content" property="content"/> 
+        <result column="conversation_time" property="conversationTime"/> 
+        <result column="read_status" property="readStatus"/> 
+        <result column="del_status" property="delStatus"/> 
+        <result column="create_time" property="createTime"/> 
+
+        
+        
+    </resultMap>
+
+    <sql id="f19CustomerServiceConversationColumns">
+        f19_customer_service_conversation.id AS "id",
+        f19_customer_service_conversation.conversation_id AS "conversationId",
+        f19_customer_service_conversation.user_id AS "userId",
+        f19_customer_service_conversation.shop_id AS "shopId",
+        f19_customer_service_conversation.content AS "content",
+        f19_customer_service_conversation.conversation_time AS "conversationTime",
+        f19_customer_service_conversation.read_status AS "readStatus",
+        f19_customer_service_conversation.del_status AS "delStatus",
+        f19_customer_service_conversation.create_time AS "createTime"
+    </sql>
+
+    <sql id="f19CustomerServiceConversationJoins">
+        
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.F19CustomerServiceConversationDO">
+        SELECT
+        <include refid="f19CustomerServiceConversationColumns" />
+        FROM f19_customer_service_conversation <include refid="f19CustomerServiceConversationJoins" />
+        <where>
+        f19_customer_service_conversation.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.F19CustomerServiceConversationDO">
+        SELECT
+        <include refid="f19CustomerServiceConversationColumns" />
+        FROM f19_customer_service_conversation <include refid="f19CustomerServiceConversationJoins" />
+        <where>
+                    <if test='conversationId!= null and conversationId !=""'> and conversation_id = #{conversationId} </if>
+        <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='content!= null and content !=""'> and content = #{content} </if>
+        <if test='conversationTime!= null and conversationTime !=""'> and conversation_time = #{conversationTime} </if>
+        <if test='readStatus!= null and readStatus !=""'> and read_status = #{readStatus} </if>
+        <if test='delStatus!= null and delStatus !=""'> and del_status = #{delStatus} </if>
+        <if test='createTime!= null and createTime !=""'> and create_time = #{createTime} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.F19CustomerServiceConversationDO">
+        SELECT
+        <include refid="f19CustomerServiceConversationColumns" />
+        FROM f19_customer_service_conversation <include refid="f19CustomerServiceConversationJoins" />
+        <where>
+                    <if test='conversationId!= null and conversationId !=""'> and conversation_id = #{conversationId} </if>
+        <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='content!= null and content !=""'> and content = #{content} </if>
+        <if test='conversationTime!= null and conversationTime !=""'> and conversation_time = #{conversationTime} </if>
+        <if test='readStatus!= null and readStatus !=""'> and read_status = #{readStatus} </if>
+        <if test='delStatus!= null and delStatus !=""'> and del_status = #{delStatus} </if>
+        <if test='createTime!= null and createTime !=""'> and create_time = #{createTime} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from f19_customer_service_conversation
+        <where>
+                    <if test='conversationId!= null and conversationId !=""'> and conversation_id = #{conversationId} </if>
+        <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='content!= null and content !=""'> and content = #{content} </if>
+        <if test='conversationTime!= null and conversationTime !=""'> and conversation_time = #{conversationTime} </if>
+        <if test='readStatus!= null and readStatus !=""'> and read_status = #{readStatus} </if>
+        <if test='delStatus!= null and delStatus !=""'> and del_status = #{delStatus} </if>
+        <if test='createTime!= null and createTime !=""'> and create_time = #{createTime} </if>
+        </where>
+    </select>
+
+
+
+    <insert id="insertBatch">
+        INSERT INTO f19_customer_service_conversation(
+                        conversation_id,
+            user_id,
+            shop_id,
+            content,
+            conversation_time,
+            read_status,
+            del_status,
+            create_time
+        )
+        VALUES
+        <foreach collection ="list" item="f19CustomerServiceConversation" separator =",">
+        (
+                        #{f19CustomerServiceConversation.conversationId},
+            #{f19CustomerServiceConversation.userId},
+            #{f19CustomerServiceConversation.shopId},
+            #{f19CustomerServiceConversation.content},
+            #{f19CustomerServiceConversation.conversationTime},
+            #{f19CustomerServiceConversation.readStatus},
+            #{f19CustomerServiceConversation.delStatus},
+            #{f19CustomerServiceConversation.createTime}
+        )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE f19_customer_service_conversation
+            <set>
+                        <if test='item.conversationId !=null and item.conversationId !=""' >conversation_id = #{item.conversationId},</if>
+        <if test='item.userId !=null and item.userId !=""' >user_id = #{item.userId},</if>
+        <if test='item.shopId !=null and item.shopId !=""' >shop_id = #{item.shopId},</if>
+        <if test='item.content !=null and item.content !=""' >content = #{item.content},</if>
+        <if test='item.conversationTime !=null and item.conversationTime !=""' >conversation_time = #{item.conversationTime},</if>
+        <if test='item.readStatus !=null and item.readStatus !=""' >read_status = #{item.readStatus},</if>
+        <if test='item.delStatus !=null and item.delStatus !=""' >del_status = #{item.delStatus},</if>
+        <if test='item.createTime !=null and item.createTime !=""' >create_time = #{item.createTime},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE f19_customer_service_conversation
+        <set>
+                    <if test='conversationId !=null and conversationId !=""' >conversation_id = #{conversationId},</if>
+        <if test='userId !=null and userId !=""' >user_id = #{userId},</if>
+        <if test='shopId !=null and shopId !=""' >shop_id = #{shopId},</if>
+        <if test='content !=null and content !=""' >content = #{content},</if>
+        <if test='conversationTime !=null and conversationTime !=""' >conversation_time = #{conversationTime},</if>
+        <if test='readStatus !=null and readStatus !=""' >read_status = #{readStatus},</if>
+        <if test='delStatus !=null and delStatus !=""' >del_status = #{delStatus},</if>
+        <if test='createTime !=null and createTime !=""' >create_time = #{createTime},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="updateConversationStatus">
+        UPDATE f19_customer_service_conversation
+        set read_status = 2
+        WHERE  conversation_id = #{conversationId}
+    </update>
+</mapper>

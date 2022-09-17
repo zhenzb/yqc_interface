@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.A13SysVersionDao">
+
+    <resultMap id="a13SysVersionResultMap" type="com.youqiancheng.mybatis.model.A13SysVersionDO">
+        <id column="id" property="id"/>
+        <result column="version_explain" property="versionExplain"/>
+        <result column="url" property="url"/>
+        <result column="lowest" property="lowest"/>
+        <result column="version" property="version"/>
+        <result column="name" property="name"/>
+        <result column="is_update" property="isUpdate"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+
+
+
+    </resultMap>
+
+    <sql id="a13SysVersionColumns">
+        a13_sys_version.id AS "id",
+        a13_sys_version.version_explain AS "versionExplain",
+        a13_sys_version.url AS "url",
+        a13_sys_version.lowest AS "lowest",
+        a13_sys_version.version AS "version",
+        a13_sys_version.name AS "name",
+        a13_sys_version.is_update AS "isUpdate",
+        a13_sys_version.create_person AS "createPerson",
+        a13_sys_version.create_time AS "createTime",
+        a13_sys_version.update_person AS "updatePerson",
+        a13_sys_version.update_time AS "updateTime",
+        a13_sys_version.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="a13SysVersionJoins">
+
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.A13SysVersionDO">
+        SELECT
+        <include refid="a13SysVersionColumns" />
+        FROM a13_sys_version <include refid="a13SysVersionJoins" />
+        <where>
+        a13_sys_version.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.A13SysVersionDO">
+        SELECT
+        <include refid="a13SysVersionColumns" />
+        FROM a13_sys_version <include refid="a13SysVersionJoins" />
+        <where>
+                    <if test='versionExplain!= null and versionExplain !=""'> and version_explain = #{versionExplain} </if>
+        <if test='url!= null and url !=""'> and url = #{url} </if>
+        <if test='lowest!= null and lowest !=""'> and lowest = #{lowest} </if>
+        <if test='version!= null and version !=""'> and version = #{version} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='isUpdate!= null and isUpdate !=""'> and is_update = #{isUpdate} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by version desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listInfoHDPage" resultType="com.youqiancheng.mybatis.model.A13SysVersionDO">
+        SELECT
+        <include refid="a13SysVersionColumns" />
+        FROM a13_sys_version <include refid="a13SysVersionJoins" />
+        <where>
+        <if test='versionExplain!= null and versionExplain !=""'> and version_explain = #{versionExplain} </if>
+        <if test='url!= null and url !=""'> and url = #{url} </if>
+        <if test='lowest!= null and lowest !=""'> and lowest = #{lowest} </if>
+        <if test='version!= null and version !=""'> and version = #{version} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='isUpdate!= null and isUpdate !=""'> and is_update = #{isUpdate} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from a13_sys_version
+        <where>
+                    <if test='versionExplain!= null and versionExplain !=""'> and version_explain = #{versionExplain} </if>
+        <if test='url!= null and url !=""'> and url = #{url} </if>
+        <if test='lowest!= null and lowest !=""'> and lowest = #{lowest} </if>
+        <if test='version!= null and version !=""'> and version = #{version} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='isUpdate!= null and isUpdate !=""'> and is_update = #{isUpdate} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+    </select>
+
+
+
+    <insert id="insertBatch">
+        INSERT INTO a13_sys_version(
+                        version_explain,
+            url,
+            lowest,
+            version,
+            name,
+            is_update,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="a13SysVersion" separator =",">
+        (
+                        #{a13SysVersion.versionExplain},
+            #{a13SysVersion.url},
+            #{a13SysVersion.lowest},
+            #{a13SysVersion.version},
+            #{a13SysVersion.name},
+            #{a13SysVersion.isUpdate},
+            #{a13SysVersion.createPerson},
+            #{a13SysVersion.createTime},
+            #{a13SysVersion.updatePerson},
+            #{a13SysVersion.updateTime},
+            #{a13SysVersion.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE a13_sys_version
+            <set>
+                        <if test='item.versionExplain !=null and item.versionExplain !=""' >version_explain = #{item.versionExplain},</if>
+        <if test='item.url !=null and item.url !=""' >url = #{item.url},</if>
+        <if test='item.lowest !=null and item.lowest !=""' >lowest = #{item.lowest},</if>
+        <if test='item.version !=null and item.version !=""' >version = #{item.version},</if>
+        <if test='item.name !=null and item.name !=""' >name = #{item.name},</if>
+        <if test='item.isUpdate !=null and item.isUpdate !=""' >is_update = #{item.isUpdate},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null      ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null       ' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE a13_sys_version
+        <set>
+                    <if test='versionExplain !=null and versionExplain !=""' >version_explain = #{versionExplain},</if>
+        <if test='url !=null and url !=""' >url = #{url},</if>
+        <if test='lowest !=null and lowest !=""' >lowest = #{lowest},</if>
+        <if test='version !=null and version !=""' >version = #{version},</if>
+        <if test='name !=null and name !=""' >name = #{name},</if>
+        <if test='isUpdate !=null and isUpdate !=""' >is_update = #{isUpdate},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

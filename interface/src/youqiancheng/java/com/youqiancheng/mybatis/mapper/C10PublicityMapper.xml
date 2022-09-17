@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.C10PublicityDao">
+
+    <resultMap id="c10PublicityResultMap" type="com.youqiancheng.mybatis.model.C10PublicityDO">
+        <id column="id" property="id"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="second_category_id" property="secondCategoryId"/>
+        <result column="third_category_id" property="thirdCategoryId"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="shop_name" property="shopName"/>
+        <result column="type" property="type"/>
+        <result column="title" property="title"/>
+        <result column="goods_desc" property="goodsDesc"/>
+        <result column="icon" property="icon"/>
+        <result column="content" property="content"/>
+        <result column="order_num" property="orderNum"/>
+        <result column="public_time" property="publicTime"/>
+        <result column="is_sale" property="isSale"/>
+        <result column="examine_status" property="examineStatus"/>
+        <result column="examine_time" property="examineTime"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="collection_volume" property="collectionVolume"/>
+        <result column="browse_volume" property="browseVolume"/>
+        <result column="duration" property="duration"/>
+        <result column="reason" property="reason"/>
+        <result column="audio" property="audio"/>
+
+    </resultMap>
+
+    <sql id="c10PublicityColumns">
+        c10_publicity.id AS "id",
+        c10_publicity.category_id AS "categoryId",
+        c10_publicity.reason AS "reason",
+        c10_publicity.second_category_id AS "secondCategoryId",
+        c10_publicity.third_category_id AS "thirdCategoryId",
+        c10_publicity.shop_id AS "shopId",
+        c10_publicity.shop_name AS "shopName",
+        c10_publicity.type AS "type",
+        c10_publicity.title AS "title",
+        c10_publicity.goods_desc AS "goodsDesc",
+        c10_publicity.icon AS "icon",
+        c10_publicity.content AS "content",
+        c10_publicity.order_num AS "orderNum",
+        c10_publicity.public_time AS "publicTime",
+        c10_publicity.is_sale AS "isSale",
+        c10_publicity.examine_status AS "examineStatus",
+        c10_publicity.examine_time AS "examineTime",
+        c10_publicity.create_person AS "createPerson",
+        c10_publicity.create_time AS "createTime",
+        c10_publicity.update_person AS "updatePerson",
+        c10_publicity.update_time AS "updateTime",
+        c10_publicity.collection_volume AS "collectionVolume",
+        c10_publicity.browse_volume AS "browseVolume",
+        c10_publicity.content_url AS "contentUrl",
+        c10_publicity.duration AS "duration",
+        c10_publicity.delete_flag AS "deleteFlag",
+        c10_publicity.audio AS "audio"
+    </sql>
+
+    <sql id="c10PublicityJoins">
+
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.C10PublicityDO">
+        SELECT
+        *
+        FROM c10_publicity
+        <where>
+        c10_publicity.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.C10PublicityDO">
+        SELECT
+        c10.*,count(c05.id) as commentCount
+        FROM c10_publicity c10
+        left join c05_comment c05 on c05.goods_id=c10.id
+        <where>
+            <if test='categoryId!= null and categoryId !=""'> and c10.category_id = #{categoryId} </if>
+            <if test='secondCategoryId!= null and secondCategoryId !=""'> and c10.second_category_id = #{secondCategoryId} </if>
+            <if test='reason!= null and reason !=""'> and c10.reason = #{reason} </if>
+            <if test='thirdCategoryId!= null and thirdCategoryId !=""'> and c10.third_category_id = #{thirdCategoryId} </if>
+            <if test='shopId!= null and shopId !=""'> and c10.shop_id = #{shopId} </if>
+            <if test='shopName!= null and shopName !=""'> and c10.shop_name = #{shopName} </if>
+            <if test='type!= null and type !=""'> and c10.type = #{type} </if>
+            <if test='title!= null and title !=""'> and c10.title = #{title} </if>
+            <if test='orderNum!= null and orderNum !=""'> and c10.order_num = #{orderNum} </if>
+            <if test='isSale!= null and isSale !=""'> and c10.is_sale = #{isSale} </if>
+            <if test='deleteFlag!= null and deleteFlag !=""'> and  c10.delete_flag = #{deleteFlag} </if>
+        </where>
+        group by c10.id
+        order by c10.id desc
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.C10PublicityDO">
+        SELECT
+       c10.*,count(c05.id) as commentCount
+        FROM c10_publicity c10
+        left join c05_comment c05 on c05.goods_id=c10.id
+        where c10.type &lt;&gt;1
+        <if test='categoryId!= null and categoryId !=""'> and c10.category_id = #{categoryId} </if>
+        <if test='secondCategoryId!= null and secondCategoryId !=""'> and c10.second_category_id = #{secondCategoryId} </if>
+        <if test='reason!= null and reason !=""'> and c10.reason = #{reason} </if>
+        <if test='thirdCategoryId!= null and thirdCategoryId !=""'> and c10.third_category_id = #{thirdCategoryId} </if>
+        <if test='shopId!= null and shopId !=""'> and c10.shop_id = #{shopId} </if>
+        <if test='shopName!= null and shopName !=""'> and c10.shop_name = #{shopName} </if>
+        <!--<if test='type!= null and type !=""'> and c10.type = #{type} </if>-->
+        <if test='title!= null and title !=""'> and c10.title = #{title} </if>
+        <if test='orderNum!= null and orderNum !=""'> and c10.order_num = #{orderNum} </if>
+        <if test='isSale!= null and isSale !=""'> and c10.is_sale = #{isSale} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and  c10.delete_flag = #{deleteFlag} </if>
+       group by c10.id
+       order by id desc
+    </select>
+
+    <select id="listByShopManageHDPage" resultType="com.youqiancheng.mybatis.model.C10PublicityDO">
+        SELECT
+        <include refid="c10PublicityColumns" />
+        FROM c10_publicity <include refid="c10PublicityJoins" />
+        <where>
+                    <if test='categoryId!= null and categoryId !=""'> and category_id = #{categoryId} </if>
+        <if test='secondCategoryId!= null and secondCategoryId !=""'> and second_category_id = #{secondCategoryId} </if>
+        <if test='reason!= null and reason !=""'> and reason = #{reason} </if>
+        <if test='thirdCategoryId!= null and thirdCategoryId !=""'> and third_category_id = #{thirdCategoryId} </if>
+        <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='shopName!= null and shopName !=""'> and shop_name = #{shopName} </if>
+        <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='title!= null and title !=""'> and title = #{title} </if>
+        <if test='goodsDesc!= null and goodsDesc !=""'> and goods_desc = #{goodsDesc} </if>
+        <if test='icon!= null and icon !=""'> and icon = #{icon} </if>
+        <if test='content!= null and content !=""'> and content = #{content} </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='publicTime!= null  '> and public_time = #{publicTime} </if>
+        <if test='isSale!= null and isSale !=""'> and is_sale = #{isSale} </if>
+        <if test='examineStatus!= null and examineStatus !=""'> and examine_status = #{examineStatus} </if>
+        <if test='examineTime!= null  '> and examine_time = #{examineTime} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null  '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null '> and update_time = #{updateTime} </if>
+        <if test='browseVolume!= null and browseVolume !=""'> and browse_volume = #{browseVolume} </if>
+        <if test='collectionVolume!= null and collectionVolume !=""'> and collection_volume = #{collectionVolume} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+            <if test='audio!= null and audio !=""'> and audio = #{audio} </if>
+        <if test="startTime != null and '' != startTime">
+            AND UNIX_TIMESTAMP(create_time) &gt;= UNIX_TIMESTAMP(#{startTime})
+        </if>
+        <if test="endTime != null and '' != endTime ">
+            AND UNIX_TIMESTAMP(create_time) &lt;= UNIX_TIMESTAMP(#{endTime})
+        </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <!--  商家管理  分页查询宣传列表-->
+    <select id="listPublicityHDPage" parameterType="java.util.Map" resultMap="c10PublicityResultMap">
+        SELECT * FROM c10_publicity WHERE delete_flag=1
+        <if test="shopPublicityPageForm.shopName != null and '' != shopPublicityPageForm.shopName">
+            AND shop_name LIKE CONCAT('%',#{shopPublicityPageForm.shopName},'%')
+        </if>
+        <if test="shopPublicityPageForm.startTime != null and '' != shopPublicityPageForm.startTime">
+            AND UNIX_TIMESTAMP(create_time) &gt;= UNIX_TIMESTAMP(#{shopPublicityPageForm.startTime})
+        </if>
+        <if test="shopPublicityPageForm.endTime != null and '' != shopPublicityPageForm.endTime">
+            AND UNIX_TIMESTAMP(create_time) &lt;= UNIX_TIMESTAMP(#{shopPublicityPageForm.endTime})
+        </if>
+        <if test="shopPublicityPageForm.examineStatus != null and '' != shopPublicityPageForm.examineStatus">
+            AND examine_status = #{shopPublicityPageForm.examineStatus}
+        </if>
+        ORDER BY order_num
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from c10_publicity
+        <where>
+                    <if test='categoryId!= null and categoryId !=""'> and category_id = #{categoryId} </if>
+        <if test='secondCategoryId!= null and secondCategoryId !=""'> and second_category_id = #{secondCategoryId} </if>
+        <if test='thirdCategoryId!= null and thirdCategoryId !=""'> and third_category_id = #{thirdCategoryId} </if>
+        <if test='reason!= null and reason !=""'> and reason = #{reason} </if>
+        <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='shopName!= null and shopName !=""'> and shop_name = #{shopName} </if>
+        <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='title!= null and title !=""'> and title = #{title} </if>
+        <if test='goodsDesc!= null and goodsDesc !=""'> and goods_desc = #{goodsDesc} </if>
+        <if test='icon!= null and icon !=""'> and icon = #{icon} </if>
+        <if test='content!= null and content !=""'> and content = #{content} </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='publicTime!= null  '> and public_time = #{publicTime} </if>
+        <if test='isSale!= null and isSale !=""'> and is_sale = #{isSale} </if>
+        <if test='examineStatus!= null and examineStatus !=""'> and examine_status = #{examineStatus} </if>
+        <if test='examineTime!= null  '> and examine_time = #{examineTime} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null  '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null '> and update_time = #{updateTime} </if>
+        <if test='browseVolume!= null and browseVolume !=""'> and browse_volume = #{browseVolume} </if>
+        <if test='collectionVolume!= null and collectionVolume !=""'> and collection_volume = #{collectionVolume} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+            <if test='audio!= null and audio !=""'> and audio = #{audio} </if>
+        </where>
+    </select>
+
+    <insert id="insertBatch">
+        INSERT INTO c10_publicity(
+                        category_id,
+            second_category_id,
+            third_category_id,
+            shop_id,
+            shop_name,
+            type,
+            title,
+            goods_desc,
+            icon,
+            content,
+            order_num,
+            public_time,
+            is_sale,
+            examine_status,
+            examine_time,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+        browse_volume,
+        collection_volume,
+        content_url,
+        duration,
+        reason,
+        delete_flag,
+        audio
+        )
+        VALUES
+        <foreach collection ="list" item="c10Publicity" separator =",">
+        (
+                        #{c10Publicity.categoryId},
+            #{c10Publicity.secondCategoryId},
+            #{c10Publicity.thirdCategoryId},
+            #{c10Publicity.shopId},
+            #{c10Publicity.shopName},
+            #{c10Publicity.type},
+            #{c10Publicity.title},
+            #{c10Publicity.goodsDesc},
+            #{c10Publicity.icon},
+            #{c10Publicity.content},
+            #{c10Publicity.orderNum},
+            #{c10Publicity.publicTime},
+            #{c10Publicity.isSale},
+            #{c10Publicity.examineStatus},
+            #{c10Publicity.examineTime},
+            #{c10Publicity.createPerson},
+            #{c10Publicity.createTime},
+            #{c10Publicity.updatePerson},
+            #{c10Publicity.updateTime},
+            #{c10Publicity.browseVolume},
+            #{c10Publicity.collectionVolume},
+            #{c10Publicity.contentUrl},
+            #{c10Publicity.duration},
+            #{c10Publicity.reason},
+            #{c10Publicity.deleteFlag},
+            #{c10Publicity.audio}
+        )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE c10_publicity
+            <set>
+                        <if test='item.categoryId !=null and item.categoryId !=""' >category_id = #{item.categoryId},</if>
+        <if test='item.secondCategoryId !=null and item.secondCategoryId !=""' >second_category_id = #{item.secondCategoryId},</if>
+        <if test='item.thirdCategoryId !=null and item.thirdCategoryId !=""' >third_category_id = #{item.thirdCategoryId},</if>
+        <if test='item.shopId !=null and item.shopId !=""' >shop_id = #{item.shopId},</if>
+        <if test='item.shopName !=null and item.shopName !=""' >shop_name = #{item.shopName},</if>
+        <if test='item.type !=null and item.type !=""' >type = #{item.type},</if>
+        <if test='item.title !=null and item.title !=""' >title = #{item.title},</if>
+        <if test='item.goodsDesc !=null and item.goodsDesc !=""' >goods_desc = #{item.goodsDesc},</if>
+        <if test='item.icon !=null and item.icon !=""' >icon = #{item.icon},</if>
+        <if test='item.content !=null and item.content !=""' >content = #{item.content},</if>
+        <if test='item.orderNum !=null and item.orderNum !=""' >order_num = #{item.orderNum},</if>
+        <if test='item.publicTime !=null     ' >public_time = #{item.publicTime},</if>
+        <if test='item.isSale !=null and item.isSale !=""' >is_sale = #{item.isSale},</if>
+        <if test='item.examineStatus !=null and item.examineStatus !=""' >examine_status = #{item.examineStatus},</if>
+        <if test='item.examineTime !=null        ' >examine_time = #{item.examineTime},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null      ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null       ' >update_time = #{item.updateTime},</if>
+        <if test='item.browseVolume !=null and item.browseVolume !=""' >browse_volume = #{item.browseVolume},</if>
+        <if test='item.collectionVolume !=null and item.collectionVolume !=""' >collection_volume = #{item.collectionVolume},</if>
+        <if test='item.contentUrl !=null and item.contentUrl !=""' >content_url = #{item.contentUrl},</if>
+        <if test='item.duration !=null and item.duration !=""' >duration = #{item.duration},</if>
+        <if test='item.reason !=null and item.reason !=""' >reason = #{item.reason},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+                <if test='item.audio !=null and item.audio !=""' >audio = #{item.audio},</if>
+
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE c10_publicity
+        <set>
+                    <if test='categoryId !=null and categoryId !=""' >category_id = #{categoryId},</if>
+        <if test='secondCategoryId !=null and secondCategoryId !=""' >second_category_id = #{secondCategoryId},</if>
+        <if test='thirdCategoryId !=null and thirdCategoryId !=""' >third_category_id = #{thirdCategoryId},</if>
+        <if test='shopId !=null and shopId !=""' >shop_id = #{shopId},</if>
+        <if test='shopName !=null and shopName !=""' >shop_name = #{shopName},</if>
+        <if test='type !=null and type !=""' >type = #{type},</if>
+        <if test='title !=null and title !=""' >title = #{title},</if>
+        <if test='goodsDesc !=null and goodsDesc !=""' >goods_desc = #{goodsDesc},</if>
+        <if test='icon !=null and icon !=""' >icon = #{icon},</if>
+        <if test='content !=null and content !=""' >content = #{content},</if>
+        <if test='orderNum !=null and orderNum !=""' >order_num = #{orderNum},</if>
+        <if test='publicTime !=null  ' >public_time = #{publicTime},</if>
+        <if test='isSale !=null and isSale !=""' >is_sale = #{isSale},</if>
+        <if test='examineStatus !=null and examineStatus !=""' >examine_status = #{examineStatus},</if>
+        <if test='examineTime !=null  ' >examine_time = #{examineTime},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='browseVolume !=null and browseVolume !=""' >browse_volume = #{browseVolume},</if>
+        <if test='collectionVolume !=null and collectionVolume !=""' >collection_volume = #{collectionVolume},</if>
+        <if test='contentUrl !=null and contentUrl !=""' >content_url = #{contentUrl},</if>
+        <if test='duration !=null and duration !=""' >duration = #{duration},</if>
+        <if test='reason !=null and reason !=""' >reason = #{reason},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+           <if test='audio!= null and audio !=""'> and audio = #{audio} </if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

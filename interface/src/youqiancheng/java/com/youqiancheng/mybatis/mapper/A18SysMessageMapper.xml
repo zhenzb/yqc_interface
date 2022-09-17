@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.A18SysMessageDao">
+
+    <resultMap id="a18SysMessageResultMap" type="com.youqiancheng.mybatis.model.A18SysMessageDO">
+        <id column="id" property="id"/> 
+        <result column="type" property="type"/> 
+        <result column="order_no" property="orderNo"/> 
+        <result column="error_code" property="errorCode"/> 
+        <result column="error_des" property="errorDes"/> 
+        <result column="content" property="content"/> 
+        <result column="create_person" property="createPerson"/> 
+        <result column="create_time" property="createTime"/> 
+        <result column="update_person" property="updatePerson"/> 
+        <result column="update_time" property="updateTime"/> 
+        <result column="delete_flag" property="deleteFlag"/> 
+
+        
+        
+    </resultMap>
+
+    <sql id="a18SysMessageColumns">
+        a18_sys_message.id AS "id",
+        a18_sys_message.type AS "type",
+        a18_sys_message.order_no AS "orderNo",
+        a18_sys_message.error_code AS "errorCode",
+        a18_sys_message.error_des AS "errorDes",
+        a18_sys_message.content AS "content",
+        a18_sys_message.create_person AS "createPerson",
+        a18_sys_message.create_time AS "createTime",
+        a18_sys_message.update_person AS "updatePerson",
+        a18_sys_message.update_time AS "updateTime",
+        a18_sys_message.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="a18SysMessageJoins">
+        
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.A18SysMessageDO">
+        SELECT
+        <include refid="a18SysMessageColumns" />
+        FROM a18_sys_message <include refid="a18SysMessageJoins" />
+        <where>
+        a18_sys_message.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.A18SysMessageDO">
+        SELECT
+        <include refid="a18SysMessageColumns" />
+        FROM a18_sys_message <include refid="a18SysMessageJoins" />
+        <where>
+                    <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='orderNo!= null and orderNo !=""'> and order_no = #{orderNo} </if>
+        <if test='errorCode!= null and errorCode !=""'> and error_code = #{errorCode} </if>
+        <if test='errorDes!= null and errorDes !=""'> and error_des = #{errorDes} </if>
+        <if test='content!= null and content !=""'> and content = #{content} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null and createTime !=""'> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null and updateTime !=""'> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.A18SysMessageDO">
+        SELECT
+        <include refid="a18SysMessageColumns" />
+        FROM a18_sys_message <include refid="a18SysMessageJoins" />
+        <where>
+                    <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='orderNo!= null and orderNo !=""'> and order_no = #{orderNo} </if>
+        <if test='errorCode!= null and errorCode !=""'> and error_code = #{errorCode} </if>
+        <if test='errorDes!= null and errorDes !=""'> and error_des = #{errorDes} </if>
+        <if test='content!= null and content !=""'> and content = #{content} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null and createTime !=""'> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null and updateTime !=""'> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from a18_sys_message
+        <where>
+                    <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='orderNo!= null and orderNo !=""'> and order_no = #{orderNo} </if>
+        <if test='errorCode!= null and errorCode !=""'> and error_code = #{errorCode} </if>
+        <if test='errorDes!= null and errorDes !=""'> and error_des = #{errorDes} </if>
+        <if test='content!= null and content !=""'> and content = #{content} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null and createTime !=""'> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null and updateTime !=""'> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+    </select>
+
+
+
+    <insert id="insertBatch">
+        INSERT INTO a18_sys_message(
+                        type,
+            order_no,
+            error_code,
+            error_des,
+            content,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="a18SysMessage" separator =",">
+        (
+                        #{a18SysMessage.type},
+            #{a18SysMessage.orderNo},
+            #{a18SysMessage.errorCode},
+            #{a18SysMessage.errorDes},
+            #{a18SysMessage.content},
+            #{a18SysMessage.createPerson},
+            #{a18SysMessage.createTime},
+            #{a18SysMessage.updatePerson},
+            #{a18SysMessage.updateTime},
+            #{a18SysMessage.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE a18_sys_message
+            <set>
+                        <if test='item.type !=null and item.type !=""' >type = #{item.type},</if>
+        <if test='item.orderNo !=null and item.orderNo !=""' >order_no = #{item.orderNo},</if>
+        <if test='item.errorCode !=null and item.errorCode !=""' >error_code = #{item.errorCode},</if>
+        <if test='item.errorDes !=null and item.errorDes !=""' >error_des = #{item.errorDes},</if>
+        <if test='item.content !=null and item.content !=""' >content = #{item.content},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null and item.createTime !=""' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null and item.updateTime !=""' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE a18_sys_message
+        <set>
+                    <if test='type !=null and type !=""' >type = #{type},</if>
+        <if test='orderNo !=null and orderNo !=""' >order_no = #{orderNo},</if>
+        <if test='errorCode !=null and errorCode !=""' >error_code = #{errorCode},</if>
+        <if test='errorDes !=null and errorDes !=""' >error_des = #{errorDes},</if>
+        <if test='content !=null and content !=""' >content = #{content},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null and createTime !=""' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null and updateTime !=""' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

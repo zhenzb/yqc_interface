@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.C01GoodsDao">
+
+    <resultMap id="c01GoodsResultMap" type="com.youqiancheng.mybatis.model.C01GoodsDO">
+        <id column="id" property="id"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="second_category_id" property="secondCategoryId"/>
+        <result column="third_category_id" property="thirdCategoryId"/>
+        <result column="name" property="name"/>
+        <result column="price" property="price"/>
+        <result column="stock" property="stock"/>
+        <result column="goods_desc" property="goodsDesc"/>
+        <result column="sale_num" property="saleNum"/>
+        <result column="is_sale" property="isSale"/>
+        <result column="examine_status" property="examineStatus"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="shop_name" property="shopName"/>
+        <result column="icon" property="icon"/>
+        <result column="browse_volume" property="browseVolume"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="comprehensive_sort" property="comprehensiveSort"/>
+        <result column="evaluate_sort" property="evaluateSort"/>
+        <result column="collection_volume" property="collectionVolume"/>
+        <result column="goods_no" property="goodsNo"/>
+        <result column="type" property="type"/>
+        <result column="reason" property="reason"/>
+        <result column="introduction" property="introduction"/>
+
+
+    </resultMap>
+
+    <!--  统计本日新增商品数据  to_days -->
+    <select id="selectForDay" resultType="java.lang.Long">
+        select count(*) from c01_goods where to_days(create_time) = to_days(now());
+    </select>
+    <!--  统计本月新增商品数据  YEARWEEK -->
+    <select id="selectForMonth" resultType="java.lang.Long">
+--         SELECT count(*) FROM b01_user WHERE YEARWEEK(create_time) = YEARWEEK(now());
+        select count(*) from c01_goods where date_format( create_time, '%y%m' ) = date_format( curdate( ) , '%y%m' )
+    </select>
+    <!--  统计所有商品数量 -->
+    <select id="selectForAll" resultType="java.lang.Long">
+        SELECT count(*) FROM c01_goods
+    </select>
+    <sql id="c01GoodsColumns">
+        c01_goods.id AS "id",
+        c01_goods.category_id AS "categoryId",
+        c01_goods.second_category_id AS "secondCategoryId",
+        c01_goods.third_category_id AS "thirdCategoryId",
+        c01_goods.name AS "name",
+        c01_goods.price AS "price",
+        c01_goods.stock AS "stock",
+        c01_goods.goods_desc AS "goodsDesc",
+        c01_goods.sale_num AS "saleNum",
+        c01_goods.is_sale AS "isSale",
+        c01_goods.examine_status AS "examineStatus",
+        c01_goods.shop_id AS "shopId",
+        c01_goods.shop_name AS "shopName",
+        c01_goods.icon AS "icon",
+        c01_goods.browse_volume AS "browseVolume",
+        c01_goods.create_person AS "createPerson",
+        c01_goods.create_time AS "createTime",
+        c01_goods.update_person AS "updatePerson",
+        c01_goods.update_time AS "updateTime",
+        c01_goods.comprehensive_sort AS "comprehensiveSort",
+        c01_goods.evaluate_sort AS "evaluateSort",
+        c01_goods.goods_no AS "goodsNo",
+        c01_goods.collection_volume AS "collectionVolume",
+        c01_goods.type AS "type",
+        c01_goods.reason AS "reason",
+        c01_goods.introduction AS "introduction",
+        c01_goods.delete_flag AS "deleteFlag",
+        c01_goods.goods_postage AS "goodsPostage"
+    </sql>
+
+    <sql id="c01GoodsJoins">
+
+    </sql>
+
+    <!--  分页查询商品/房间列表-->
+    <select id="listGoodsHDPage" parameterType="java.util.Map" resultMap="c01GoodsResultMap">
+        SELECT
+          *
+        FROM c01_goods
+        WHERE delete_flag=1
+        <if test="shopGoodsPageForm.goodsName != null and '' != shopGoodsPageForm.goodsName">
+            AND name LIKE CONCAT('%',#{shopGoodsPageForm.goodsName},'%')
+        </if>
+        <if test="shopGoodsPageForm.startTime != null and '' != shopGoodsPageForm.startTime">
+            AND UNIX_TIMESTAMP(create_time) &gt;= UNIX_TIMESTAMP(#{shopGoodsPageForm.startTime})
+        </if>
+        <if test="shopGoodsPageForm.endTime != null and '' != shopGoodsPageForm.endTime">
+            AND UNIX_TIMESTAMP(create_time) &lt;= UNIX_TIMESTAMP(#{shopGoodsPageForm.endTime})
+        </if>
+        <if test="shopGoodsPageForm.goodsStatus != null and '' != shopGoodsPageForm.goodsStatus">
+            AND examine_status = #{shopGoodsPageForm.goodsStatus}
+        </if>
+        <if test="shopGoodsPageForm.shopId != null and '' != shopGoodsPageForm.shopId">
+            AND shop_id = #{shopGoodsPageForm.shopId}
+        </if>
+        <if test="shopGoodsPageForm.type != null and '' != shopGoodsPageForm.type">
+            AND type != #{shopGoodsPageForm.type}
+        </if>
+        <if test="shopGoodsPageForm.types != null and '' != shopGoodsPageForm.types">
+            AND type = #{shopGoodsPageForm.types}
+        </if>
+        ORDER BY create_time desc,comprehensive_sort,evaluate_sort
+    </select>
+    <select id="listGoodsHDPage1" parameterType="java.util.Map" resultMap="c01GoodsResultMap">
+        SELECT
+          *
+        FROM c01_goods
+        WHERE delete_flag=1
+        <if test="shopGoodsPageForm.goodsName != null and '' != shopGoodsPageForm.goodsName">
+            AND name LIKE CONCAT('%',#{shopGoodsPageForm.goodsName},'%')
+        </if>
+        <if test="shopGoodsPageForm.startTime != null and '' != shopGoodsPageForm.startTime">
+            AND UNIX_TIMESTAMP(create_time) &gt;= UNIX_TIMESTAMP(#{shopGoodsPageForm.startTime})
+        </if>
+        <if test="shopGoodsPageForm.endTime != null and '' != shopGoodsPageForm.endTime">
+            AND UNIX_TIMESTAMP(create_time) &lt;= UNIX_TIMESTAMP(#{shopGoodsPageForm.endTime})
+        </if>
+        <if test="shopGoodsPageForm.goodsStatus != null and '' != shopGoodsPageForm.goodsStatus">
+            AND examine_status = #{shopGoodsPageForm.goodsStatus}
+        </if>
+        <if test="shopGoodsPageForm.shopId != null and '' != shopGoodsPageForm.shopId">
+            AND shop_id = #{shopGoodsPageForm.shopId}
+        </if>
+        <if test="shopGoodsPageForm.type != null and '' != shopGoodsPageForm.type">
+            AND type = #{shopGoodsPageForm.type}
+        </if>
+        ORDER BY id desc
+    </select>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.C01GoodsDO">
+        SELECT
+        <include refid="c01GoodsColumns" />
+        FROM c01_goods <include refid="c01GoodsJoins" />
+        <where>
+        c01_goods.id = #{id} and delete_flag=1
+        </where>
+    </select>
+
+    <select id="getGoodsByIdHDPage" resultType="com.youqiancheng.mybatis.model.C01GoodsDO">
+        SELECT
+        <include refid="c01GoodsColumns" />
+        FROM c01_goods <include refid="c01GoodsJoins" />
+        <where>
+            <if test='categoryId!= null and categoryId !=""'> and category_id = #{categoryId} </if>
+            <if test='reason!= null and reason !=""'> and reason = #{reason} </if>
+            <if test='secondCategoryId!= null and secondCategoryId !=""'> and second_category_id = #{secondCategoryId} </if>
+            <if test='thirdCategoryId!= null and thirdCategoryId !=""'> and third_category_id = #{thirdCategoryId} </if>
+            <if test='name!= null and name !=""'> and name = #{name} </if>
+            <if test='price!= null and price !=""'> and price = #{price} </if>
+            <if test='stock!= null and stock !=""'> and stock = #{stock} </if>
+            <if test='goodsDesc!= null and goodsDesc !=""'> and goods_desc = #{goodsDesc} </if>
+            <if test='saleNum!= null and saleNum !=""'> and sale_num = #{saleNum} </if>
+            <if test='isSale!= null and isSale !=""'> and is_sale = #{isSale} </if>
+            <if test='examineStatus!= null and examineStatus !=""'> and examine_status = #{examineStatus} </if>
+            <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+            <if test='shopName!= null and shopName !=""'> and shop_name = #{shopName} </if>
+            <if test='icon!= null and icon !=""'> and icon = #{icon} </if>
+            <if test='browseVolume!= null and browseVolume !=""'> and browse_volume = #{browseVolume} </if>
+            <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+            <if test='createTime!= null '> and create_time = #{createTime} </if>
+            <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+            <if test='updateTime!= null '> and update_time = #{updateTime} </if>
+            <if test='comprehensiveSort!= null and comprehensiveSort !=""'> and comprehensive_sort = #{comprehensiveSort} </if>
+            <if test='evaluateSort!= null and evaluateSort !=""'> and evaluate_sort = #{evaluateSort} </if>
+            <if test='goodsNo!= null and goodsNo !=""'> and goods_no = #{goodsNo} </if>
+            <if test='collectionVolume!= null and collectionVolume !=""'> and collection_volume = #{collectionVolume} </if>
+            <if test='type!= null and type !=""'> and type = #{type} </if>
+            <if test='introduction!= null and introduction !=""'> and introduction = #{introduction} </if>
+            <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.C01GoodsDO">
+        SELECT
+        <include refid="c01GoodsColumns" />
+        FROM c01_goods <include refid="c01GoodsJoins" />
+        <where>
+                    <if test='categoryId!= null and categoryId !=""'> and category_id = #{categoryId} </if>
+        <if test='secondCategoryId!= null and secondCategoryId !=""'> and second_category_id = #{secondCategoryId} </if>
+        <if test='thirdCategoryId!= null and thirdCategoryId !=""'> and third_category_id = #{thirdCategoryId} </if>
+        <if test='reason!= null and reason !=""'> and reason = #{reason} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='price!= null and price !=""'> and price = #{price} </if>
+        <if test='stock!= null and stock !=""'> and stock = #{stock} </if>
+        <if test='goodsDesc!= null and goodsDesc !=""'> and goods_desc = #{goodsDesc} </if>
+        <if test='saleNum!= null and saleNum !=""'> and sale_num = #{saleNum} </if>
+        <if test='isSale!= null and isSale !=""'> and is_sale = #{isSale} </if>
+        <if test='examineStatus!= null and examineStatus !=""'> and examine_status = #{examineStatus} </if>
+        <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='shopName!= null and shopName !=""'> and shop_name = #{shopName} </if>
+        <if test='icon!= null and icon !=""'> and icon = #{icon} </if>
+        <if test='browseVolume!= null and browseVolume !=""'> and browse_volume = #{browseVolume} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null '> and update_time = #{updateTime} </if>
+        <if test='comprehensiveSort!= null and comprehensiveSort !=""'> and comprehensive_sort = #{comprehensiveSort} </if>
+        <if test='evaluateSort!= null and evaluateSort !=""'> and evaluate_sort = #{evaluateSort} </if>
+        <if test='goodsNo!= null and goodsNo !=""'> and goods_no = #{goodsNo} </if>
+        <if test='collectionVolume!= null and collectionVolume !=""'> and collection_volume = #{collectionVolume} </if>
+        <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='introduction!= null and introduction !=""'> and introduction = #{introduction} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.C01GoodsDO">
+        SELECT
+         c.*, count(d.id) as evaluateCount
+        FROM c01_goods c
+        left join d04_goods_evaluate d on d.goods_id=c.id
+        <where>
+            <if test='isSale!= null and isSale !=""'> and c.is_sale = #{isSale} </if>
+            <if test='shopId!= null and shopId !=""'> and c.shop_id = #{shopId} </if>
+            <if test='deleteFlag!= null and deleteFlag !=""'> and c.delete_flag = #{deleteFlag} </if>
+        </where>
+         group by c.id
+         order by c.id desc
+
+    </select>
+
+
+    <select id="listGoods" resultType="com.youqiancheng.mybatis.model.C01GoodsDO">
+        SELECT
+        c.*, count(d.id) as evaluateCount
+        FROM c01_goods c
+        left join d04_goods_evaluate d on d.goods_id=c.id
+        <where>
+            <if test='isSale!= null and isSale !=""'> and c.is_sale = #{isSale} </if>
+            <if test='shopId!= null and shopId !=""'> and c.shop_id = #{shopId} </if>
+            <if test='deleteFlag!= null and deleteFlag !=""'> and c.delete_flag = #{deleteFlag} </if>
+        </where>
+        group by c.id
+        order by c.id desc
+    </select>
+
+    <select id="listWithOrderHDPage" resultType="com.youqiancheng.mybatis.model.C01GoodsDO">
+        SELECT
+        c.*,f.province,ca.`name` as city,f.area
+        FROM c01_goods c
+        left Join f01_shop f on c.shop_id=f.id
+        left JOIN c03_category ca on ca.id = c.third_category_id
+        <where>
+        and c.is_sale =2 and c.delete_flag = 1
+            <if test='categoryId!= null and categoryId !=""'> and c.category_id = #{categoryId} </if>
+            <if test='secondCategoryId!= null and secondCategoryId !=""'> and c.second_category_id = #{secondCategoryId} </if>
+            <if test='reason!= null and reason !=""'> and c.reason = #{reason} </if>
+            <if test='thirdCategoryId!= null and thirdCategoryId !=""'> and c.third_category_id = #{thirdCategoryId} </if>
+            <if test='type!= null and type !=""'> and c.type = #{type} </if>
+            <if test='name!= null and name !=""'> and c.name like CONCAT('%',#{name},'%') </if>
+            <if test='price!= null and price !=""'> and c.price = #{price} </if>
+            <if test='stock!= null and stock !=""'> and c.stock = #{stock} </if>
+            <if test='goodsDesc!= null and goodsDesc !=""'> and c.goods_desc = #{goodsDesc} </if>
+            <if test='saleNum!= null and saleNum !=""'> and c.sale_num = #{saleNum} </if>
+            <if test='isSale!= null and isSale !=""'> and c.is_sale = #{isSale} </if>
+            <if test='examineStatus!= null and examineStatus !=""'> and c.examine_status = #{examineStatus} </if>
+            <if test='shopId!= null and shopId !=""'> and c.shop_id = #{shopId} </if>
+            <if test='shopName!= null and shopName !=""'> and c.shop_name = #{shopName} </if>
+            <if test='icon!= null and icon !=""'> and c.icon = #{icon} </if>
+            <if test='browseVolume!= null and browseVolume !=""'> and c.browse_volume = #{browseVolume} </if>
+            <if test='createPerson!= null and createPerson !=""'> and c.create_person = #{createPerson} </if>
+            <if test='createTime!= null '> and c.create_time = #{createTime} </if>
+            <if test='updatePerson!= null and updatePerson !=""'> and c.update_person = #{updatePerson} </if>
+            <if test='updateTime!= null '> and c.update_time = #{updateTime} </if>
+            <if test='evaluateSort!= null and evaluateSort !=""'> and c.evaluate_sort = #{evaluateSort} </if>
+            <if test='goodsNo!= null and goodsNo !=""'> and c.goods_no = #{goodsNo} </if>
+            <if test='collectionVolume!= null and collectionVolume !=""'> and c.collection_volume = #{collectionVolume} </if>
+            <if test='introduction!= null and introduction !=""'> and c.introduction = #{introduction} </if>
+            <if test='deleteFlag!= null and deleteFlag !=""'> and c.delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="orderKey == 1">
+                order by c.comprehensive_sort ${orderType}
+            </when>
+            <when test="orderKey == 2">
+                order by c.sale_num  ${orderType}
+            </when>
+            <when test="orderKey == 3">
+                order by c.price  ${orderType}
+            </when>
+            <when test="orderKey == 4">
+                order by c.evaluate_sort  ${orderType}
+            </when>
+            <otherwise>
+                order by c.id desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from c01_goods
+        <where>
+            <if test='categoryId!= null and categoryId !=""'> and category_id = #{categoryId} </if>
+        <if test='secondCategoryId!= null and secondCategoryId !=""'> and second_category_id = #{secondCategoryId} </if>
+        <if test='thirdCategoryId!= null and thirdCategoryId !=""'> and third_category_id = #{thirdCategoryId} </if>
+        <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='reason!= null and reason !=""'> and reason #{reason} </if>
+        <if test='price!= null and price !=""'> and price = #{price} </if>
+        <if test='stock!= null and stock !=""'> and stock = #{stock} </if>
+        <if test='goodsDesc!= null and goodsDesc !=""'> and goods_desc = #{goodsDesc} </if>
+        <if test='saleNum!= null and saleNum !=""'> and sale_num = #{saleNum} </if>
+        <if test='isSale!= null and isSale !=""'> and is_sale = #{isSale} </if>
+        <if test='examineStatus!= null and examineStatus !=""'> and examine_status = #{examineStatus} </if>
+        <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='shopName!= null and shopName !=""'> and shop_name = #{shopName} </if>
+        <if test='icon!= null and icon !=""'> and icon = #{icon} </if>
+        <if test='browseVolume!= null and browseVolume !=""'> and browse_volume = #{browseVolume} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null '> and update_time = #{updateTime} </if>
+        <if test='comprehensiveSort!= null and comprehensiveSort !=""'> and comprehensive_sort = #{comprehensiveSort} </if>
+        <if test='evaluateSort!= null and evaluateSort !=""'> and evaluate_sort = #{evaluateSort} </if>
+        <if test='collectionVolume!= null and collectionVolume !=""'> and collection_volume = #{collectionVolume} </if>
+        <if test='goodsNo!= null and goodsNo !=""'> and goods_no = #{goodsNo} </if>
+        <if test='introduction!= null and introduction !=""'> and introduction = #{introduction} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+    </select>
+
+
+
+    <insert id="insertBatch">
+        INSERT INTO c01_goods(
+                        category_id,
+            second_category_id,
+            third_category_id,
+        type,
+            name,
+            price,
+            stock,
+            goods_desc,
+            sale_num,
+            is_sale,
+            examine_status,
+            shop_id,
+            shop_name,
+            icon,
+            browse_volume,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+        comprehensive_sort,
+        evaluate_sort,
+        goods_no,
+        collection_volume,
+        reason,
+        introduction,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="c01Goods" separator =",">
+        (
+                        #{c01Goods.categoryId},
+            #{c01Goods.secondCategoryId},
+            #{c01Goods.thirdCategoryId},
+            #{c01Goods.type},
+            #{c01Goods.name},
+            #{c01Goods.price},
+            #{c01Goods.stock},
+            #{c01Goods.goodsDesc},
+            #{c01Goods.saleNum},
+            #{c01Goods.isSale},
+            #{c01Goods.examineStatus},
+            #{c01Goods.shopId},
+            #{c01Goods.shopName},
+            #{c01Goods.icon},
+            #{c01Goods.browseVolume},
+            #{c01Goods.createPerson},
+            #{c01Goods.createTime},
+            #{c01Goods.updatePerson},
+            #{c01Goods.updateTime},
+            #{c01Goods.comprehensiveSort},
+            #{c01Goods.evaluateSort},
+            #{c01Goods.goodsNo},
+            #{c01Goods.collectionVolume},
+            #{c01Goods.reason},
+            #{c01Goods.introduction},
+            #{c01Goods.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE c01_goods
+            <set>
+                        <if test='item.categoryId !=null and item.categoryId !=""' >category_id = #{item.categoryId},</if>
+        <if test='item.secondCategoryId !=null and item.secondCategoryId !=""' >second_category_id = #{item.secondCategoryId},</if>
+        <if test='item.thirdCategoryId !=null and item.thirdCategoryId !=""' >third_category_id = #{item.thirdCategoryId},</if>
+        <if test='item.type !=null and item.type !=""' >type = #{item.type},</if>
+        <if test='item.name !=null and item.name !=""' >name = #{item.name},</if>
+        <if test='item.price !=null and item.price !=""' >price = #{item.price},</if>
+        <if test='item.stock !=null and item.stock !=""' >stock = #{item.stock},</if>
+        <if test='item.goodsDesc !=null and item.goodsDesc !=""' >goods_desc = #{item.goodsDesc},</if>
+        <if test='item.saleNum !=null and item.saleNum !=""' >sale_num = #{item.saleNum},</if>
+        <if test='item.isSale !=null and item.isSale !=""' >is_sale = #{item.isSale},</if>
+        <if test='item.examineStatus !=null and item.examineStatus !=""' >examine_status = #{item.examineStatus},</if>
+        <if test='item.shopId !=null and item.shopId !=""' >shop_id = #{item.shopId},</if>
+        <if test='item.shopName !=null and item.shopName !=""' >shop_name = #{item.shopName},</if>
+        <if test='item.icon !=null and item.icon !=""' >icon = #{item.icon},</if>
+        <if test='item.browseVolume !=null and item.browseVolume !=""' >browse_volume = #{item.browseVolume},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null  ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null  ' >update_time = #{item.updateTime},</if>
+        <if test='item.comprehensiveSort !=null and item.comprehensiveSort !=""' >comprehensive_sort = #{item.comprehensiveSort},</if>
+        <if test='item.evaluateSort !=null and item.evaluateSort !=""' >comprehensive_sort = #{item.evaluateSort},</if>
+        <if test='item.goodsNo !=null and item.goodsNo !=""' >goods_no = #{item.goodsNo},</if>
+        <if test='item.collectionVolume !=null and item.collectionVolume !=""' >collection_volume = #{item.collectionVolume},</if>
+        <if test='item.reason !=null and item.reason !=""' >reason = #{item.reason},</if>
+        <if test='item.introduction !=null and item.introduction !=""' >introduction = #{item.introduction},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE c01_goods
+        <set>
+                    <if test='categoryId !=null and categoryId !=""' >category_id = #{categoryId},</if>
+        <if test='secondCategoryId !=null and secondCategoryId !=""' >second_category_id = #{secondCategoryId},</if>
+        <if test='thirdCategoryId !=null and thirdCategoryId !=""' >third_category_id = #{thirdCategoryId},</if>
+        <if test='type !=null and type !=""' >type = #{type},</if>
+        <if test='name !=null and name !=""' >name = #{name},</if>
+        <if test='price !=null and price !=""' >price = #{price},</if>
+        <if test='stock !=null and stock !=""' >stock = #{stock},</if>
+        <if test='goodsDesc !=null and goodsDesc !=""' >goods_desc = #{goodsDesc},</if>
+        <if test='saleNum !=null and saleNum !=""' >sale_num = #{saleNum},</if>
+        <if test='isSale !=null and isSale !=""' >is_sale = #{isSale},</if>
+        <if test='examineStatus !=null and examineStatus !=""' >examine_status = #{examineStatus},</if>
+        <if test='shopId !=null and shopId !=""' >shop_id = #{shopId},</if>
+        <if test='shopName !=null and shopName !=""' >shop_name = #{shopName},</if>
+        <if test='icon !=null and icon !=""' >icon = #{icon},</if>
+        <if test='browseVolume !=null and browseVolume !=""' >browse_volume = #{browseVolume},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null  ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null  ' >update_time = #{updateTime},</if>
+        <if test='comprehensiveSort !=null and comprehensiveSort !=""' >comprehensive_sort = #{comprehensiveSort},</if>
+        <if test='evaluateSort !=null and evaluateSort !=""' >evaluate_sort = #{evaluateSort},</if>
+        <if test='goodsNo !=null and goodsNo !=""' >goods_no = #{goodsNo},</if>
+        <if test='collectionVolume !=null and collectionVolume !=""' >collection_volume = #{collectionVolume},</if>
+        <if test='reason !=null and reason !=""' >reason = #{reason},</if>
+        <if test='introduction !=null and introduction !=""' >introduction = #{introduction},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+<select id="getGoodsListHDPage"  parameterType="java.util.Map"  resultType="com.youqiancheng.mybatis.model.C01GoodsDO">
+    select * from c01_goods
+    <where>
+        <if test='thirdCategoryId!= null and thirdCategoryId !=""'>
+            and third_category_id = #{thirdCategoryId}
+        </if>
+        <if test='shopName!= null and shopName !=""'>
+            and shop_name = #{shopName}
+        </if>
+    </where>
+    <choose>
+        <when test="sort != null and sort.trim() != ''">
+            order by ${sort} ${order}
+        </when>
+        <otherwise>
+            order by id desc
+        </otherwise>
+    </choose>
+</select>
+    <select id="getShopAppGoodsByShopId" resultType="com.youqiancheng.mybatis.model.C01GoodsDO">
+        SELECT id,name,icon,price,goods_desc,sale_num,introduction from c01_goods where shop_id=#{shopId}
+    </select>
+</mapper>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.A09NoticeDao">
+
+    <resultMap id="a09NoticeResultMap" type="com.youqiancheng.mybatis.model.A09NoticeDO">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="order_num" property="orderNum"/>
+        <result column="status" property="status"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="category_name" property="categoryName"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+
+    </resultMap>
+
+    <sql id="a09NoticeColumns">
+        a09_notice.id AS "id",
+        a09_notice.title AS "title",
+        a09_notice.content AS "content",
+        a09_notice.order_num AS "orderNum",
+        a09_notice.status AS "status",
+        a09_notice.category_id AS "categoryId",
+        a09_notice.category_name AS "categoryName",
+        a09_notice.create_person AS "createPerson",
+        a09_notice.create_time AS "createTime",
+        a09_notice.update_person AS "updatePerson",
+        a09_notice.update_time AS "updateTime",
+        a09_notice.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="a09NoticeJoins">
+
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.A09NoticeDO">
+        SELECT
+        <include refid="a09NoticeColumns" />
+        FROM a09_notice <include refid="a09NoticeJoins" />
+        <where>
+        a09_notice.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.A09NoticeDO">
+        SELECT
+        <include refid="a09NoticeColumns" />
+        FROM a09_notice <include refid="a09NoticeJoins" />
+        <where>
+                    <if test='title!= null and title !=""'> and title = #{title} </if>
+        <if test='content!= null and content !=""'> and content = #{content} </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='categoryId!= null and categoryId !=""'> and category_id = #{categoryId} </if>
+        <if test='categoryName!= null and categoryName !=""'> and category_name = #{categoryName} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from a09_notice
+        <where>
+                    <if test='title!= null and title !=""'> and title = #{title} </if>
+        <if test='content!= null and content !=""'> and content = #{content} </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='categoryId!= null and categoryId !=""'> and category_id = #{categoryId} </if>
+        <if test='categoryName!= null and categoryName !=""'> and category_name = #{categoryName} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+    </select>
+
+    <!--分页获取公告列表-->
+    <select id="listNoticeHDPage" resultType="com.youqiancheng.mybatis.model.A09NoticeDO">
+            select * from a09_notice where delete_flag = #{deleteFlag}  and status = 1 order by a09_notice.update_time desc
+    </select>
+
+    <!--  商家管理  分页查询公告列表-->
+    <select id="listNoticePage" parameterType="java.util.Map" resultMap="a09NoticeResultMap">
+        SELECT * FROM a09_notice WHERE delete_flag=1
+        <if test="shopNoticePageForm.noticeTitle != null and '' != shopNoticePageForm.noticeTitle">
+            AND title LIKE CONCAT('%',#{shopNoticePageForm.noticeTitle},'%')
+        </if>
+        <if test="shopNoticePageForm.startTime != null and '' != shopNoticePageForm.startTime">
+            AND UNIX_TIMESTAMP(create_time) &gt;= UNIX_TIMESTAMP(#{shopNoticePageForm.startTime})
+        </if>
+        <if test="shopNoticePageForm.endTime != null and '' != shopNoticePageForm.endTime">
+            AND UNIX_TIMESTAMP(create_time) &lt;= UNIX_TIMESTAMP(#{shopNoticePageForm.endTime})
+        </if>
+        <if test="shopNoticePageForm.auditStatus != null and '' != shopNoticePageForm.auditStatus">
+            AND status = #{shopNoticePageForm.auditStatus}
+        </if>
+        ORDER BY id DESC
+    </select>
+
+    <insert id="insertBatch">
+        INSERT INTO a09_notice(
+                        title,
+            content,
+            order_num,
+            status,
+            category_id,
+        category_name,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="a09Notice" separator =",">
+        (
+                        #{a09Notice.title},
+            #{a09Notice.content},
+            #{a09Notice.orderNum},
+            #{a09Notice.status},
+            #{a09Notice.categoryId},
+            #{a09Notice.categoryName},
+            #{a09Notice.createPerson},
+            #{a09Notice.createTime},
+            #{a09Notice.updatePerson},
+            #{a09Notice.updateTime},
+            #{a09Notice.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+
+
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE a09_notice
+            <set>
+                        <if test='item.title !=null and item.title !=""' >title = #{item.title},</if>
+        <if test='item.content !=null and item.content !=""' >content = #{item.content},</if>
+        <if test='item.orderNum !=null and item.orderNum !=""' >order_num = #{item.orderNum},</if>
+        <if test='item.status !=null and item.status !=""' >status = #{item.status},</if>
+        <if test='item.categoryId !=null and item.categoryId !=""' >category_id = #{item.categoryId},</if>
+        <if test='item.categoryName !=null and item.categoryName !=""' >category_name = #{item.categoryName},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null      ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null       ' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE a09_notice
+        <set>
+                    <if test='title !=null and title !=""' >title = #{title},</if>
+        <if test='content !=null and content !=""' >content = #{content},</if>
+        <if test='orderNum !=null and orderNum !=""' >order_num = #{orderNum},</if>
+        <if test='status !=null and status !=""' >status = #{status},</if>
+        <if test='categoryId !=null and categoryId !=""' >category_id = #{categoryId},</if>
+        <if test='categoryName !=null and categoryName !=""' >category_name = #{categoryName},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

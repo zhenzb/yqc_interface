@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.B01UserDao">
+
+    <resultMap id="b01UserResultMap" type="com.youqiancheng.mybatis.model.B01UserDO">
+        <id column="id" property="id"/>
+        <result column="nick" property="nick"/>
+        <result column="mobile" property="mobile"/>
+        <result column="pic" property="pic"/>
+        <result column="regist_time" property="registTime"/>
+        <result column="sex" property="sex"/>
+        <result column="birthday" property="birthday"/>
+        <result column="weChat_openId" property="wechatOpenid"/>
+        <result column="current_login_time" property="currentLoginTime"/>
+        <result column="app_type" property="appType"/>
+        <result column="is_shop" property="isShop"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="shop_name" property="shopName"/>
+        <result column="status" property="status"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="is_authentication" property="isAuthentication"/>
+        <result column="apple_id" property="appleId"/>
+
+    </resultMap>
+
+    <sql id="b01UserColumns">
+        b01_user.id AS "id",
+        b01_user.nick AS "nick",
+        b01_user.mobile AS "mobile",
+        b01_user.pic AS "pic",
+        b01_user.regist_time AS "registTime",
+        b01_user.sex AS "sex",
+        b01_user.birthday AS "birthday",
+        b01_user.weChat_openId AS "wechatOpenid",
+        b01_user.current_login_time AS "currentLoginTime",
+        b01_user.app_type AS "appType",
+        b01_user.is_shop AS "isShop",
+        b01_user.shop_id AS "shopId",
+        b01_user.shop_name AS "shopName",
+        b01_user.status AS "status",
+        b01_user.create_person AS "createPerson",
+        b01_user.create_time AS "createTime",
+        b01_user.update_person AS "updatePerson",
+        b01_user.update_time AS "updateTime",
+        b01_user.is_authentication AS "isAuthentication",
+        b01_user.apple_id AS "appleId",
+        b01_user.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="b01UserJoins">
+
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.B01UserDO">
+        SELECT
+        b01.*,b07.name as authenticationName,
+        f08.status AS shopState
+        FROM b01_user b01
+        left join b07_authentication  b07 on b01.id=b07.user_id
+        LEFT JOIN f08_shop_user f08 ON f08.shop_id = b01.shop_id
+        <where>
+            b01.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.B01UserDO">
+        SELECT
+        <include refid="b01UserColumns" />
+        FROM b01_user <include refid="b01UserJoins" />
+        <where>
+                    <if test='nick!= null and nick !=""'> and nick = #{nick} </if>
+        <if test='mobile!= null and mobile !=""'> and mobile = #{mobile} </if>
+        <if test='pic!= null and pic !=""'> and pic = #{pic} </if>
+        <if test='registTime!= null  '> and regist_time = #{registTime} </if>
+        <if test='sex!= null and sex !=""'> and sex = #{sex} </if>
+        <if test='birthday!= null and birthday !=""'> and birthday = #{birthday} </if>
+        <if test='wechatOpenid!= null and wechatOpenid !=""'> and weChat_openId = #{wechatOpenid} </if>
+        <if test='currentLoginTime!= null  '> and current_login_time = #{currentLoginTime} </if>
+        <if test='appType!= null and appType !=""'> and app_type = #{appType} </if>
+        <if test='isShop!= null and isShop !=""'> and is_shop = #{isShop} </if>
+        <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='shopName!= null and shopName !=""'> and shop_name = #{shopName} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='isAuthentication!= null and isAuthentication !=""'> and is_authentication = #{isAuthentication} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='appleId!= null and appleId !=""'> and apple_id = #{appleId} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.B01UserDO">
+        SELECT
+        <include refid="b01UserColumns" />
+        FROM b01_user <include refid="b01UserJoins" />
+        <where>
+                    <if test='nick!= null and nick !=""'> and nick = #{nick} </if>
+        <if test='mobile!= null and mobile !=""'> and mobile = #{mobile} </if>
+        <if test='pic!= null and pic !=""'> and pic = #{pic} </if>
+        <if test='registTime!= null  '> and regist_time = #{registTime} </if>
+        <if test='sex!= null and sex !=""'> and sex = #{sex} </if>
+        <if test='birthday!= null and birthday !=""'> and birthday = #{birthday} </if>
+        <if test='wechatOpenid!= null and wechatOpenid !=""'> and weChat_openId = #{wechatOpenid} </if>
+        <if test='currentLoginTime!= null '> and current_login_time = #{currentLoginTime} </if>
+        <if test='appType!= null and appType !=""'> and app_type = #{appType} </if>
+        <if test='isShop!= null and isShop !=""'> and is_shop = #{isShop} </if>
+        <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='shopName!= null and shopName !=""'> and shop_name = #{shopName} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='isAuthentication!= null and isAuthentication !=""'> and is_authentication = #{isAuthentication} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='appleId!= null and appleId !=""'> and apple_id = #{appleId} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from b01_user
+        <where>
+                    <if test='nick!= null and nick !=""'> and nick = #{nick} </if>
+        <if test='mobile!= null and mobile !=""'> and mobile = #{mobile} </if>
+        <if test='pic!= null and pic !=""'> and pic = #{pic} </if>
+        <if test='registTime!= null  '> and regist_time = #{registTime} </if>
+        <if test='sex!= null and sex !=""'> and sex = #{sex} </if>
+        <if test='birthday!= null and birthday !=""'> and birthday = #{birthday} </if>
+        <if test='wechatOpenid!= null and wechatOpenid !=""'> and weChat_openId = #{wechatOpenid} </if>
+        <if test='currentLoginTime!= null  '> and current_login_time = #{currentLoginTime} </if>
+        <if test='appType!= null and appType !=""'> and app_type = #{appType} </if>
+        <if test='isShop!= null and isShop !=""'> and is_shop = #{isShop} </if>
+        <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='shopName!= null and shopName !=""'> and shop_name = #{shopName} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='isAuthentication!= null and isAuthentication !=""'> and is_authentication = #{isAuthentication} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='appleId!= null and appleId !=""'> and apple_id = #{appleId} </if>
+        </where>
+    </select>
+    <!--  统计本日新增用户数据  to_days -->
+    <select id="selectForDay" resultType="java.lang.Long">
+        select count(*) from b01_user where to_days(create_time) = to_days(now());
+    </select>
+    <!--  统计本月新增用户数据  YEARWEEK -->
+    <select id="selectForMonth" resultType="java.lang.Long">
+        select count(*) from b01_user where date_format( create_time, '%y%m' ) = date_format( curdate( ) , '%y%m' )
+    </select>
+    <!--  统计所有用户数量 -->
+    <select id="selectForAll" resultType="java.lang.Long">
+        SELECT count(*) FROM b01_user
+    </select>
+
+
+
+    <!--分页查询用户-->
+    <select id="listUserHDPage" resultType="com.youqiancheng.mybatis.model.B01UserDO">
+        SELECT *
+        FROM b01_user
+        WHERE 1=1
+        and delete_flag =1
+        <if test="userQueryForm.nick != null and '' != userQueryForm.nick">
+            AND nick LIKE CONCAT('%',#{userQueryForm.nick},'%')
+        </if>
+        <if test="userQueryForm.mobile != null and '' != userQueryForm.mobile">
+            AND mobile = #{userQueryForm.mobile}
+        </if>
+        <if test="userQueryForm.startTime != null">
+            AND regist_time &gt;= #{userQueryForm.startTime}
+        </if>
+        <if test="userQueryForm.endTime != null">
+            AND regist_time &lt;= #{userQueryForm.endTime}
+        </if>
+        ORDER BY id
+        DESC
+    </select>
+
+
+
+    <insert id="insertBatch">
+        INSERT INTO b01_user(
+                        nick,
+            mobile,
+            pic,
+            regist_time,
+            sex,
+            birthday,
+            weChat_openId,
+            current_login_time,
+            app_type,
+            is_shop,
+            shop_id,
+            shop_name,
+            status,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+        is_authentication,
+        apple_id,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="b01User" separator =",">
+        (
+                        #{b01User.nick},
+            #{b01User.mobile},
+            #{b01User.pic},
+            #{b01User.registTime},
+            #{b01User.sex},
+            #{b01User.birthday},
+            #{b01User.wechatOpenid},
+            #{b01User.currentLoginTime},
+            #{b01User.appType},
+            #{b01User.isShop},
+            #{b01User.shopId},
+            #{b01User.shopName},
+            #{b01User.status},
+            #{b01User.createPerson},
+            #{b01User.createTime},
+            #{b01User.updatePerson},
+            #{b01User.updateTime},
+            #{b01User.isAuthentication},
+            #{b01User.appleId},
+            #{b01User.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE b01_user
+            <set>
+                        <if test='item.nick !=null and item.nick !=""' >nick = #{item.nick},</if>
+        <if test='item.mobile !=null and item.mobile !=""' >mobile = #{item.mobile},</if>
+        <if test='item.pic !=null and item.pic !=""' >pic = #{item.pic},</if>
+        <if test='item.registTime !=null  ' >regist_time = #{item.registTime},</if>
+        <if test='item.sex !=null and item.sex !=""' >sex = #{item.sex},</if>
+        <if test='item.birthday !=null and item.birthday !=""' >birthday = #{item.birthday},</if>
+        <if test='item.wechatOpenid !=null and item.wechatOpenid !=""' >weChat_openId = #{item.wechatOpenid},</if>
+        <if test='item.currentLoginTime !=null ' >current_login_time = #{item.currentLoginTime},</if>
+        <if test='item.appType !=null and item.appType !=""' >app_type = #{item.appType},</if>
+        <if test='item.isShop !=null and item.isShop !=""' >is_shop = #{item.isShop},</if>
+        <if test='item.shopId !=null and item.shopId !=""' >shop_id = #{item.shopId},</if>
+        <if test='item.shopName !=null and item.shopName !=""' >shop_name = #{item.shopName},</if>
+        <if test='item.status !=null and item.status !=""' >status = #{item.status},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null      ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null       ' >update_time = #{item.updateTime},</if>
+        <if test='item.isAuthentication !=null and item.isAuthentication !=""' >is_authentication = #{item.isAuthentication},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+        <if test='item.appleId !=null and item.appleId !=""' >apple_id = #{item.appleId},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE b01_user
+        <set>
+                    <if test='nick !=null and nick !=""' >nick = #{nick},</if>
+        <if test='mobile !=null and mobile !=""' >mobile = #{mobile},</if>
+        <if test='pic !=null and pic !=""' >pic = #{pic},</if>
+        <if test='registTime !=null  ' >regist_time = #{registTime},</if>
+        <if test='sex !=null and sex !=""' >sex = #{sex},</if>
+        <if test='birthday !=null and birthday !=""' >birthday = #{birthday},</if>
+        <if test='wechatOpenid !=null and wechatOpenid !=""' >weChat_openId = #{wechatOpenid},</if>
+        <if test='currentLoginTime !=null ' >current_login_time = #{currentLoginTime},</if>
+        <if test='appType !=null and appType !=""' >app_type = #{appType},</if>
+        <if test='isShop !=null and isShop !=""' >is_shop = #{isShop},</if>
+        <if test='shopId !=null and shopId !=""' >shop_id = #{shopId},</if>
+        <if test='shopName !=null and shopName !=""' >shop_name = #{shopName},</if>
+        <if test='status !=null and status !=""' >status = #{status},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='isAuthentication !=null and isAuthentication !=""' >is_authentication = #{isAuthentication},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        <if test='appleId !=null and appleId !=""' >apple_id = #{appleId},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+
+    <select id="listUserByUserIds" parameterType="java.util.List" resultType="com.youqiancheng.mybatis.model.B01UserDO">
+        SELECT *
+        FROM b01_user
+        WHERE 1=1
+        and delete_flag =1
+        and id in
+        <foreach collection="list" index="index" item="id" separator="," open="(" close=")">
+        #{id}
+      </foreach>
+    </select>
+
+
+</mapper>

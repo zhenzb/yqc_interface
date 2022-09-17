@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.shop.system.F12PermissionDao">
+
+    <resultMap id="f12PermissionResultMap" type="com.youqiancheng.mybatis.model.F12PermissionDO">
+        <id column="menu_id" property="menuId"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="name" property="name"/>
+        <result column="url" property="url"/>
+        <result column="perms" property="perms"/>
+        <result column="type" property="type"/>
+        <result column="icon" property="icon"/>
+        <result column="order_num" property="orderNum"/>
+        <result column="component" property="component"/>
+        <result column="redirect" property="redirect"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="type_flag" property="typeFlag"/>
+
+
+
+    </resultMap>
+
+    <sql id="f12PermissionColumns">
+        f12_permission.menu_id AS "menuId",
+        f12_permission.parent_id AS "parentId",
+        f12_permission.name AS "name",
+        f12_permission.url AS "url",
+        f12_permission.perms AS "perms",
+        f12_permission.type AS "type",
+        f12_permission.icon AS "icon",
+        f12_permission.order_num AS "orderNum",
+        f12_permission.component AS "component",
+        f12_permission.redirect AS "redirect",
+        f12_permission.create_person AS "createPerson",
+        f12_permission.create_time AS "createTime",
+        f12_permission.update_person AS "updatePerson",
+        f12_permission.update_time AS "updateTime",
+        f12_permission.delete_flag AS "deleteFlag",
+        f12_permission.type_flag AS "typeFlag"
+    </sql>
+
+    <sql id="f12PermissionJoins">
+
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.F12PermissionDO">
+        SELECT
+        <include refid="f12PermissionColumns" />
+        FROM f12_permission <include refid="f12PermissionJoins" />
+        <where>
+        f12_permission.menu_id = #{id}
+        </where>
+    </select>
+
+    <!-- 根据用户id，查询用户所有的权限 -->
+    <select id="findByUserId" resultType="com.youqiancheng.mybatis.model.F12PermissionDO">
+      SELECT
+      p.*
+      FROM
+      f08_shop_user a
+      LEFT JOIN f13_role_shop_user ra ON a.id = ra.user_id
+      LEFT JOIN f11_role r on r.id = ra.role_id
+      left join f14_role_permission rp on rp.role_id = r.id
+      left join f12_permission p on p.menu_id = rp.permission_id
+      WHERE a.id = #{id}
+    </select>
+
+    <select id="findShopPermissionByName" resultType="com.youqiancheng.mybatis.model.F12PermissionDO">
+        SELECT menu_id
+        FROM f12_permission
+        where `name` = #{name}
+        limit 1
+    </select>
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.F12PermissionDO">
+        SELECT
+        <include refid="f12PermissionColumns" />
+        FROM f12_permission <include refid="f12PermissionJoins" />
+        <where>
+                    <if test='parentId!= null and parentId !=""'> and parent_id = #{parentId} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='url!= null and url !=""'> and url = #{url} </if>
+        <if test='perms!= null and perms !=""'> and perms = #{perms} </if>
+        <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='icon!= null and icon !=""'> and icon = #{icon} </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='component!= null and component !=""'> and component = #{component} </if>
+        <if test='redirect!= null and redirect !=""'> and redirect = #{redirect} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='typeFlag!= null and typeFlag !=""'> and type_flag = #{typeFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by menuId desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.F12PermissionDO">
+        SELECT
+        <include refid="f12PermissionColumns" />
+        FROM f12_permission <include refid="f12PermissionJoins" />
+        <where>
+                    <if test='parentId!= null and parentId !=""'> and parent_id = #{parentId} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='url!= null and url !=""'> and url = #{url} </if>
+        <if test='perms!= null and perms !=""'> and perms = #{perms} </if>
+        <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='icon!= null and icon !=""'> and icon = #{icon} </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='component!= null and component !=""'> and component = #{component} </if>
+        <if test='redirect!= null and redirect !=""'> and redirect = #{redirect} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='typeFlag!= null and typeFlag !=""'> and type_flag = #{typeFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by menuId desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from f12_permission
+        <where>
+                    <if test='parentId!= null and parentId !=""'> and parent_id = #{parentId} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='url!= null and url !=""'> and url = #{url} </if>
+        <if test='perms!= null and perms !=""'> and perms = #{perms} </if>
+        <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='icon!= null and icon !=""'> and icon = #{icon} </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='component!= null and component !=""'> and component = #{component} </if>
+        <if test='redirect!= null and redirect !=""'> and redirect = #{redirect} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='typeFlag!= null and typeFlag !=""'> and type_flag = #{typeFlag} </if>
+        </where>
+    </select>
+
+
+
+    <insert id="insertBatch">
+        INSERT INTO f12_permission(
+                        parent_id,
+            name,
+            url,
+            perms,
+            type,
+            icon,
+            order_num,
+            component,
+            redirect,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+            delete_flag,
+            type_flag
+        )
+        VALUES
+        <foreach collection ="list" item="f12Permission" separator =",">
+        (
+                        #{f12Permission.parentId},
+            #{f12Permission.name},
+            #{f12Permission.url},
+            #{f12Permission.perms},
+            #{f12Permission.type},
+            #{f12Permission.icon},
+            #{f12Permission.orderNum},
+            #{f12Permission.component},
+            #{f12Permission.redirect},
+            #{f12Permission.createPerson},
+            #{f12Permission.createTime},
+            #{f12Permission.updatePerson},
+            #{f12Permission.updateTime},
+            #{f12Permission.deleteFlag},
+            #{f12Permission.typeFlag}
+        )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE f12_permission
+            <set>
+                        <if test='item.parentId !=null and item.parentId !=""' >parent_id = #{item.parentId},</if>
+        <if test='item.name !=null and item.name !=""' >name = #{item.name},</if>
+        <if test='item.url !=null and item.url !=""' >url = #{item.url},</if>
+        <if test='item.perms !=null and item.perms !=""' >perms = #{item.perms},</if>
+        <if test='item.type !=null and item.type !=""' >type = #{item.type},</if>
+        <if test='item.icon !=null and item.icon !=""' >icon = #{item.icon},</if>
+        <if test='item.orderNum !=null and item.orderNum !=""' >order_num = #{item.orderNum},</if>
+        <if test='item.component !=null and item.component !=""' >component = #{item.component},</if>
+        <if test='item.redirect !=null and item.redirect !=""' >redirect = #{item.redirect},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null      ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null       ' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+        <if test='item.typeFlag !=null and item.typeFlag !=""' >type_flag = #{item.typeFlag},</if>
+            </set>
+            <where>
+                menu_id = #{item.menuId}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE f12_permission
+        <set>
+                    <if test='parentId !=null and parentId !=""' >parent_id = #{parentId},</if>
+        <if test='name !=null and name !=""' >name = #{name},</if>
+        <if test='url !=null and url !=""' >url = #{url},</if>
+        <if test='perms !=null and perms !=""' >perms = #{perms},</if>
+        <if test='type !=null and type !=""' >type = #{type},</if>
+        <if test='icon !=null and icon !=""' >icon = #{icon},</if>
+        <if test='orderNum !=null and orderNum !=""' >order_num = #{orderNum},</if>
+        <if test='component !=null and component !=""' >component = #{component},</if>
+        <if test='redirect !=null and redirect !=""' >redirect = #{redirect},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        <if test='typeFlag !=null and typeFlag !=""' >type_flag = #{typeFlag},</if>
+        </set>
+        WHERE menu_id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

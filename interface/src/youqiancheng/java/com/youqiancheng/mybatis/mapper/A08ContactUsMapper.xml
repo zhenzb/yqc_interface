@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.A08ContactUsDao">
+
+    <resultMap id="a08ContactUsResultMap" type="com.youqiancheng.mybatis.model.A08ContactUsDO">
+        <id column="id" property="id"/>
+        <result column="content" property="content"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+
+
+
+    </resultMap>
+
+    <sql id="a08ContactUsColumns">
+        a08_contact_us.id AS "id",
+        a08_contact_us.content AS "content",
+        a08_contact_us.create_person AS "createPerson",
+        a08_contact_us.create_time AS "createTime",
+        a08_contact_us.update_person AS "updatePerson",
+        a08_contact_us.update_time AS "updateTime",
+        a08_contact_us.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="a08ContactUsJoins">
+
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.A08ContactUsDO">
+        SELECT
+        <include refid="a08ContactUsColumns" />
+        FROM a08_contact_us <include refid="a08ContactUsJoins" />
+        <where>
+        a08_contact_us.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.A08ContactUsDO">
+        SELECT
+        <include refid="a08ContactUsColumns" />
+        FROM a08_contact_us <include refid="a08ContactUsJoins" />
+        <where>
+                    <if test='content!= null and content !=""'> and content = #{content} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.A08ContactUsDO">
+        SELECT
+        <include refid="a08ContactUsColumns" />
+        FROM a08_contact_us <include refid="a08ContactUsJoins" />
+        <where>
+                    <if test='content!= null and content !=""'> and content = #{content} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from a08_contact_us
+        <where>
+                    <if test='content!= null and content !=""'> and content = #{content} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+    </select>
+
+
+
+    <insert id="insertBatch">
+        INSERT INTO a08_contact_us(
+                        content,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="a08ContactUs" separator =",">
+        (
+                        #{a08ContactUs.content},
+            #{a08ContactUs.createPerson},
+            #{a08ContactUs.createTime},
+            #{a08ContactUs.updatePerson},
+            #{a08ContactUs.updateTime},
+            #{a08ContactUs.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE a08_contact_us
+            <set>
+                        <if test='item.content !=null and item.content !=""' >content = #{item.content},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null      ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null       ' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE a08_contact_us
+        <set>
+                    <if test='content !=null and content !=""' >content = #{content},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

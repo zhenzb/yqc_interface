@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.F16ShopProfitFlowsDao">
+
+    <resultMap id="f16ShopProfitFlowsResultMap" type="com.youqiancheng.mybatis.model.F16ShopProfitFlowsDO">
+        <id column="id" property="id"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="day_income" property="dayIncome"/>
+        <result column="income_day" property="incomeDay"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+
+
+
+    </resultMap>
+
+    <sql id="f16ShopProfitFlowsColumns">
+        f16_shop_profit_flows.id AS "id",
+        f16_shop_profit_flows.shop_id AS "shopId",
+        f16_shop_profit_flows.day_income AS "dayIncome",
+        f16_shop_profit_flows.income_day AS "incomeDay",
+        f16_shop_profit_flows.create_person AS "createPerson",
+        f16_shop_profit_flows.create_time AS "createTime",
+        f16_shop_profit_flows.update_person AS "updatePerson",
+        f16_shop_profit_flows.update_time AS "updateTime",
+        f16_shop_profit_flows.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="f16ShopProfitFlowsJoins">
+
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.F16ShopProfitFlowsDO">
+        SELECT
+        <include refid="f16ShopProfitFlowsColumns" />
+        FROM f16_shop_profit_flows <include refid="f16ShopProfitFlowsJoins" />
+        <where>
+        f16_shop_profit_flows.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.F16ShopProfitFlowsDO">
+        SELECT
+        <include refid="f16ShopProfitFlowsColumns" />
+        FROM f16_shop_profit_flows <include refid="f16ShopProfitFlowsJoins" />
+        <where>
+                    <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='dayIncome!= null and dayIncome !=""'> and day_income = #{dayIncome} </if>
+        <if test='incomeDay!= null and incomeDay !=""'> and income_day = #{incomeDay} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null and createTime !=""'> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null and updateTime !=""'> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.F16ShopProfitFlowsDO">
+        SELECT
+        <include refid="f16ShopProfitFlowsColumns" />
+        FROM f16_shop_profit_flows <include refid="f16ShopProfitFlowsJoins" />
+        <where>
+                    <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='dayIncome!= null and dayIncome !=""'> and day_income = #{dayIncome} </if>
+        <if test='incomeDay!= null and incomeDay !=""'> and income_day = #{incomeDay} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null and createTime !=""'> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null and updateTime !=""'> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from f16_shop_profit_flows
+        <where>
+                    <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='dayIncome!= null and dayIncome !=""'> and day_income = #{dayIncome} </if>
+        <if test='incomeDay!= null and incomeDay !=""'> and income_day = #{incomeDay} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null and createTime !=""'> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null and updateTime !=""'> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+    </select>
+
+
+
+    <insert id="insertBatch">
+        INSERT INTO f16_shop_profit_flows(
+                        shop_id,
+            day_income,
+            income_day,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="f16ShopProfitFlows" separator =",">
+        (
+                        #{f16ShopProfitFlows.shopId},
+            #{f16ShopProfitFlows.dayIncome},
+            #{f16ShopProfitFlows.incomeDay},
+            #{f16ShopProfitFlows.createPerson},
+            #{f16ShopProfitFlows.createTime},
+            #{f16ShopProfitFlows.updatePerson},
+            #{f16ShopProfitFlows.updateTime},
+            #{f16ShopProfitFlows.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE f16_shop_profit_flows
+            <set>
+                        <if test='item.shopId !=null and item.shopId !=""' >shop_id = #{item.shopId},</if>
+        <if test='item.dayIncome !=null and item.dayIncome !=""' >day_income = #{item.dayIncome},</if>
+        <if test='item.incomeDay !=null and item.incomeDay !=""' >income_day = #{item.incomeDay},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null and item.createTime !=""' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null and item.updateTime !=""' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE f16_shop_profit_flows
+        <set>
+                    <if test='shopId !=null and shopId !=""' >shop_id = #{shopId},</if>
+        <if test='dayIncome !=null and dayIncome !=""' >day_income = #{dayIncome},</if>
+        <if test='incomeDay !=null and incomeDay !=""' >income_day = #{incomeDay},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null and createTime !=""' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null and updateTime !=""' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+    <select id="getProfitByDay" resultType="com.youqiancheng.mybatis.model.F16ShopProfitFlowsDO">
+SELECT
+	sum(day_income) dayIncome
+FROM
+	f15_shop_profit
+WHERE shop_id = #{shopId}
+	and TO_DAYS(create_time)=TO_DAYS(now())-1
+    </select>
+
+    <select id="getProfitBytoday" resultType="com.youqiancheng.mybatis.model.F16ShopProfitFlowsDO">
+SELECT
+	sum(day_income) dayIncome
+FROM
+	f15_shop_profit
+WHERE shop_id = #{shopId}
+	and TO_DAYS(create_time)=TO_DAYS(now())
+    </select>
+    <select id="getTotalProfitBytoday" resultType="com.youqiancheng.mybatis.model.F16ShopProfitFlowsDO">
+SELECT
+	sum(day_income) dayIncome
+FROM
+	f15_shop_profit
+WHERE shop_id = #{shopId}
+    </select>
+
+    <select id="unionTest" resultType="int">
+        select sum(profit.count) from (
+        <foreach collection="shopIds" index="index" item="id"
+                 separator=" union" >
+            select count(*) as count
+            from f16_shop_profit_flows
+            where 1=1 and
+            (
+            shop_id = #{id}
+            and create_person = #{person}
+            )
+            and delete_flag = #{delFlag}
+        </foreach>
+      ) as profit
+    </select>
+
+</mapper>

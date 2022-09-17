@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.C09GoodsSkuDao">
+
+    <resultMap id="c09GoodsSkuResultMap" type="com.youqiancheng.mybatis.model.C09GoodsSkuDO">
+        <id column="id" property="id"/>
+        <result column="specifications" property="specifications"/>
+        <result column="num" property="num"/>
+        <result column="goods_price" property="goodsPrice"/>
+        <result column="goods_id" property="goodsId"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="version" property="version"/>
+
+
+
+    </resultMap>
+
+    <sql id="c09GoodsSkuColumns">
+        c09_goods_sku.id AS "id",
+        c09_goods_sku.specifications AS "specifications",
+        c09_goods_sku.num AS "num",
+        c09_goods_sku.goods_price AS "goodsPrice",
+        c09_goods_sku.goods_id AS "goodsId",
+        c09_goods_sku.create_person AS "createPerson",
+        c09_goods_sku.create_time AS "createTime",
+        c09_goods_sku.update_person AS "updatePerson",
+        c09_goods_sku.update_time AS "updateTime",
+        c09_goods_sku.goods_desc AS "goodsDesc",
+        c09_goods_sku.version AS "version",
+        c09_goods_sku.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="c09GoodsSkuJoins">
+
+    </sql>
+
+    <!--  分页查询商品规则列表-->
+    <select id="listGoodsSkuHDPage" parameterType="java.util.Map" resultMap="c09GoodsSkuResultMap">
+        SELECT * FROM c09_goods_sku WHERE delete_flag=1
+        ORDER BY id DESC
+    </select>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.C09GoodsSkuDO">
+        SELECT
+        <include refid="c09GoodsSkuColumns" />
+        FROM c09_goods_sku <include refid="c09GoodsSkuJoins" />
+        <where>
+        c09_goods_sku.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.C09GoodsSkuDO">
+        SELECT
+        <include refid="c09GoodsSkuColumns" />
+        FROM c09_goods_sku <include refid="c09GoodsSkuJoins" />
+        <where>
+                    <if test='specifications!= null and specifications !=""'> and specifications = #{specifications} </if>
+        <if test='num!= null and num !=""'> and num = #{num} </if>
+        <if test='goodsPrice!= null and goodsPrice !=""'> and goods_price = #{goodsPrice} </if>
+        <if test='goodsId!= null and goodsId !=""'> and goods_id = #{goodsId} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='version!= null and version !=""'> and version = #{version} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.C09GoodsSkuDO">
+        SELECT
+        <include refid="c09GoodsSkuColumns" />
+        FROM c09_goods_sku <include refid="c09GoodsSkuJoins" />
+        <where>
+                    <if test='specifications!= null and specifications !=""'> and specifications = #{specifications} </if>
+        <if test='num!= null and num !=""'> and num = #{num} </if>
+        <if test='goodsPrice!= null and goodsPrice !=""'> and goods_price = #{goodsPrice} </if>
+        <if test='goodsId!= null and goodsId !=""'> and goods_id = #{goodsId} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='version!= null and version !=""'> and version = #{version} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from c09_goods_sku
+        <where>
+                    <if test='specifications!= null and specifications !=""'> and specifications = #{specifications} </if>
+        <if test='num!= null and num !=""'> and num = #{num} </if>
+        <if test='goodsPrice!= null and goodsPrice !=""'> and goods_price = #{goodsPrice} </if>
+        <if test='goodsId!= null and goodsId !=""'> and goods_id = #{goodsId} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='version!= null and version !=""'> and version = #{version} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+    </select>
+
+
+
+    <insert id="insertBatch">
+        INSERT INTO c09_goods_sku(
+                        specifications,
+            num,
+            goods_price,
+            goods_id,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+            goods_desc,
+        version,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="c09GoodsSku" separator =",">
+        (
+                        #{c09GoodsSku.specifications},
+            #{c09GoodsSku.num},
+            #{c09GoodsSku.goodsPrice},
+            #{c09GoodsSku.goodsId},
+            #{c09GoodsSku.createPerson},
+            #{c09GoodsSku.createTime},
+            #{c09GoodsSku.updatePerson},
+            #{c09GoodsSku.updateTime},
+            #{c09GoodsSku.goodsDesc},
+            #{c09GoodsSku.version},
+            #{c09GoodsSku.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE c09_goods_sku
+            <set>
+                        <if test='item.specifications !=null and item.specifications !=""' >specifications = #{item.specifications},</if>
+        <if test='item.num !=null and item.num !=""' >num = #{item.num},</if>
+        <if test='item.goodsPrice !=null and item.goodsPrice !=""' >goods_price = #{item.goodsPrice},</if>
+        <if test='item.goodsId !=null and item.goodsId !=""' >goods_id = #{item.goodsId},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null      ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.version !=null and item.version !=""' >version = #{item.version},</if>
+        <if test='item.updateTime !=null       ' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE c09_goods_sku
+        <set>
+                    <if test='specifications !=null and specifications !=""' >specifications = #{specifications},</if>
+        <if test='num !=null and num !=""' >num = #{num},</if>
+        <if test='goodsPrice !=null and goodsPrice !=""' >goods_price = #{goodsPrice},</if>
+        <if test='goodsId !=null and goodsId !=""' >goods_id = #{goodsId},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='version !=null and version !=""' >version = #{version},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="deductInventory">
+        UPDATE c09_goods_sku  set  num=num-#{num},update_time=now() where id=#{id} and num>=#{num}
+    </update>
+    <update id="addInventory">
+        UPDATE c09_goods_sku  set  num=num+#{num},update_time=now(),version=version+1 where id=#{id} and  version=#{version}
+    </update>
+
+</mapper>

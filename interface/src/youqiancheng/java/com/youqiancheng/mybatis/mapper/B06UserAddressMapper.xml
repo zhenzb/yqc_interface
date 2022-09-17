@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.B06UserAddressDao">
+
+    <resultMap id="b06UserAddressResultMap" type="com.youqiancheng.mybatis.model.B06UserAddressDO">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="receiver" property="receiver"/>
+        <result column="phone" property="phone"/>
+        <result column="province_code" property="provinceCode"/>
+        <result column="province" property="province"/>
+        <result column="city_code" property="cityCode"/>
+        <result column="city" property="city"/>
+        <result column="area_code" property="areaCode"/>
+        <result column="area" property="area"/>
+        <result column="tel" property="tel"/>
+        <result column="name" property="name"/>
+        <result column="address" property="address"/>
+        <result column="is_default" property="isDefault"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+
+
+
+    </resultMap>
+
+    <sql id="b06UserAddressColumns">
+        b06_user_address.id AS "id",
+        b06_user_address.user_id AS "userId",
+        b06_user_address.receiver AS "receiver",
+        b06_user_address.phone AS "phone",
+        b06_user_address.province_code AS "provinceCode",
+        b06_user_address.province AS "province",
+        b06_user_address.city_code AS "cityCode",
+        b06_user_address.city AS "city",
+        b06_user_address.area_code AS "areaCode",
+        b06_user_address.area AS "area",
+        b06_user_address.name AS "name",
+        b06_user_address.tel AS "tel",
+        b06_user_address.address AS "address",
+        b06_user_address.is_default AS "isDefault",
+        b06_user_address.create_person AS "createPerson",
+        b06_user_address.create_time AS "createTime",
+        b06_user_address.update_person AS "updatePerson",
+        b06_user_address.update_time AS "updateTime",
+        b06_user_address.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="b06UserAddressJoins">
+
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.B06UserAddressDO">
+        SELECT
+        <include refid="b06UserAddressColumns" />
+        FROM b06_user_address <include refid="b06UserAddressJoins" />
+        <where>
+        b06_user_address.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.B06UserAddressDO">
+        SELECT
+        <include refid="b06UserAddressColumns" />
+        FROM b06_user_address <include refid="b06UserAddressJoins" />
+        <where>
+                    <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='receiver!= null and receiver !=""'> and receiver = #{receiver} </if>
+        <if test='phone!= null and phone !=""'> and phone = #{phone} </if>
+        <if test='provinceCode!= null and provinceCode !=""'> and province_code = #{provinceCode} </if>
+        <if test='province!= null and province !=""'> and province = #{province} </if>
+        <if test='cityCode!= null and cityCode !=""'> and city_code = #{cityCode} </if>
+        <if test='city!= null and city !=""'> and city = #{city} </if>
+        <if test='areaCode!= null and areaCode !=""'> and area_code = #{areaCode} </if>
+        <if test='area!= null and area !=""'> and area = #{area} </if>
+        <if test='tel!= null and tel !=""'> and tel = #{tel} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='address!= null and address !=""'> and address = #{address} </if>
+        <if test='isDefault!= null and isDefault !=""'> and is_default = #{isDefault} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.B06UserAddressDO">
+        SELECT
+        <include refid="b06UserAddressColumns" />
+        FROM b06_user_address <include refid="b06UserAddressJoins" />
+        <where>
+                    <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='receiver!= null and receiver !=""'> and receiver = #{receiver} </if>
+        <if test='phone!= null and phone !=""'> and phone = #{phone} </if>
+        <if test='provinceCode!= null and provinceCode !=""'> and province_code = #{provinceCode} </if>
+        <if test='province!= null and province !=""'> and province = #{province} </if>
+        <if test='cityCode!= null and cityCode !=""'> and city_code = #{cityCode} </if>
+        <if test='city!= null and city !=""'> and city = #{city} </if>
+        <if test='areaCode!= null and areaCode !=""'> and area_code = #{areaCode} </if>
+        <if test='area!= null and area !=""'> and area = #{area} </if>
+        <if test='tel!= null and tel !=""'> and tel = #{tel} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='address!= null and address !=""'> and address = #{address} </if>
+        <if test='isDefault!= null and isDefault !=""'> and is_default = #{isDefault} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by is_default desc,id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from b06_user_address
+        <where>
+                    <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='receiver!= null and receiver !=""'> and receiver = #{receiver} </if>
+        <if test='phone!= null and phone !=""'> and phone = #{phone} </if>
+        <if test='provinceCode!= null and provinceCode !=""'> and province_code = #{provinceCode} </if>
+        <if test='province!= null and province !=""'> and province = #{province} </if>
+        <if test='cityCode!= null and cityCode !=""'> and city_code = #{cityCode} </if>
+        <if test='city!= null and city !=""'> and city = #{city} </if>
+        <if test='areaCode!= null and areaCode !=""'> and area_code = #{areaCode} </if>
+        <if test='area!= null and area !=""'> and area = #{area} </if>
+        <if test='tel!= null and tel !=""'> and tel = #{tel} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='address!= null and address !=""'> and address = #{address} </if>
+        <if test='isDefault!= null and isDefault !=""'> and is_default = #{isDefault} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+    </select>
+
+
+
+    <insert id="insertBatch">
+        INSERT INTO b06_user_address(
+                        user_id,
+            receiver,
+            phone,
+            province_code,
+            province,
+            city_code,
+            city,
+            area_code,
+            area,
+            tel,
+            name,
+            address,
+            is_default,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="b06UserAddress" separator =",">
+        (
+                        #{b06UserAddress.userId},
+            #{b06UserAddress.receiver},
+            #{b06UserAddress.phone},
+            #{b06UserAddress.provinceCode},
+            #{b06UserAddress.province},
+            #{b06UserAddress.cityCode},
+            #{b06UserAddress.city},
+            #{b06UserAddress.areaCode},
+            #{b06UserAddress.area},
+            #{b06UserAddress.tel},
+            #{b06UserAddress.name},
+            #{b06UserAddress.address},
+            #{b06UserAddress.isDefault},
+            #{b06UserAddress.createPerson},
+            #{b06UserAddress.createTime},
+            #{b06UserAddress.updatePerson},
+            #{b06UserAddress.updateTime},
+            #{b06UserAddress.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE b06_user_address
+            <set>
+                        <if test='item.userId !=null and item.userId !=""' >user_id = #{item.userId},</if>
+        <if test='item.receiver !=null and item.receiver !=""' >receiver = #{item.receiver},</if>
+        <if test='item.phone !=null and item.phone !=""' >phone = #{item.phone},</if>
+        <if test='item.provinceCode !=null and item.provinceCode !=""' >province_code = #{item.provinceCode},</if>
+        <if test='item.province !=null and item.province !=""' >province = #{item.province},</if>
+        <if test='item.cityCode !=null and item.cityCode !=""' >city_code = #{item.cityCode},</if>
+        <if test='item.city !=null and item.city !=""' >city = #{item.city},</if>
+        <if test='item.areaCode !=null and item.areaCode !=""' >area_code = #{item.areaCode},</if>
+        <if test='item.area !=null and item.area !=""' >area = #{item.area},</if>
+        <if test='item.tel !=null and item.tel !=""' >tel = #{item.tel},</if>
+        <if test='item.name !=null and item.name !=""' >name = #{item.name},</if>
+        <if test='item.address !=null and item.address !=""' >address = #{item.address},</if>
+        <if test='item.isDefault !=null and item.isDefault !=""' >is_default = #{item.isDefault},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null      ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null       ' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE b06_user_address
+        <set>
+                    <if test='userId !=null and userId !=""' >user_id = #{userId},</if>
+        <if test='receiver !=null and receiver !=""' >receiver = #{receiver},</if>
+        <if test='phone !=null and phone !=""' >phone = #{phone},</if>
+        <if test='provinceCode !=null and provinceCode !=""' >province_code = #{provinceCode},</if>
+        <if test='province !=null and province !=""' >province = #{province},</if>
+        <if test='cityCode !=null and cityCode !=""' >city_code = #{cityCode},</if>
+        <if test='city !=null and city !=""' >city = #{city},</if>
+        <if test='areaCode !=null and areaCode !=""' >area_code = #{areaCode},</if>
+        <if test='area !=null and area !=""' >area = #{area},</if>
+        <if test='tel !=null and tel !=""' >tel = #{tel},</if>
+        <if test='name !=null and name !=""' >name = #{name},</if>
+        <if test='address !=null and address !=""' >address = #{address},</if>
+        <if test='isDefault !=null and isDefault !=""' >is_default = #{isDefault},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

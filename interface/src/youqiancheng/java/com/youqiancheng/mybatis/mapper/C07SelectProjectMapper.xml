@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.C07SelectProjectDao">
+
+    <resultMap id="c07SelectProjectResultMap" type="com.youqiancheng.mybatis.model.C07SelectProjectDO">
+        <id column="id" property="id"/>
+        <result column="project_id" property="projectId"/>
+        <result column="goods_id" property="goodsId"/>
+        <result column="status" property="status"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+
+
+
+    </resultMap>
+
+    <sql id="c07SelectProjectColumns">
+        c07_select_project.id AS "id",
+        c07_select_project.project_id AS "projectId",
+        c07_select_project.goods_id AS "goodsId",
+        c07_select_project.status AS "status",
+        c07_select_project.create_person AS "createPerson",
+        c07_select_project.create_time AS "createTime",
+        c07_select_project.update_person AS "updatePerson",
+        c07_select_project.update_time AS "updateTime",
+        c07_select_project.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="c07SelectProjectJoins">
+
+    </sql>
+
+    <!--  分页查询商品选择属性列表-->
+    <select id="listSelectProjectHDPage" parameterType="java.util.Map" resultMap="c07SelectProjectResultMap">
+        SELECT * FROM c07_select_project WHERE delete_flag=1
+        ORDER BY id DESC
+    </select>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.C07SelectProjectDO">
+        SELECT
+        <include refid="c07SelectProjectColumns" />
+        FROM c07_select_project <include refid="c07SelectProjectJoins" />
+        <where>
+        c07_select_project.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.C07SelectProjectDO">
+        SELECT
+        <include refid="c07SelectProjectColumns" />
+        FROM c07_select_project <include refid="c07SelectProjectJoins" />
+        <where>
+                    <if test='projectId!= null and projectId !=""'> and project_id = #{projectId} </if>
+        <if test='goodsId!= null and goodsId !=""'> and goods_id = #{goodsId} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listWithContent" resultType="com.youqiancheng.mybatis.model.C07SelectProjectDO">
+        SELECT a.*,b.content,b.name
+        FROM c07_select_project a
+        left Join c06_attribute_project b on a.project_id=b.id
+        <where>
+        <if test='projectId!= null and projectId !=""'> and a.project_id = #{projectId} </if>
+        <if test='goodsId!= null and goodsId !=""'> and a.goods_id = #{goodsId} </if>
+        <if test='status!= null and status !=""'> and a.status = #{status} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and a.delete_flag = #{deleteFlag} </if>
+        </where>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.C07SelectProjectDO">
+        SELECT
+        <include refid="c07SelectProjectColumns" />
+        FROM c07_select_project <include refid="c07SelectProjectJoins" />
+        <where>
+                    <if test='projectId!= null and projectId !=""'> and project_id = #{projectId} </if>
+        <if test='goodsId!= null and goodsId !=""'> and goods_id = #{goodsId} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from c07_select_project
+        <where>
+                    <if test='projectId!= null and projectId !=""'> and project_id = #{projectId} </if>
+        <if test='goodsId!= null and goodsId !=""'> and goods_id = #{goodsId} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null  '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null  '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+    </select>
+
+
+    <insert id="insertBatch">
+        INSERT INTO c07_select_project(
+                        project_id,
+            goods_id,
+            status,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="c07SelectProject" separator =",">
+        (
+                        #{c07SelectProject.projectId},
+            #{c07SelectProject.goodsId},
+            #{c07SelectProject.status},
+            #{c07SelectProject.createPerson},
+            #{c07SelectProject.createTime},
+            #{c07SelectProject.updatePerson},
+            #{c07SelectProject.updateTime},
+            #{c07SelectProject.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE c07_select_project
+            <set>
+                        <if test='item.projectId !=null and item.projectId !=""' >project_id = #{item.projectId},</if>
+        <if test='item.goodsId !=null and item.goodsId !=""' >goods_id = #{item.goodsId},</if>
+        <if test='item.status !=null and item.status !=""' >status = #{item.status},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null  ' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE c07_select_project
+        <set>
+                    <if test='projectId !=null and projectId !=""' >project_id = #{projectId},</if>
+        <if test='goodsId !=null and goodsId !=""' >goods_id = #{goodsId},</if>
+        <if test='status !=null and status !=""' >status = #{status},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

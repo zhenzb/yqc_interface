@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.A19ExpressDao">
+
+    <resultMap id="a19ExpressResultMap" type="com.youqiancheng.mybatis.model.A19ExpressDO">
+        <id column="id" property="id"/> 
+        <result column="name" property="name"/> 
+        <result column="code" property="code"/> 
+        <result column="create_person" property="createPerson"/> 
+        <result column="create_time" property="createTime"/> 
+        <result column="update_person" property="updatePerson"/> 
+        <result column="update_time" property="updateTime"/> 
+        <result column="delete_flag" property="deleteFlag"/> 
+
+        
+        
+    </resultMap>
+
+    <sql id="a19ExpressColumns">
+        a19_express.id AS "id",
+        a19_express.name AS "name",
+        a19_express.code AS "code",
+        a19_express.create_person AS "createPerson",
+        a19_express.create_time AS "createTime",
+        a19_express.update_person AS "updatePerson",
+        a19_express.update_time AS "updateTime",
+        a19_express.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="a19ExpressJoins">
+        
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.A19ExpressDO">
+        SELECT
+        <include refid="a19ExpressColumns" />
+        FROM a19_express <include refid="a19ExpressJoins" />
+        <where>
+        a19_express.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.A19ExpressDO">
+        SELECT
+        <include refid="a19ExpressColumns" />
+        FROM a19_express <include refid="a19ExpressJoins" />
+        <where>
+                    <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='code!= null and code !=""'> and code = #{code} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null and createTime !=""'> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null and updateTime !=""'> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.A19ExpressDO">
+        SELECT
+        <include refid="a19ExpressColumns" />
+        FROM a19_express <include refid="a19ExpressJoins" />
+        <where>
+                    <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='code!= null and code !=""'> and code = #{code} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null and createTime !=""'> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null and updateTime !=""'> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from a19_express
+        <where>
+                    <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='code!= null and code !=""'> and code = #{code} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null and createTime !=""'> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null and updateTime !=""'> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+    </select>
+
+
+
+    <insert id="insertBatch">
+        INSERT INTO a19_express(
+                        name,
+            code,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="a19Express" separator =",">
+        (
+                        #{a19Express.name},
+            #{a19Express.code},
+            #{a19Express.createPerson},
+            #{a19Express.createTime},
+            #{a19Express.updatePerson},
+            #{a19Express.updateTime},
+            #{a19Express.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE a19_express
+            <set>
+                        <if test='item.name !=null and item.name !=""' >name = #{item.name},</if>
+        <if test='item.code !=null and item.code !=""' >code = #{item.code},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null and item.createTime !=""' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null and item.updateTime !=""' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE a19_express
+        <set>
+                    <if test='name !=null and name !=""' >name = #{name},</if>
+        <if test='code !=null and code !=""' >code = #{code},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null and createTime !=""' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null and updateTime !=""' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="getCourierServicesCompanylist" resultType="com.youqiancheng.mybatis.model.A19ExpressDO">
+        SELECT
+        <include refid="a19ExpressColumns" />
+        FROM a19_express <include refid="a19ExpressJoins" />
+        <where>
+            <if test='name!= null and name !=""'> and name like CONCAT('%',#{name},'%') </if>
+            <if test='code!= null and code !=""'> and code like CONCAT('%',#{code},'%') </if>
+            <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+            <if test='createTime!= null and createTime !=""'> and create_time = #{createTime} </if>
+            <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+            <if test='updateTime!= null and updateTime !=""'> and update_time = #{updateTime} </if>
+            <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+            and delete_flag = 1
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+
+
+</mapper>

@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.E04RedenvelopesGrantRecordDao">
+
+    <resultMap id="e04RedenvelopesGrantRecordResultMap" type="com.youqiancheng.mybatis.model.E04RedenvelopesGrantRecordDO">
+        <id column="id" property="id"/>
+        <result column="street_id" property="streetId"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="end_flag" property="endFlag"/>
+        <result column="pay_type" property="payType"/>
+        <result column="pay_no" property="payNo"/>
+
+
+    </resultMap>
+
+    <sql id="e04RedenvelopesGrantRecordColumns">
+        e04_redenvelopes_grant_record.id AS "id",
+        e04_redenvelopes_grant_record.street_id AS "streetId",
+        e04_redenvelopes_grant_record.shop_id AS "shopId",
+        e04_redenvelopes_grant_record.create_person AS "createPerson",
+        e04_redenvelopes_grant_record.create_time AS "createTime",
+        e04_redenvelopes_grant_record.update_person AS "updatePerson",
+        e04_redenvelopes_grant_record.update_time AS "updateTime",
+        e04_redenvelopes_grant_record.end_flag AS "endFlag",
+        e04_redenvelopes_grant_record.pay_type AS "payType",
+        e04_redenvelopes_grant_record.pay_no AS "payNo",
+        e04_redenvelopes_grant_record.delete_flag AS "deleteFlag",
+        e04_redenvelopes_grant_record.money AS "money"
+    </sql>
+
+    <sql id="e04RedenvelopesGrantRecordJoins">
+
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.E04RedenvelopesGrantRecordDO">
+        SELECT
+        <include refid="e04RedenvelopesGrantRecordColumns" />
+        FROM e04_redenvelopes_grant_record <include refid="e04RedenvelopesGrantRecordJoins" />
+        <where>
+        e04_redenvelopes_grant_record.id = #{id}
+        </where>
+    </select>
+    <select id="getGrantMoney" resultType="decimal">
+        SELECT SUM(e01.money)
+        FROM e04_redenvelopes_grant_record  e04, e01_redenvelopes_street e01
+        where
+       e04.street_id=e01.id and e04.end_flag = 2 and e04.shop_id = #{shopId} and
+        DATE_FORMAT(e04.create_time,'%Y-%m') = DATE_FORMAT(now(),'%Y-%m')
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.E04RedenvelopesGrantRecordDO">
+        SELECT
+        <include refid="e04RedenvelopesGrantRecordColumns" />
+        FROM e04_redenvelopes_grant_record <include refid="e04RedenvelopesGrantRecordJoins" />
+        <where>
+                    <if test='streetId!= null and streetId !=""'> and street_id = #{streetId} </if>
+        <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='endFlag!= null and endFlag !=""'> and end_flag = #{endFlag} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='payType!= null and payType !=""'> and pay_type = #{payType} </if>
+        <if test='payNo!= null and payNo !=""'> and pay_no = #{payNo} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.E04RedenvelopesGrantRecordDO">
+        SELECT
+        <include refid="e04RedenvelopesGrantRecordColumns" />
+        FROM e04_redenvelopes_grant_record <include refid="e04RedenvelopesGrantRecordJoins" />
+        <where>
+                    <if test='streetId!= null and streetId !=""'> and street_id = #{streetId} </if>
+        <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='endFlag!= null and endFlag !=""'> and end_flag = #{endFlag} </if>
+        <if test='endFlags!= null and endFlags !=""'> and end_flag != #{endFlags} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <!--<if test='createTime!= null   '> and create_time = #{createTime} </if>-->
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='payType!= null and payType !=""'> and pay_type = #{payType} </if>
+        <if test='payNo!= null and payNo !=""'> and pay_no = #{payNo} </if>
+            <if test="createTime != null and '' != createTime">
+                AND UNIX_TIMESTAMP(create_time) &gt;= UNIX_TIMESTAMP(#{createTime})
+            </if>
+            <if test="endTime != null and '' != endTime">
+                AND UNIX_TIMESTAMP(create_time) &lt;= UNIX_TIMESTAMP(#{endTime})
+            </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="TotalAmtHDPage" resultType="decimal">
+        SELECT
+        sum(money) as totalAmt
+        FROM e04_redenvelopes_grant_record <include refid="e04RedenvelopesGrantRecordJoins" />
+        <where>
+            <if test='streetId!= null and streetId !=""'> and street_id = #{streetId} </if>
+            <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+            <if test='endFlag!= null and endFlag !=""'> and end_flag = #{endFlag} </if>
+            <if test='endFlags!= null and endFlags !=""'> and end_flag != #{endFlags} </if>
+            <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+            <!--<if test='createTime!= null   '> and create_time = #{createTime} </if>-->
+            <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+            <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+            <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+            <if test='payType!= null and payType !=""'> and pay_type = #{payType} </if>
+            <if test='payNo!= null and payNo !=""'> and pay_no = #{payNo} </if>
+            <if test="createTime != null and '' != createTime">
+                AND UNIX_TIMESTAMP(create_time) &gt;= UNIX_TIMESTAMP(#{createTime})
+            </if>
+            <if test="endTime != null and '' != endTime">
+                AND UNIX_TIMESTAMP(create_time) &lt;= UNIX_TIMESTAMP(#{endTime})
+            </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="getShopListByRedEnvelopesHDPage" resultType="com.youqiancheng.mybatis.model.F01ShopDO">
+       SELECT
+	    a.* ,b.street_id
+        FROM
+            f01_shop a left join e04_redenvelopes_grant_record b  on a.id = b.shop_id
+            WHERE
+                 b.street_id = #{streetId} and b.delete_flag=#{deleteFlag}
+                <if test='type!= null and type !=""'> and a.type = #{type} </if>
+                <if test='mainProject!= null and mainProject !=""'> and a.main_project = #{mainProject} </if>
+                <if test='countryId!= null and countryId !=""'> and a.country_id = #{countryId} </if>
+                <if test='provinceCode!= null and provinceCode !=""'> and a.province_code = #{provinceCode} </if>
+                <if test='cityCode!= null and cityCode !=""'> and a.city_code = #{cityCode} </if>
+                <if test='areaCode!= null and areaCode !=""'> and a.area_code = #{areaCode} </if>
+                <if test='endFlag!= null and endFlag !=""'> and b.end_flag = #{endFlag} </if>
+                <if test='payType!= null and payType !=""'> and b.pay_type = #{payType} </if>
+                <if test='payNo!= null and payNo !=""'> and b.pay_no = #{payNo} </if>
+            ORDER BY   b.id DESC
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from e04_redenvelopes_grant_record
+        <where>
+                    <if test='streetId!= null and streetId !=""'> and street_id = #{streetId} </if>
+        <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='endFlag!= null and endFlag !=""'> and end_flag = #{endFlag} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='payType!= null and payType !=""'> and pay_type = #{payType} </if>
+        <if test='payNo!= null and payNo !=""'> and pay_no = #{payNo} </if>
+        </where>
+    </select>
+
+
+
+    <insert id="insertBatch">
+        INSERT INTO e04_redenvelopes_grant_record(
+                        street_id,
+            shop_id,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+        end_flag,
+        pay_type,
+        pay_no,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="e04RedenvelopesGrantRecord" separator =",">
+        (
+                        #{e04RedenvelopesGrantRecord.streetId},
+            #{e04RedenvelopesGrantRecord.shopId},
+            #{e04RedenvelopesGrantRecord.createPerson},
+            #{e04RedenvelopesGrantRecord.createTime},
+            #{e04RedenvelopesGrantRecord.updatePerson},
+            #{e04RedenvelopesGrantRecord.updateTime},
+            #{e04RedenvelopesGrantRecord.endFlag},
+            #{e04RedenvelopesGrantRecord.payType},
+            #{e04RedenvelopesGrantRecord.payNo},
+            #{e04RedenvelopesGrantRecord.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE e04_redenvelopes_grant_record
+            <set>
+                        <if test='item.streetId !=null and item.streetId !=""' >street_id = #{item.streetId},</if>
+        <if test='item.shopId !=null and item.shopId !=""' >shop_id = #{item.shopId},</if>
+        <if test='item.endFlag !=null and item.endFlag !=""' >end_flag = #{item.endFlag},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null      ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null       ' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+        <if test='item.payType !=null and item.payType !=""' >pay_type = #{item.payType},</if>
+        <if test='item.payNo !=null and item.payNo !=""' >pay_no = #{item.payNo},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE e04_redenvelopes_grant_record
+        <set>
+                    <if test='streetId !=null and streetId !=""' >street_id = #{streetId},</if>
+        <if test='shopId !=null and shopId !=""' >shop_id = #{shopId},</if>
+        <if test='endFlag !=null and endFlag !=""' >end_flag = #{endFlag},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        <if test='payType !=null and payType !=""' >pay_type = #{payType},</if>
+        <if test='payNo !=null and payNo !=""' >pay_no = #{payNo},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+     <select id="getShopRedPacket" resultType="com.youqiancheng.mybatis.model.E05RedenvelopesReceiveRecordDO">
+        SELECT e05.*
+        FROM e04_redenvelopes_grant_record e04
+        left join e05_redenvelopes_receive_record e05 on e04.id=e05.grant_id
+        <where>
+            <if test='streetId!= null and streetId !=""'> and e04.street_id = #{streetId} </if>
+            <if test='shopId!= null and shopId !=""'> and e04.shop_id = #{shopId} </if>
+            <if test='endFlag!= null and endFlag !=""'> and e04.end_flag = #{endFlag} </if>
+            <if test='payType!= null and payType !=""'> and e04.pay_type = #{payType} </if>
+            <if test='payNo!= null and payNo !=""'> and e04.pay_no = #{payNo} </if>
+        </where>
+    </select>
+</mapper>

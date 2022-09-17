@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.shop.system.F14RolePermissionDao">
+
+    <resultMap id="f14RolePermissionResultMap" type="com.youqiancheng.mybatis.model.F14RolePermissionDO">
+        <id column="id" property="id"/>
+        <result column="role_id" property="roleId"/>
+        <result column="permission_id" property="permissionId"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+
+
+
+    </resultMap>
+
+    <sql id="f14RolePermissionColumns">
+        f14_role_permission.id AS "id",
+        f14_role_permission.role_id AS "roleId",
+        f14_role_permission.permission_id AS "permissionId",
+        f14_role_permission.create_person AS "createPerson",
+        f14_role_permission.create_time AS "createTime",
+        f14_role_permission.update_person AS "updatePerson",
+        f14_role_permission.update_time AS "updateTime",
+        f14_role_permission.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="f14RolePermissionJoins">
+
+    </sql>
+
+    <insert id="insertBatchRolePermission">
+        INSERT INTO f14_role_permission(
+        <include refid="f14RolePermissionColumns" />
+        )
+        VALUES
+        <foreach collection ="list" item="F14RolePermissionDO" separator =",">
+            (
+            #{F14RolePermissionDO.id},
+            #{F14RolePermissionDO.roleId},
+            #{F14RolePermissionDO.permissionId},
+            #{F14RolePermissionDO.createPerson},
+            #{F14RolePermissionDO.createTime},
+            #{F14RolePermissionDO.updatePerson},
+            #{F14RolePermissionDO.updateTime},
+            #{F14RolePermissionDO.deleteFlag}
+            )
+        </foreach>
+    </insert>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.F14RolePermissionDO">
+        SELECT
+        <include refid="f14RolePermissionColumns" />
+        FROM f14_role_permission <include refid="f14RolePermissionJoins" />
+        <where>
+        f14_role_permission.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.F14RolePermissionDO">
+        SELECT
+        <include refid="f14RolePermissionColumns" />
+        FROM f14_role_permission <include refid="f14RolePermissionJoins" />
+        <where>
+                    <if test='roleId!= null and roleId !=""'> and role_id = #{roleId} </if>
+        <if test='permissionId!= null and permissionId !=""'> and permission_id = #{permissionId} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.F14RolePermissionDO">
+        SELECT
+        <include refid="f14RolePermissionColumns" />
+        FROM f14_role_permission <include refid="f14RolePermissionJoins" />
+        <where>
+                    <if test='roleId!= null and roleId !=""'> and role_id = #{roleId} </if>
+        <if test='permissionId!= null and permissionId !=""'> and permission_id = #{permissionId} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from f14_role_permission
+        <where>
+                    <if test='roleId!= null and roleId !=""'> and role_id = #{roleId} </if>
+        <if test='permissionId!= null and permissionId !=""'> and permission_id = #{permissionId} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+    </select>
+
+
+
+    <insert id="insertBatch">
+        INSERT INTO f14_role_permission(
+                        role_id,
+            permission_id,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="f14RolePermission" separator =",">
+        (
+                        #{f14RolePermission.roleId},
+            #{f14RolePermission.permissionId},
+            #{f14RolePermission.createPerson},
+            #{f14RolePermission.createTime},
+            #{f14RolePermission.updatePerson},
+            #{f14RolePermission.updateTime},
+            #{f14RolePermission.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE f14_role_permission
+            <set>
+                        <if test='item.roleId !=null and item.roleId !=""' >role_id = #{item.roleId},</if>
+        <if test='item.permissionId !=null and item.permissionId !=""' >permission_id = #{item.permissionId},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null      ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null       ' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE f14_role_permission
+        <set>
+                    <if test='roleId !=null and roleId !=""' >role_id = #{roleId},</if>
+        <if test='permissionId !=null and permissionId !=""' >permission_id = #{permissionId},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

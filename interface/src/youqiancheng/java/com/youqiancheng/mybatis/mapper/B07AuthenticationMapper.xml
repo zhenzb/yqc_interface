@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.B07AuthenticationDao">
+
+    <resultMap id="b07AuthenticationResultMap" type="com.youqiancheng.mybatis.model.B07AuthenticationDO">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="name" property="name"/>
+        <result column="card_no" property="cardNo"/>
+        <result column="url" property="url"/>
+        <result column="back_url" property="backUrl"/>
+        <result column="status" property="status"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="bank_card_num" property="bankCardNum"/>
+
+    </resultMap>
+
+    <sql id="b07AuthenticationColumns">
+        b07_authentication.id AS "id",
+        b07_authentication.user_id AS "userId",
+        b07_authentication.name AS "name",
+        b07_authentication.card_no AS "cardNo",
+        b07_authentication.url AS "url",
+        b07_authentication.back_url AS "backUrl",
+        b07_authentication.status AS "status",
+        b07_authentication.create_person AS "createPerson",
+        b07_authentication.create_time AS "createTime",
+        b07_authentication.update_person AS "updatePerson",
+        b07_authentication.update_time AS "updateTime",
+        b07_authentication.delete_flag AS "deleteFlag",
+        b07_authentication.bank_card_num AS "bankCardNum",
+        b07_authentication.e_account_id AS "EAccountId"
+    </sql>
+
+    <sql id="b07AuthenticationJoins">
+
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.B07AuthenticationDO">
+        SELECT
+        <include refid="b07AuthenticationColumns" />
+        FROM b07_authentication <include refid="b07AuthenticationJoins" />
+        <where>
+        b07_authentication.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.B07AuthenticationDO">
+        SELECT
+        <include refid="b07AuthenticationColumns" />
+        FROM b07_authentication <include refid="b07AuthenticationJoins" />
+        <where>
+                    <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='cardNo!= null and cardNo !=""'> and card_no = #{cardNo} </if>
+        <if test='url!= null and url !=""'> and url = #{url} </if>
+        <if test='backUrl!= null and backUrl !=""'> and back_url = #{backUrl} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='flowId!= null and flowId !=""'> and flow_id = #{flowId} </if>
+        <if test='EAccountId!= null and EAccountId !=""'> and e_account_id = #{EAccountId} </if>
+        <if test='bankCardNum!= null and bankCardNum !=""'> and bank_card_num = #{bankCardNum} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.B07AuthenticationDO">
+        SELECT
+        <include refid="b07AuthenticationColumns" />
+        FROM b07_authentication <include refid="b07AuthenticationJoins" />
+        <where>
+                    <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='cardNo!= null and cardNo !=""'> and card_no = #{cardNo} </if>
+        <if test='url!= null and url !=""'> and url = #{url} </if>
+        <if test='backUrl!= null and backUrl !=""'> and back_url = #{backUrl} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='bankCardNum!= null and bankCardNum !=""'> and bank_card_num = #{bankCardNum} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from b07_authentication
+        <where>
+                    <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='cardNo!= null and cardNo !=""'> and card_no = #{cardNo} </if>
+        <if test='url!= null and url !=""'> and url = #{url} </if>
+        <if test='backUrl!= null and backUrl !=""'> and back_url = #{backUrl} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='bankCardNum!= null and bankCardNum !=""'> and bank_card_num = #{bankCardNum} </if>
+        </where>
+    </select>
+
+    <select id="listUserAuthHDPage" resultType="com.youqiancheng.mybatis.model.B07AuthenticationDO">
+        SELECT *
+        FROM b07_authentication
+        WHERE 1=1
+        and delete_flag =1
+        and status =1
+        <if test="userAuthForm.name != null and '' != userAuthForm.name">
+            AND name LIKE CONCAT('%',#{userAuthForm.name},'%')
+        </if>
+        <if test="userAuthForm.status != null and '' != userAuthForm.status">
+            AND status = #{userAuthForm.status}
+        </if>
+        ORDER BY id
+        DESC
+    </select>
+
+
+    <insert id="insertBatch">
+        INSERT INTO b07_authentication(
+                        user_id,
+            name,
+            card_no,
+            url,
+            back_url,
+            status,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+            delete_flag,
+            bank_card_num
+        )
+        VALUES
+        <foreach collection ="list" item="b07Authentication" separator =",">
+        (
+                        #{b07Authentication.userId},
+            #{b07Authentication.name},
+            #{b07Authentication.cardNo},
+            #{b07Authentication.url},
+            #{b07Authentication.backUrl},
+            #{b07Authentication.status},
+            #{b07Authentication.createPerson},
+            #{b07Authentication.createTime},
+            #{b07Authentication.updatePerson},
+            #{b07Authentication.updateTime},
+            #{b07Authentication.deleteFlag},
+            #{b07Authentication.bankCardNum}
+        )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE b07_authentication
+            <set>
+                        <if test='item.userId !=null and item.userId !=""' >user_id = #{item.userId},</if>
+        <if test='item.name !=null and item.name !=""' >name = #{item.name},</if>
+        <if test='item.cardNo !=null and item.cardNo !=""' >card_no = #{item.cardNo},</if>
+        <if test='item.url !=null and item.url !=""' >url = #{item.url},</if>
+        <if test='item.backUrl !=null and item.backUrl !=""' >back_url = #{item.backUrl},</if>
+        <if test='item.status !=null and item.status !=""' >status = #{item.status},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null      ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null       ' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+         <if test='bankCardNum!= null and bankCardNum !=""'> and bank_card_num = #{bankCardNum},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE b07_authentication
+        <set>
+                    <if test='userId !=null and userId !=""' >user_id = #{userId},</if>
+        <if test='name !=null and name !=""' >name = #{name},</if>
+        <if test='cardNo !=null and cardNo !=""' >card_no = #{cardNo},</if>
+        <if test='url !=null and url !=""' >url = #{url},</if>
+        <if test='backUrl !=null and backUrl !=""' >back_url = #{backUrl},</if>
+        <if test='status !=null and status !=""' >status = #{status},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        <if test='bankCardNum!= null and bankCardNum !=""'> and bank_card_num = #{bankCardNum},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+
+</mapper>

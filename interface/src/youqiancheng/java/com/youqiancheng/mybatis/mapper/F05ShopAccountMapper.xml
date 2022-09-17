@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.F05ShopAccountDao">
+
+    <resultMap id="f05ShopAccountResultMap" type="com.youqiancheng.mybatis.model.F05ShopAccountDO">
+        <id column="id" property="id"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="account_balance" property="accountBalance"/>
+        <result column="available_balance" property="availableBalance"/>
+        <result column="available_withdraw_money" property="availableWithdrawMoney"/>
+        <result column="has_withdraw_money" property="hasWithdrawMoney"/>
+        <result column="in_withdraw_money" property="inWithdrawMoney"/>
+        <result column="weChat_account" property="wechatAccount"/>
+        <result column="alipay_account" property="alipayAccount"/>
+        <result column="unionPay_account" property="unionpayAccount"/>
+        <result column="International_unionPay_account" property="internationalUnionpayAccount"/>
+        <result column="status" property="status"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+
+
+
+    </resultMap>
+
+    <sql id="f05ShopAccountColumns">
+        f05_shop_account.id AS "id",
+        f05_shop_account.shop_id AS "shopId",
+        f05_shop_account.account_balance AS "accountBalance",
+        f05_shop_account.available_balance AS "availableBalance",
+        f05_shop_account.available_withdraw_money AS "availableWithdrawMoney",
+        f05_shop_account.has_withdraw_money AS "hasWithdrawMoney",
+        f05_shop_account.in_withdraw_money AS "inWithdrawMoney",
+        f05_shop_account.weChat_account AS "wechatAccount",
+        f05_shop_account.alipay_account AS "alipayAccount",
+        f05_shop_account.unionPay_account AS "unionpayAccount",
+        f05_shop_account.International_unionPay_account AS "internationalUnionpayAccount",
+        f05_shop_account.status AS "status",
+        f05_shop_account.create_person AS "createPerson",
+        f05_shop_account.create_time AS "createTime",
+        f05_shop_account.update_person AS "updatePerson",
+        f05_shop_account.update_time AS "updateTime",
+        f05_shop_account.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="f05ShopAccountJoins">
+
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.F05ShopAccountDO">
+        SELECT
+        <include refid="f05ShopAccountColumns" />
+        FROM f05_shop_account <include refid="f05ShopAccountJoins" />
+        <where>
+        f05_shop_account.id = #{shop_id}
+        </where>
+    </select>
+
+    <select id="getShopAccountbyShopId" resultType="com.youqiancheng.mybatis.model.F05ShopAccountDO">
+        SELECT
+        <include refid="f05ShopAccountColumns" />
+        FROM f05_shop_account <include refid="f05ShopAccountJoins" />
+        <where>
+            f05_shop_account.shop_id = #{shop_id}
+        </where>
+    </select>
+
+    <select id="getShopAccount" resultType="com.youqiancheng.mybatis.model.F05ShopAccountDO">
+        SELECT
+        <include refid="f05ShopAccountColumns" />
+        FROM f05_shop_account <include refid="f05ShopAccountJoins" />
+        <where>
+            f05_shop_account.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.F05ShopAccountDO">
+        SELECT
+        <include refid="f05ShopAccountColumns" />
+        FROM f05_shop_account <include refid="f05ShopAccountJoins" />
+        <where>
+                    <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='accountBalance!= null and accountBalance !=""'> and account_balance = #{accountBalance} </if>
+        <if test='availableBalance!= null and availableBalance !=""'> and available_balance = #{availableBalance} </if>
+        <if test='availableWithdrawMoney!= null and availableWithdrawMoney !=""'> and available_withdraw_money = #{availableWithdrawMoney} </if>
+        <if test='hasWithdrawMoney!= null and hasWithdrawMoney !=""'> and has_withdraw_money = #{hasWithdrawMoney} </if>
+        <if test='inWithdrawMoney!= null and inWithdrawMoney !=""'> and in_withdraw_money = #{inWithdrawMoney} </if>
+        <if test='wechatAccount!= null and wechatAccount !=""'> and weChat_account = #{wechatAccount} </if>
+        <if test='alipayAccount!= null and alipayAccount !=""'> and alipay_account = #{alipayAccount} </if>
+        <if test='unionpayAccount!= null and unionpayAccount !=""'> and unionPay_account = #{unionpayAccount} </if>
+        <if test='internationalUnionpayAccount!= null and internationalUnionpayAccount !=""'> and International_unionPay_account = #{internationalUnionpayAccount} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.F05ShopAccountDO">
+        SELECT
+        <include refid="f05ShopAccountColumns" />
+        FROM f05_shop_account <include refid="f05ShopAccountJoins" />
+        <where>
+                    <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='accountBalance!= null and accountBalance !=""'> and account_balance = #{accountBalance} </if>
+        <if test='availableBalance!= null and availableBalance !=""'> and available_balance = #{availableBalance} </if>
+        <if test='availableWithdrawMoney!= null and availableWithdrawMoney !=""'> and available_withdraw_money = #{availableWithdrawMoney} </if>
+        <if test='hasWithdrawMoney!= null and hasWithdrawMoney !=""'> and has_withdraw_money = #{hasWithdrawMoney} </if>
+        <if test='inWithdrawMoney!= null and inWithdrawMoney !=""'> and in_withdraw_money = #{inWithdrawMoney} </if>
+        <if test='wechatAccount!= null and wechatAccount !=""'> and weChat_account = #{wechatAccount} </if>
+        <if test='alipayAccount!= null and alipayAccount !=""'> and alipay_account = #{alipayAccount} </if>
+        <if test='unionpayAccount!= null and unionpayAccount !=""'> and unionPay_account = #{unionpayAccount} </if>
+        <if test='internationalUnionpayAccount!= null and internationalUnionpayAccount !=""'> and International_unionPay_account = #{internationalUnionpayAccount} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from f05_shop_account
+        <where>
+                    <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='accountBalance!= null and accountBalance !=""'> and account_balance = #{accountBalance} </if>
+        <if test='availableBalance!= null and availableBalance !=""'> and available_balance = #{availableBalance} </if>
+        <if test='availableWithdrawMoney!= null and availableWithdrawMoney !=""'> and available_withdraw_money = #{availableWithdrawMoney} </if>
+        <if test='hasWithdrawMoney!= null and hasWithdrawMoney !=""'> and has_withdraw_money = #{hasWithdrawMoney} </if>
+        <if test='inWithdrawMoney!= null and inWithdrawMoney !=""'> and in_withdraw_money = #{inWithdrawMoney} </if>
+        <if test='wechatAccount!= null and wechatAccount !=""'> and weChat_account = #{wechatAccount} </if>
+        <if test='alipayAccount!= null and alipayAccount !=""'> and alipay_account = #{alipayAccount} </if>
+        <if test='unionpayAccount!= null and unionpayAccount !=""'> and unionPay_account = #{unionpayAccount} </if>
+        <if test='internationalUnionpayAccount!= null and internationalUnionpayAccount !=""'> and International_unionPay_account = #{internationalUnionpayAccount} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+    </select>
+
+
+
+    <insert id="insertBatch">
+        INSERT INTO f05_shop_account(
+                        shop_id,
+            account_balance,
+            available_balance,
+            available_withdraw_money,
+            has_withdraw_money,
+            in_withdraw_money,
+            weChat_account,
+            alipay_account,
+            unionPay_account,
+            International_unionPay_account,
+            status,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="f05ShopAccount" separator =",">
+        (
+                        #{f05ShopAccount.shopId},
+            #{f05ShopAccount.accountBalance},
+            #{f05ShopAccount.availableBalance},
+            #{f05ShopAccount.availableWithdrawMoney},
+            #{f05ShopAccount.hasWithdrawMoney},
+            #{f05ShopAccount.inWithdrawMoney},
+            #{f05ShopAccount.wechatAccount},
+            #{f05ShopAccount.alipayAccount},
+            #{f05ShopAccount.unionpayAccount},
+            #{f05ShopAccount.internationalUnionpayAccount},
+            #{f05ShopAccount.status},
+            #{f05ShopAccount.createPerson},
+            #{f05ShopAccount.createTime},
+            #{f05ShopAccount.updatePerson},
+            #{f05ShopAccount.updateTime},
+            #{f05ShopAccount.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE f05_shop_account
+            <set>
+                        <if test='item.shopId !=null and item.shopId !=""' >shop_id = #{item.shopId},</if>
+        <if test='item.accountBalance !=null and item.accountBalance !=""' >account_balance = #{item.accountBalance},</if>
+        <if test='item.availableBalance !=null and item.availableBalance !=""' >available_balance = #{item.availableBalance},</if>
+        <if test='item.availableWithdrawMoney !=null and item.availableWithdrawMoney !=""' >available_withdraw_money = #{item.availableWithdrawMoney},</if>
+        <if test='item.hasWithdrawMoney !=null and item.hasWithdrawMoney !=""' >has_withdraw_money = #{item.hasWithdrawMoney},</if>
+        <if test='item.inWithdrawMoney !=null and item.inWithdrawMoney !=""' >in_withdraw_money = #{item.inWithdrawMoney},</if>
+        <if test='item.wechatAccount !=null and item.wechatAccount !=""' >weChat_account = #{item.wechatAccount},</if>
+        <if test='item.alipayAccount !=null and item.alipayAccount !=""' >alipay_account = #{item.alipayAccount},</if>
+        <if test='item.unionpayAccount !=null and item.unionpayAccount !=""' >unionPay_account = #{item.unionpayAccount},</if>
+        <if test='item.internationalUnionpayAccount !=null and item.internationalUnionpayAccount !=""' >International_unionPay_account = #{item.internationalUnionpayAccount},</if>
+        <if test='item.status !=null and item.status !=""' >status = #{item.status},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null      ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null       ' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE f05_shop_account
+        <set>
+                    <if test='shopId !=null and shopId !=""' >shop_id = #{shopId},</if>
+        <if test='accountBalance !=null and accountBalance !=""' >account_balance = #{accountBalance},</if>
+        <if test='availableBalance !=null and availableBalance !=""' >available_balance = #{availableBalance},</if>
+        <if test='availableWithdrawMoney !=null and availableWithdrawMoney !=""' >available_withdraw_money = #{availableWithdrawMoney},</if>
+        <if test='hasWithdrawMoney !=null and hasWithdrawMoney !=""' >has_withdraw_money = #{hasWithdrawMoney},</if>
+        <if test='inWithdrawMoney !=null and inWithdrawMoney !=""' >in_withdraw_money = #{inWithdrawMoney},</if>
+        <if test='wechatAccount !=null and wechatAccount !=""' >weChat_account = #{wechatAccount},</if>
+        <if test='alipayAccount !=null and alipayAccount !=""' >alipay_account = #{alipayAccount},</if>
+        <if test='unionpayAccount !=null and unionpayAccount !=""' >unionPay_account = #{unionpayAccount},</if>
+        <if test='internationalUnionpayAccount !=null and internationalUnionpayAccount !=""' >International_unionPay_account = #{internationalUnionpayAccount},</if>
+        <if test='status !=null and status !=""' >status = #{status},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="getShopTotalBalanceByShopId" resultType="decimal">
+        SELECT account_Balance from f05_shop_account where shop_id=#{shopId}
+    </select>
+    <select id="getShopAccountById" resultType="com.youqiancheng.mybatis.model.F05ShopAccountDO">
+        SELECT * from f05_shop_account where shop_id=#{shopId}
+    </select>
+
+
+</mapper>

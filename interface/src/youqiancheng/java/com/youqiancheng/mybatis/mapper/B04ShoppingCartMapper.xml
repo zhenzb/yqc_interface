@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.B04ShoppingCartDao">
+
+    <resultMap id="b04ShoppingCartResultMap" type="com.youqiancheng.mybatis.model.B04ShoppingCartDO">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="shop_name" property="shopName"/>
+        <result column="goods_id" property="goodsId"/>
+        <result column="goods_name" property="goodsName"/>
+        <result column="goods_icon" property="goodsIcon"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="inventory" property="inventory"/>
+        <result column="commodity_number" property="commodityNumber"/>
+        <result column="price" property="price"/>
+        <result column="total_price" property="totalPrice"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+
+
+
+    </resultMap>
+
+    <sql id="b04ShoppingCartColumns">
+        b04_shopping_cart.id AS "id",
+        b04_shopping_cart.user_id AS "userId",
+        b04_shopping_cart.category_id AS "categoryId",
+        b04_shopping_cart.shop_id AS "shopId",
+        b04_shopping_cart.shop_name AS "shopName",
+        b04_shopping_cart.goods_id AS "goodsId",
+        b04_shopping_cart.goods_name AS "goodsName",
+        b04_shopping_cart.goods_icon AS "goodsIcon",
+        b04_shopping_cart.sku_id AS "skuId",
+        b04_shopping_cart.inventory AS "inventory",
+        b04_shopping_cart.commodity_number AS "commodityNumber",
+        b04_shopping_cart.price AS "price",
+        b04_shopping_cart.total_price AS "totalPrice",
+        b04_shopping_cart.create_person AS "createPerson",
+        b04_shopping_cart.create_time AS "createTime",
+        b04_shopping_cart.update_person AS "updatePerson",
+        b04_shopping_cart.update_time AS "updateTime",
+        b04_shopping_cart.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="b04ShoppingCartJoins">
+
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.B04ShoppingCartDO">
+        SELECT
+        <include refid="b04ShoppingCartColumns" />
+        FROM b04_shopping_cart <include refid="b04ShoppingCartJoins" />
+        <where>
+        b04_shopping_cart.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.B04ShoppingCartDO">
+        SELECT
+        <include refid="b04ShoppingCartColumns" />
+        FROM b04_shopping_cart <include refid="b04ShoppingCartJoins" />
+        where 1=1
+        <if test='goodsId!= null and goodsId !=""'> and goods_id = #{goodsId} </if>
+        <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='categoryId!= null and categoryId !=""'> and category_id = #{categoryId} </if>
+        <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='shopName!= null and shopName !=""'> and shop_name = #{shopName} </if>
+
+        <if test='goodsName!= null and goodsName !=""'> and goods_name = #{goodsName} </if>
+        <if test='goodsIcon!= null and goodsIcon !=""'> and goods_icon = #{goodsIcon} </if>
+        <if test='skuId!= null and skuId !=""'> and sku_id = #{skuId} </if>
+        <if test='inventory!= null and inventory !=""'> and inventory = #{inventory} </if>
+        <if test='commodityNumber!= null and commodityNumber !=""'> and commodity_number = #{commodityNumber} </if>
+        <if test='price!= null and price !=""'> and price = #{price} </if>
+        <if test='totalPrice!= null and totalPrice !=""'> and total_price = #{totalPrice} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null  '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null  '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.B04ShoppingCartDO">
+        SELECT
+        b.*,c.num as skuNum,c.goods_price as  goodPrice
+        FROM b04_shopping_cart b
+        left join  c09_goods_sku c on b.sku_id=c.id
+        <where>
+            <if test='cartId!= null and cartId !=""'> and b.id = #{cartId} </if>
+        <if test='userId!= null and userId !=""'> and b.user_id = #{userId} </if>
+        <if test='categoryId!= null and categoryId !=""'> and b.category_id = #{categoryId} </if>
+        <if test='shopId!= null and shopId !=""'> and b.shop_id = #{shopId} </if>
+        <if test='shopName!= null and shopName !=""'> and b.shop_name = #{shopName} </if>
+        <if test='goodsId!= null and goodsId !=""'> and b.goods_id = #{goodsId} </if>
+        <if test='goodsName!= null and goodsName !=""'> and b.goods_name = #{goodsName} </if>
+        <if test='goodsIcon!= null and goodsIcon !=""'> and b.goods_icon = #{goodsIcon} </if>
+        <if test='skuId!= null and skuId !=""'> and b.sku_id = #{skuId} </if>
+        <if test='inventory!= null and inventory !=""'> and b.inventory = #{inventory} </if>
+        <if test='commodityNumber!= null and commodityNumber !=""'> and b.commodity_number = #{commodityNumber} </if>
+        <if test='price!= null and price !=""'> and b.price = #{price} </if>
+        <if test='totalPrice!= null and totalPrice !=""'> and b.total_price = #{totalPrice} </if>
+        <if test='createPerson!= null and createPerson !=""'> and b.create_person = #{createPerson} </if>
+        <if test='createTime!= null  '> and b.create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and b.update_person = #{updatePerson} </if>
+        <if test='updateTime!= null  '> and b.update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and b.delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by b.create_time desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from b04_shopping_cart
+        <where>
+                    <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='categoryId!= null and categoryId !=""'> and category_id = #{categoryId} </if>
+        <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='shopName!= null and shopName !=""'> and shop_name = #{shopName} </if>
+        <if test='goodsId!= null and goodsId !=""'> and goods_id = #{goodsId} </if>
+        <if test='goodsName!= null and goodsName !=""'> and goods_name = #{goodsName} </if>
+        <if test='goodsIcon!= null and goodsIcon !=""'> and goods_icon = #{goodsIcon} </if>
+        <if test='skuId!= null and skuId !=""'> and sku_id = #{skuId} </if>
+        <if test='inventory!= null and inventory !=""'> and inventory = #{inventory} </if>
+        <if test='commodityNumber!= null and commodityNumber !=""'> and commodity_number = #{commodityNumber} </if>
+        <if test='price!= null and price !=""'> and price = #{price} </if>
+        <if test='totalPrice!= null and totalPrice !=""'> and total_price = #{totalPrice} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null  '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+    </select>
+
+
+
+    <insert id="insertBatch">
+        INSERT INTO b04_shopping_cart(
+                        user_id,
+            category_id,
+            shop_id,
+            shop_name,
+            goods_id,
+            goods_name,
+            goods_icon,
+            sku_id,
+            inventory,
+            commodity_number,
+            price,
+            total_price,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="b04ShoppingCart" separator =",">
+        (
+                        #{b04ShoppingCart.userId},
+            #{b04ShoppingCart.categoryId},
+            #{b04ShoppingCart.shopId},
+            #{b04ShoppingCart.shopName},
+            #{b04ShoppingCart.goodsId},
+            #{b04ShoppingCart.goodsName},
+            #{b04ShoppingCart.goodsIcon},
+            #{b04ShoppingCart.skuId},
+            #{b04ShoppingCart.inventory},
+            #{b04ShoppingCart.commodityNumber},
+            #{b04ShoppingCart.price},
+            #{b04ShoppingCart.totalPrice},
+            #{b04ShoppingCart.createPerson},
+            #{b04ShoppingCart.createTime},
+            #{b04ShoppingCart.updatePerson},
+            #{b04ShoppingCart.updateTime},
+            #{b04ShoppingCart.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE b04_shopping_cart
+            <set>
+                        <if test='item.userId !=null and item.userId !=""' >user_id = #{item.userId},</if>
+        <if test='item.categoryId !=null and item.categoryId !=""' >category_id = #{item.categoryId},</if>
+        <if test='item.shopId !=null and item.shopId !=""' >shop_id = #{item.shopId},</if>
+        <if test='item.shopName !=null and item.shopName !=""' >shop_name = #{item.shopName},</if>
+        <if test='item.goodsId !=null and item.goodsId !=""' >goods_id = #{item.goodsId},</if>
+        <if test='item.goodsName !=null and item.goodsName !=""' >goods_name = #{item.goodsName},</if>
+        <if test='item.goodsIcon !=null and item.goodsIcon !=""' >goods_icon = #{item.goodsIcon},</if>
+        <if test='item.skuId !=null and item.skuId !=""' >sku_id = #{item.skuId},</if>
+        <if test='item.inventory !=null and item.inventory !=""' >inventory = #{item.inventory},</if>
+        <if test='item.commodityNumber !=null and item.commodityNumber !=""' >commodity_number = #{item.commodityNumber},</if>
+        <if test='item.price !=null and item.price !=""' >price = #{item.price},</if>
+        <if test='item.totalPrice !=null and item.totalPrice !=""' >total_price = #{item.totalPrice},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null  ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null  ' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE b04_shopping_cart
+        <set>
+                    <if test='userId !=null and userId !=""' >user_id = #{userId},</if>
+        <if test='categoryId !=null and categoryId !=""' >category_id = #{categoryId},</if>
+        <if test='shopId !=null and shopId !=""' >shop_id = #{shopId},</if>
+        <if test='shopName !=null and shopName !=""' >shop_name = #{shopName},</if>
+        <if test='goodsId !=null and goodsId !=""' >goods_id = #{goodsId},</if>
+        <if test='goodsName !=null and goodsName !=""' >goods_name = #{goodsName},</if>
+        <if test='goodsIcon !=null and goodsIcon !=""' >goods_icon = #{goodsIcon},</if>
+        <if test='skuId !=null and skuId !=""' >sku_id = #{skuId},</if>
+        <if test='inventory !=null and inventory !=""' >inventory = #{inventory},</if>
+        <if test='commodityNumber !=null and commodityNumber !=""' >commodity_number = #{commodityNumber},</if>
+        <if test='price !=null and price !=""' >price = #{price},</if>
+        <if test='totalPrice !=null and totalPrice !=""' >total_price = #{totalPrice},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null  ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null  ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+    <update id="deleteShoppingCart">
+        UPDATE b04_shopping_cart
+        <set>
+                    <if test='userId !=null and userId !=""' >user_id = #{userId},</if>
+        <if test='categoryId !=null and categoryId !=""' >category_id = #{categoryId},</if>
+        <if test='shopId !=null and shopId !=""' >shop_id = #{shopId},</if>
+        <if test='shopName !=null and shopName !=""' >shop_name = #{shopName},</if>
+        <if test='goodsId !=null and goodsId !=""' >goods_id = #{goodsId},</if>
+        <if test='goodsName !=null and goodsName !=""' >goods_name = #{goodsName},</if>
+        <if test='goodsIcon !=null and goodsIcon !=""' >goods_icon = #{goodsIcon},</if>
+        <if test='skuId !=null and skuId !=""' >sku_id = #{skuId},</if>
+        <if test='inventory !=null and inventory !=""' >inventory = #{inventory},</if>
+        <if test='commodityNumber !=null and commodityNumber !=""' >commodity_number = #{commodityNumber},</if>
+        <if test='price !=null and price !=""' >price = #{price},</if>
+        <if test='totalPrice !=null and totalPrice !=""' >total_price = #{totalPrice},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null  ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null  ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

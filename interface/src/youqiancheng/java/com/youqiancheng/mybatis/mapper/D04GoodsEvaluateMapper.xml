@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.D04GoodsEvaluateDao">
+
+    <resultMap id="d04GoodsEvaluateResultMap" type="com.youqiancheng.mybatis.model.D04GoodsEvaluateDO">
+        <id column="id" property="id"/>
+        <result column="goods_id" property="goodsId"/>
+        <result column="goods_name" property="goodsName"/>
+        <result column="icon" property="icon"/>
+        <result column="user_id" property="userId"/>
+        <result column="order_id" property="orderId"/>
+        <result column="star" property="star"/>
+        <result column="content" property="content"/>
+        <result column="reply" property="reply"/>
+        <result column="has_pic" property="hasPic"/>
+        <result column="order_item_id" property="orderItemId"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="reply_time" property="replyTime"/>
+        <collection property="d05EvaluatePicDO" column="id" javaType="java.util.List" select="selectEvaluuatePic"></collection>
+
+    </resultMap>
+    <select id="selectEvaluuatePic"  resultType="com.youqiancheng.mybatis.model.D05EvaluatePicDO">
+        select * from d05_evaluate_pic as do5 where do5.evaluate_id = #{id}
+    </select>
+    <sql id="d04GoodsEvaluateColumns">
+        d04_goods_evaluate.id AS "id",
+        d04_goods_evaluate.goods_id AS "goodsId",
+        d04_goods_evaluate.goods_name AS "goodsName",
+        d04_goods_evaluate.icon AS "icon",
+        d04_goods_evaluate.user_id AS "userId",
+        d04_goods_evaluate.order_id AS "orderId",
+        d04_goods_evaluate.star AS "star",
+        d04_goods_evaluate.content AS "content",
+        d04_goods_evaluate.reply AS "reply",
+        d04_goods_evaluate.has_pic AS "hasPic",
+        d04_goods_evaluate.order_item_id AS "orderItemId",
+        d04_goods_evaluate.create_person AS "createPerson",
+        d04_goods_evaluate.create_time AS "createTime",
+        d04_goods_evaluate.update_person AS "updatePerson",
+        d04_goods_evaluate.update_time AS "updateTime",
+        d04_goods_evaluate.delete_flag AS "deleteFlag",
+        d04_goods_evaluate.reply_time AS "replyTime"
+    </sql>
+
+    <sql id="d04GoodsEvaluateJoins">
+
+    </sql>
+
+    <!--  分页查询商品评论记录-->
+    <select id="listGoodsEvaluateHDPage" parameterType="java.util.Map" resultMap="d04GoodsEvaluateResultMap">
+        SELECT  d.*
+        FROM d04_goods_evaluate d ,c01_goods c
+        WHERE d.delete_flag=1  and c.id=d.goods_id and c.shop_id=#{shopId}
+        <if test='goodsName!= null and goodsName !=""'> and d.goods_name like CONCAT('%',#{goodsName},'%')  </if>
+        ORDER BY d.id DESC
+    </select>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.D04GoodsEvaluateDO">
+        SELECT
+        <include refid="d04GoodsEvaluateColumns" />
+        FROM d04_goods_evaluate <include refid="d04GoodsEvaluateJoins" />
+        <where>
+        d04_goods_evaluate.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.D04GoodsEvaluateDO">
+        SELECT
+        <include refid="d04GoodsEvaluateColumns" />
+        FROM d04_goods_evaluate <include refid="d04GoodsEvaluateJoins" />
+        <where>
+                    <if test='goodsId!= null and goodsId !=""'> and goods_id = #{goodsId} </if>
+        <if test='goodsName!= null and goodsName !=""'> and goods_name = #{goodsName} </if>
+        <if test='icon!= null and icon !=""'> and icon = #{icon} </if>
+        <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='orderId!= null and orderId !=""'> and order_id = #{orderId} </if>
+        <if test='star!= null and star !=""'> and star = #{star} </if>
+        <if test='content!= null and content !=""'> and content = #{content} </if>
+        <if test='reply!= null and reply !=""'> and reply = #{reply} </if>
+        <if test='hasPic!= null and hasPic !=""'> and has_pic = #{hasPic} </if>
+        <if test='orderItemId!= null and orderItemId !=""'> and order_item_id = #{orderItemId} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+            <if test='replyTime!= null and replyTime !=""'> and reply_time = #{replyTime} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.D04GoodsEvaluateDO">
+        SELECT
+        d.*,b.pic,b.nick
+        FROM d04_goods_evaluate d
+        left join b01_user b on d.user_id=b.id
+        <where>
+                    <if test='goodsId!= null and goodsId !=""'> and d.goods_id = #{goodsId} </if>
+        <if test='goodsName!= null and goodsName !=""'> and d.goods_name = #{goodsName} </if>
+        <if test='icon!= null and icon !=""'> and d.icon = #{icon} </if>
+        <if test='userId!= null and userId !=""'> and d.user_id = #{userId} </if>
+        <if test='orderId!= null and orderId !=""'> and d.order_id = #{orderId} </if>
+        <if test='star!= null and star !=""'> and d.star = #{star} </if>
+        <if test='content!= null and content !=""'> and d.content = #{content} </if>
+        <if test='reply!= null and reply !=""'> and d.reply = #{reply} </if>
+        <if test='hasPic!= null and hasPic !=""'> and d.has_pic = #{hasPic} </if>
+        <if test='orderItemId!= null and orderItemId !=""'> and d.order_item_id = #{orderItemId} </if>
+        <if test='createPerson!= null and createPerson !=""'> and d.create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and d.create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and d.update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and d.update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and d.delete_flag = #{deleteFlag} </if>
+            <if test='replyTime!= null and replyTime !=""'> and reply_time = #{replyTime} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by d.id desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from d04_goods_evaluate
+        <where>
+                    <if test='goodsId!= null and goodsId !=""'> and goods_id = #{goodsId} </if>
+        <if test='goodsName!= null and goodsName !=""'> and goods_name = #{goodsName} </if>
+        <if test='icon!= null and icon !=""'> and icon = #{icon} </if>
+        <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='orderId!= null and orderId !=""'> and order_id = #{orderId} </if>
+        <if test='reply!= null and reply !=""'> and reply = #{reply} </if>
+        <if test='star!= null and star !=""'> and star = #{star} </if>
+        <if test='content!= null and content !=""'> and content = #{content} </if>
+        <if test='hasPic!= null and hasPic !=""'> and has_pic = #{hasPic} </if>
+        <if test='orderItemId!= null and orderItemId !=""'> and order_item_id = #{orderItemId} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+            <if test='replyTime!= null and replyTime !=""'> and reply_time = #{replyTime} </if>
+        </where>
+    </select>
+    <select id="listCommentHDPage" resultType="com.youqiancheng.mybatis.model.D04GoodsEvaluateDO">
+        SELECT
+        *
+        FROM d04_goods_evaluate
+        WHERE delete_flag = 1
+        <if test="commentQueryForm.goodsName != null and '' != commentQueryForm.goodsName">
+            AND goods_name LIKE CONCAT('%',#{commentQueryForm.goodsName},'%')
+        </if>
+        ORDER BY id DESC
+    </select>
+
+
+    <insert id="insertBatch">
+        INSERT INTO d04_goods_evaluate(
+                        goods_id,
+            goods_name,
+            icon,
+            user_id,
+            order_id,
+            star,
+            content,
+        reply,
+            has_pic,
+            order_item_id,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+            delete_flag,
+        reply_time
+        )
+        VALUES
+        <foreach collection ="list" item="d04GoodsEvaluate" separator =",">
+        (
+                        #{d04GoodsEvaluate.goodsId},
+            #{d04GoodsEvaluate.goodsName},
+            #{d04GoodsEvaluate.icon},
+            #{d04GoodsEvaluate.userId},
+            #{d04GoodsEvaluate.orderId},
+            #{d04GoodsEvaluate.star},
+            #{d04GoodsEvaluate.content},
+            #{d04GoodsEvaluate.reply},
+            #{d04GoodsEvaluate.hasPic},
+            #{d04GoodsEvaluate.orderItemId},
+            #{d04GoodsEvaluate.createPerson},
+            #{d04GoodsEvaluate.createTime},
+            #{d04GoodsEvaluate.updatePerson},
+            #{d04GoodsEvaluate.updateTime},
+            #{d04GoodsEvaluate.deleteFlag},
+            #{d04GoodsEvaluate.replyTime}
+        )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE d04_goods_evaluate
+            <set>
+                        <if test='item.goodsId !=null and item.goodsId !=""' >goods_id = #{item.goodsId},</if>
+        <if test='item.goodsName !=null and item.goodsName !=""' >goods_name = #{item.goodsName},</if>
+        <if test='item.icon !=null and item.icon !=""' >icon = #{item.icon},</if>
+        <if test='item.userId !=null and item.userId !=""' >user_id = #{item.userId},</if>
+        <if test='item.orderId !=null and item.orderId !=""' >order_id = #{item.orderId},</if>
+        <if test='item.star !=null and item.star !=""' >star = #{item.star},</if>
+        <if test='item.content !=null and item.content !=""' >content = #{item.content},</if>
+        <if test='item.reply !=null and item.reply !=""' >reply = #{item.reply},</if>
+        <if test='item.hasPic !=null and item.hasPic !=""' >has_pic = #{item.hasPic},</if>
+        <if test='item.orderItemId !=null and item.orderItemId !=""' >order_item_id = #{item.orderItemId},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+                <if test='item.replyTime !=null and item.replyTime !=""' >reply_time = #{item.replyTime},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE d04_goods_evaluate
+        <set>
+                    <if test='goodsId !=null and goodsId !=""' >goods_id = #{goodsId},</if>
+        <if test='goodsName !=null and goodsName !=""' >goods_name = #{goodsName},</if>
+        <if test='icon !=null and icon !=""' >icon = #{icon},</if>
+        <if test='userId !=null and userId !=""' >user_id = #{userId},</if>
+        <if test='orderId !=null and orderId !=""' >order_id = #{orderId},</if>
+        <if test='reply !=null and reply !=""' >reply = #{reply},</if>
+        <if test='star !=null and star !=""' >star = #{star},</if>
+        <if test='content !=null and content !=""' >content = #{content},</if>
+        <if test='hasPic !=null and hasPic !=""' >has_pic = #{hasPic},</if>
+        <if test='orderItemId !=null and orderItemId !=""' >order_item_id = #{orderItemId},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+            <if test='replyTime!= null and replyTime !=""'> and reply_time = #{replyTime} </if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

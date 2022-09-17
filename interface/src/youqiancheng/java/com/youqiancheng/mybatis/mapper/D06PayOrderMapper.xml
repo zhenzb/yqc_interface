@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.D06PayOrderDao">
+
+    <resultMap id="d06PayOrderResultMap" type="com.youqiancheng.mybatis.model.D06PayOrderDO">
+        <id column="id" property="id"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="user_id" property="userId"/>
+        <result column="nick" property="nick"/>
+        <result column="user_phone" property="userPhone"/>
+        <result column="order_price" property="orderPrice"/>
+        <result column="pay_type" property="payType"/>
+        <result column="trade_no" property="tradeNo"/>
+        <result column="order_status" property="orderStatus"/>
+        <result column="buy_msg" property="buyMsg"/>
+        <result column="shipping_name" property="shippingName"/>
+        <result column="shipping_phone" property="shippingPhone"/>
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="area" property="area"/>
+        <result column="invoice_flag" property="invoiceFlag"/>
+        <result column="invoice_type" property="invoiceType"/>
+        <result column="invoice_content" property="invoiceContent"/>
+        <result column="invoice_title" property="invoiceTitle"/>
+        <result column="shipping_address" property="shippingAddress"/>
+        <result column="create_time" property="createTime"/>
+        <result column="pay_time" property="payTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+
+
+
+    </resultMap>
+
+    <sql id="d06PayOrderColumns">
+        d06_pay_order.id AS "id",
+        d06_pay_order.order_no AS "orderNo",
+        d06_pay_order.user_id AS "userId",
+        d06_pay_order.nick AS "nick",
+        d06_pay_order.user_phone AS "userPhone",
+        d06_pay_order.order_price AS "orderPrice",
+        d06_pay_order.pay_type AS "payType",
+        d06_pay_order.trade_no AS "tradeNo",
+        d06_pay_order.order_status AS "orderStatus",
+        d06_pay_order.buy_msg AS "buyMsg",
+        d06_pay_order.shipping_name AS "shippingName",
+        d06_pay_order.shipping_phone AS "shippingPhone",
+        d06_pay_order.province AS "province",
+        d06_pay_order.city AS "city",
+        d06_pay_order.area AS "area",
+        d06_pay_order.invoice_flag AS "invoiceFlag",
+        d06_pay_order.invoice_type AS "invoiceType",
+        d06_pay_order.invoice_content AS "invoiceContent",
+        d06_pay_order.invoice_title AS "invoiceTitle",
+        d06_pay_order.shipping_address AS "shippingAddress",
+        d06_pay_order.create_time AS "createTime",
+        d06_pay_order.pay_time AS "payTime",
+        d06_pay_order.delete_flag AS "deleteFlag",
+        d06_pay_order.end_time AS "endTime"
+    </sql>
+
+    <sql id="d06PayOrderJoins">
+
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.D06PayOrderDO">
+        SELECT
+        <include refid="d06PayOrderColumns" />
+        FROM d06_pay_order <include refid="d06PayOrderJoins" />
+        <where>
+        d06_pay_order.id = #{id}
+        </where>
+    </select>
+
+  <!--  <select id="getList" resultType="com.youqiancheng.mybatis.model.D06PayOrderDO">
+        SELECT  id from  d06_pay_order
+    </select>
+-->
+    <select id="list" resultType="com.youqiancheng.mybatis.model.D06PayOrderDO">
+        SELECT
+        <include refid="d06PayOrderColumns" />
+        FROM d06_pay_order <include refid="d06PayOrderJoins" />
+        <where>
+                    <if test='orderNo!= null and orderNo !=""'> and order_no = #{orderNo} </if>
+        <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='nick!= null and nick !=""'> and nick = #{nick} </if>
+        <if test='userPhone!= null and userPhone !=""'> and user_phone = #{userPhone} </if>
+        <if test='orderPrice!= null and orderPrice !=""'> and order_price = #{orderPrice} </if>
+        <if test='payType!= null and payType !=""'> and pay_type = #{payType} </if>
+        <if test='tradeNo!= null and tradeNo !=""'> and trade_no = #{tradeNo} </if>
+        <if test='orderStatus!= null and orderStatus !=""'> and order_status = #{orderStatus} </if>
+        <if test='buyMsg!= null and buyMsg !=""'> and buy_msg = #{buyMsg} </if>
+        <if test='shippingName!= null and shippingName !=""'> and shipping_name = #{shippingName} </if>
+        <if test='shippingPhone!= null and shippingPhone !=""'> and shipping_phone = #{shippingPhone} </if>
+        <if test='province!= null and province !=""'> and province = #{province} </if>
+        <if test='city!= null and city !=""'> and city = #{city} </if>
+        <if test='area!= null and area !=""'> and area = #{area} </if>
+        <if test='invoiceFlag!= null and invoiceFlag !=""'> and invoice_flag = #{invoiceFlag} </if>
+        <if test='invoiceType!= null and invoiceType !=""'> and invoice_type = #{invoiceType} </if>
+        <if test='invoiceContent!= null and invoiceContent !=""'> and invoice_content = #{invoiceContent} </if>
+        <if test='invoiceTitle!= null and invoiceTitle !=""'> and invoice_title = #{invoiceTitle} </if>
+        <if test='shippingAddress!= null and shippingAddress !=""'> and shipping_address = #{shippingAddress} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='createTime!= null  '> and create_time = #{createTime} </if>
+        <if test='payTime!= null  '> and pay_time = #{payTime} </if>
+        <if test='endTime!= null  '> and end_time = #{endTime} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.D06PayOrderDO">
+        SELECT
+        <include refid="d06PayOrderColumns" />
+        FROM d06_pay_order <include refid="d06PayOrderJoins" />
+        <where>
+                    <if test='orderNo!= null and orderNo !=""'> and order_no = #{orderNo} </if>
+        <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='nick!= null and nick !=""'> and nick = #{nick} </if>
+        <if test='userPhone!= null and userPhone !=""'> and user_phone = #{userPhone} </if>
+        <if test='orderPrice!= null and orderPrice !=""'> and order_price = #{orderPrice} </if>
+        <if test='payType!= null and payType !=""'> and pay_type = #{payType} </if>
+        <if test='tradeNo!= null and tradeNo !=""'> and trade_no = #{tradeNo} </if>
+        <if test='orderStatus!= null and orderStatus !=""'> and order_status = #{orderStatus} </if>
+        <if test='buyMsg!= null and buyMsg !=""'> and buy_msg = #{buyMsg} </if>
+        <if test='shippingName!= null and shippingName !=""'> and shipping_name = #{shippingName} </if>
+        <if test='shippingPhone!= null and shippingPhone !=""'> and shipping_phone = #{shippingPhone} </if>
+        <if test='province!= null and province !=""'> and province = #{province} </if>
+        <if test='city!= null and city !=""'> and city = #{city} </if>
+        <if test='area!= null and area !=""'> and area = #{area} </if>
+        <if test='invoiceFlag!= null and invoiceFlag !=""'> and invoice_flag = #{invoiceFlag} </if>
+        <if test='invoiceType!= null and invoiceType !=""'> and (invoice_type is null or invoice_type !=999999) </if>
+        <if test='invoiceContent!= null and invoiceContent !=""'> and invoice_content = #{invoiceContent} </if>
+        <if test='invoiceTitle!= null and invoiceTitle !=""'> and invoice_title = #{invoiceTitle} </if>
+        <if test='shippingAddress!= null and shippingAddress !=""'> and shipping_address = #{shippingAddress} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='createTime!= null  '> and create_time = #{createTime} </if>
+        <if test='payTime!= null  '> and pay_time = #{payTime} </if>
+        <if test='endTime!= null  '> and end_time = #{endTime} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from d06_pay_order
+        <where>
+                    <if test='orderNo!= null and orderNo !=""'> and order_no = #{orderNo} </if>
+        <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='nick!= null and nick !=""'> and nick = #{nick} </if>
+        <if test='userPhone!= null and userPhone !=""'> and user_phone = #{userPhone} </if>
+        <if test='orderPrice!= null and orderPrice !=""'> and order_price = #{orderPrice} </if>
+        <if test='payType!= null and payType !=""'> and pay_type = #{payType} </if>
+        <if test='tradeNo!= null and tradeNo !=""'> and trade_no = #{tradeNo} </if>
+        <if test='orderStatus!= null and orderStatus !=""'> and order_status = #{orderStatus} </if>
+        <if test='buyMsg!= null and buyMsg !=""'> and buy_msg = #{buyMsg} </if>
+        <if test='shippingName!= null and shippingName !=""'> and shipping_name = #{shippingName} </if>
+        <if test='shippingPhone!= null and shippingPhone !=""'> and shipping_phone = #{shippingPhone} </if>
+        <if test='province!= null and province !=""'> and province = #{province} </if>
+        <if test='city!= null and city !=""'> and city = #{city} </if>
+        <if test='area!= null and area !=""'> and area = #{area} </if>
+        <if test='invoiceFlag!= null and invoiceFlag !=""'> and invoice_flag = #{invoiceFlag} </if>
+        <if test='invoiceType!= null and invoiceType !=""'> and invoice_type = #{invoiceType} </if>
+        <if test='invoiceContent!= null and invoiceContent !=""'> and invoice_content = #{invoiceContent} </if>
+        <if test='invoiceTitle!= null and invoiceTitle !=""'> and invoice_title = #{invoiceTitle} </if>
+        <if test='shippingAddress!= null and shippingAddress !=""'> and shipping_address = #{shippingAddress} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='createTime!= null  '> and create_time = #{createTime} </if>
+        <if test='payTime!= null  '> and pay_time = #{payTime} </if>
+        <if test='endTime!= null '> and end_time = #{endTime} </if>
+        </where>
+    </select>
+
+
+
+    <insert id="insertBatch">
+        INSERT INTO d06_pay_order(
+                        order_no,
+            user_id,
+            nick,
+            user_phone,
+            order_price,
+            pay_type,
+            trade_no,
+            order_status,
+            buy_msg,
+            shipping_name,
+            shipping_phone,
+            province,
+            city,
+            area,
+            invoice_flag,
+            invoice_type,
+            invoice_content,
+            invoice_title,
+            shipping_address,
+            create_time,
+        delete_flag,
+            pay_time,
+            end_time
+        )
+        VALUES
+        <foreach collection ="list" item="d06PayOrder" separator =",">
+        (
+                        #{d06PayOrder.orderNo},
+            #{d06PayOrder.userId},
+            #{d06PayOrder.nick},
+            #{d06PayOrder.userPhone},
+            #{d06PayOrder.orderPrice},
+            #{d06PayOrder.payType},
+            #{d06PayOrder.tradeNo},
+            #{d06PayOrder.orderStatus},
+            #{d06PayOrder.buyMsg},
+            #{d06PayOrder.shippingName},
+            #{d06PayOrder.shippingPhone},
+            #{d06PayOrder.province},
+            #{d06PayOrder.city},
+            #{d06PayOrder.area},
+            #{d06PayOrder.invoiceFlag},
+            #{d06PayOrder.invoiceType},
+            #{d06PayOrder.invoiceContent},
+            #{d06PayOrder.invoiceTitle},
+            #{d06PayOrder.shippingAddress},
+            #{d06PayOrder.createTime},
+            #{d06PayOrder.delete_flag},
+            #{d06PayOrder.payTime},
+            #{d06PayOrder.endTime}
+        )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE d06_pay_order
+            <set>
+                        <if test='item.orderNo !=null and item.orderNo !=""' >order_no = #{item.orderNo},</if>
+        <if test='item.userId !=null and item.userId !=""' >user_id = #{item.userId},</if>
+        <if test='item.nick !=null and item.nick !=""' >nick = #{item.nick},</if>
+        <if test='item.userPhone !=null and item.userPhone !=""' >user_phone = #{item.userPhone},</if>
+        <if test='item.orderPrice !=null and item.orderPrice !=""' >order_price = #{item.orderPrice},</if>
+        <if test='item.payType !=null and item.payType !=""' >pay_type = #{item.payType},</if>
+        <if test='item.tradeNo !=null and item.tradeNo !=""' >trade_no = #{item.tradeNo},</if>
+        <if test='item.orderStatus !=null and item.orderStatus !=""' >order_status = #{item.orderStatus},</if>
+        <if test='item.buyMsg !=null and item.buyMsg !=""' >buy_msg = #{item.buyMsg},</if>
+        <if test='item.shippingName !=null and item.shippingName !=""' >shipping_name = #{item.shippingName},</if>
+        <if test='item.shippingPhone !=null and item.shippingPhone !=""' >shipping_phone = #{item.shippingPhone},</if>
+        <if test='item.province !=null and item.province !=""' >province = #{item.province},</if>
+        <if test='item.city !=null and item.city !=""' >city = #{item.city},</if>
+        <if test='item.area !=null and item.area !=""' >area = #{item.area},</if>
+        <if test='item.invoiceFlag !=null and item.invoiceFlag !=""' >invoice_flag = #{item.invoiceFlag},</if>
+        <if test='item.invoiceType !=null and item.invoiceType !=""' >invoice_type = #{item.invoiceType},</if>
+        <if test='item.invoiceContent !=null and item.invoiceContent !=""' >invoice_content = #{item.invoiceContent},</if>
+        <if test='item.invoiceTitle !=null and item.invoiceTitle !=""' >invoice_title = #{item.invoiceTitle},</if>
+        <if test='item.shippingAddress !=null and item.shippingAddress !=""' >shipping_address = #{item.shippingAddress},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+        <if test='item.createTime !=null  ' >create_time = #{item.createTime},</if>
+        <if test='item.payTime !=null  ' >pay_time = #{item.payTime},</if>
+        <if test='item.endTime !=null  ' >end_time = #{item.endTime},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE d06_pay_order
+        <set>
+                    <if test='orderNo !=null and orderNo !=""' >order_no = #{orderNo},</if>
+        <if test='userId !=null and userId !=""' >user_id = #{userId},</if>
+        <if test='nick !=null and nick !=""' >nick = #{nick},</if>
+        <if test='userPhone !=null and userPhone !=""' >user_phone = #{userPhone},</if>
+        <if test='orderPrice !=null and orderPrice !=""' >order_price = #{orderPrice},</if>
+        <if test='payType !=null and payType !=""' >pay_type = #{payType},</if>
+        <if test='tradeNo !=null and tradeNo !=""' >trade_no = #{tradeNo},</if>
+        <if test='orderStatus !=null and orderStatus !=""' >order_status = #{orderStatus},</if>
+        <if test='buyMsg !=null and buyMsg !=""' >buy_msg = #{buyMsg},</if>
+        <if test='shippingName !=null and shippingName !=""' >shipping_name = #{shippingName},</if>
+        <if test='shippingPhone !=null and shippingPhone !=""' >shipping_phone = #{shippingPhone},</if>
+        <if test='province !=null and province !=""' >province = #{province},</if>
+        <if test='city !=null and city !=""' >city = #{city},</if>
+        <if test='area !=null and area !=""' >area = #{area},</if>
+        <if test='invoiceFlag !=null and invoiceFlag !=""' >invoice_flag = #{invoiceFlag},</if>
+        <if test='invoiceType !=null and invoiceType !=""' >invoice_type = #{invoiceType},</if>
+        <if test='invoiceContent !=null and invoiceContent !=""' >invoice_content = #{invoiceContent},</if>
+        <if test='invoiceTitle !=null and invoiceTitle !=""' >invoice_title = #{invoiceTitle},</if>
+        <if test='shippingAddress !=null and shippingAddress !=""' >shipping_address = #{shippingAddress},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        <if test='createTime !=null  ' >create_time = #{createTime},</if>
+        <if test='payTime !=null ' >pay_time = #{payTime},</if>
+        <if test='endTime !=null ' >end_time = #{endTime},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="getOrderNumberByUserId" resultType="com.youqiancheng.vo.client.D06OrderStatusNumVO">
+    SELECT
+	order_status AS id,
+	count(*) AS num
+FROM
+	d06_pay_order
+WHERE
+	user_id = #{userId}
+GROUP BY
+	order_status;
+    </select>
+
+</mapper>

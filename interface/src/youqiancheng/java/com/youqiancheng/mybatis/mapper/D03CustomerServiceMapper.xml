@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.D03CustomerServiceDao">
+
+    <resultMap id="d03CustomerServiceResultMap" type="com.youqiancheng.mybatis.model.D03CustomerServiceDO">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="order_id" property="orderId"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="service_no" property="serviceNo"/>
+        <result column="type" property="type"/>
+        <result column="money" property="money"/>
+        <result column="is_return_goods" property="isReturnGoods"/>
+        <result column="reason" property="reason"/>
+        <result column="time" property="time"/>
+        <result column="status" property="status"/>
+        <result column="examine_status" property="examineStatus"/>
+        <result column="examine_time" property="examineTime"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="refuse_reason" property="refuseReason"/>
+        <result column="order_item_id" property="orderItemId"/>
+        <result column="refund_no" property="refundNo"/>
+        <result column="refund_type" property="refundType"/>
+        <result column="explain" property="explain"/>
+
+
+
+    </resultMap>
+
+    <sql id="d03CustomerServiceColumns">
+        d03_customer_service.id AS "id",
+        d03_customer_service.user_id AS "userId",
+        d03_customer_service.order_id AS "orderId",
+        d03_customer_service.order_no AS "orderNo",
+        d03_customer_service.service_no AS "serviceNo",
+        d03_customer_service.type AS "type",
+        d03_customer_service.money AS "money",
+        d03_customer_service.is_return_goods AS "isReturnGoods",
+        d03_customer_service.reason AS "reason",
+        d03_customer_service.time AS "time",
+        d03_customer_service.status AS "status",
+        d03_customer_service.examine_status AS "examineStatus",
+        d03_customer_service.examine_time AS "examineTime",
+        d03_customer_service.create_person AS "createPerson",
+        d03_customer_service.create_time AS "createTime",
+        d03_customer_service.update_person AS "updatePerson",
+        d03_customer_service.update_time AS "updateTime",
+        d03_customer_service.refuse_reason AS "refuseReason",
+        d03_customer_service.order_item_id AS "orderItemId",
+        d03_customer_service.refund_no AS "refundNo",
+        d03_customer_service.refund_type AS "refundType",
+        d03_customer_service.explain AS "explain",
+        d03_customer_service.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="d03CustomerServiceJoins">
+
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.D03CustomerServiceDO">
+        SELECT
+        <include refid="d03CustomerServiceColumns" />
+        FROM d03_customer_service <include refid="d03CustomerServiceJoins" />
+        <where>
+        d03_customer_service.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.D03CustomerServiceDO">
+        SELECT d03.*
+        FROM d03_customer_service d03
+        left join d02_order_item d02 on d02.id=d03.order_item_id
+        <where>
+         <if test='shopId!= null and shopId !=""'> and d02.shop_id = #{shopId} </if>
+         <if test='userId!= null and userId !=""'> and d03.user_id = #{userId} </if>
+        <if test='orderId!= null and orderId !=""'> and d03.order_id = #{orderId} </if>
+        <if test='orderItemId!= null and orderItemId !=""'> and d03.order_item_id = #{orderItemId} </if>
+        <if test='orderNo!= null and orderNo !=""'> and d03.order_no = #{orderNo} </if>
+        <if test='serviceNo!= null and serviceNo !=""'> and d03.service_no = #{serviceNo} </if>
+        <if test='type!= null and type !=""'> and d03.type = #{type} </if>
+        <if test='money!= null and money !=""'> and d03.money = #{money} </if>
+        <if test='isReturnGoods!= null and isReturnGoods !=""'> and d03.is_return_goods = #{isReturnGoods} </if>
+        <if test='reason!= null and reason !=""'> and d03.reason = #{reason} </if>
+        <if test='time!= null  '> and d03.time = #{time} </if>
+        <if test='status!= null and status !=""'> and d03.status = #{status} </if>
+        <if test='examineStatus!= null and examineStatus !=""'> and d03.examine_status = #{examineStatus} </if>
+        <if test='examineTime!= null  '> and d03.examine_time = #{examineTime} </if>
+        <if test='createPerson!= null and createPerson !=""'> and d03.create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and d03.create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and d03.update_person = #{updatePerson} </if>
+        <if test='refuseReason!= null and refuseReason !=""'> and d03.refuse_reason = #{refuseReason} </if>
+        <if test='updateTime!= null    '> and d03.update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and d03.delete_flag = #{deleteFlag} </if>
+        <if test='refundNo!= null and refundNo !=""'> and d03.refund_no = #{refundNo} </if>
+        <if test='refundType!= null and refundType !=""'> and d03.refund_type = #{refundType} </if>
+        <if test='explain!= null and explain !=""'> and d03.explain = #{explain} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by d03.id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.D03CustomerServiceDO">
+        SELECT d03.*
+        FROM d03_customer_service d03
+        left join d02_order_item d02 on d02.id=d03.order_item_id
+        <where>
+            <if test='shopId!= null and shopId !=""'> and d02.shop_id = #{shopId} </if>
+            <if test='userId!= null and userId !=""'> and d03.user_id = #{userId} </if>
+            <if test='orderId!= null and orderId !=""'> and d03.order_id = #{orderId} </if>
+            <if test='orderItemId!= null and orderItemId !=""'> and d03.order_item_id = #{orderItemId} </if>
+            <if test='orderNo!= null and orderNo !=""'> and d03.order_no = #{orderNo} </if>
+            <if test='serviceNo!= null and serviceNo !=""'> and d03.service_no = #{serviceNo} </if>
+            <if test='type!= null and type !=""'> and d03.type = #{type} </if>
+            <if test='money!= null and money !=""'> and d03.money = #{money} </if>
+            <if test='isReturnGoods!= null and isReturnGoods !=""'> and d03.is_return_goods = #{isReturnGoods} </if>
+            <if test='reason!= null and reason !=""'> and d03.reason = #{reason} </if>
+            <if test='time!= null  '> and d03.time = #{time} </if>
+            <if test='status!= null and status !=""'> and d03.status = #{status} </if>
+            <if test='examineStatus!= null and examineStatus !=""'> and d03.examine_status = #{examineStatus} </if>
+            <if test='examineTime!= null  '> and d03.examine_time = #{examineTime} </if>
+            <if test='createPerson!= null and createPerson !=""'> and d03.create_person = #{createPerson} </if>
+            <if test='createTime!= null   '> and d03.create_time = #{createTime} </if>
+            <if test='updatePerson!= null and updatePerson !=""'> and d03.update_person = #{updatePerson} </if>
+            <if test='refuseReason!= null and refuseReason !=""'> and d03.refuse_reason = #{refuseReason} </if>
+            <if test='updateTime!= null    '> and d03.update_time = #{updateTime} </if>
+            <if test='deleteFlag!= null and deleteFlag !=""'> and d03.delete_flag = #{deleteFlag} </if>
+            <if test='refundNo!= null and refundNo !=""'> and d03.refund_no = #{refundNo} </if>
+            <if test='refundType!= null and refundType !=""'> and d03.refund_type = #{refundType} </if>
+            <if test='explain!= null and explain !=""'> and d03.explain = #{explain} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by d03.id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listByManageHDPage" resultType="com.youqiancheng.mybatis.model.D03CustomerServiceDO">
+        SELECT d03.*
+        FROM d03_customer_service d03
+        left join d02_order_item d02 on d02.id=d03.order_item_id
+        left join f01_shop f01 on f01.id=d02.shop_id
+        left join b01_user b01 on b01.id=d03.user_id
+        <where>
+            <if test='userName!= null and userName !=""'>and b01.nick like CONCAT('%',#{userName},'%') </if>
+            <if test='shopName!= null and shopName !=""'> and f01.name like CONCAT('%',#{shopName},'%') </if>
+            <if test='shopId!= null and shopId !=""'> and d02.shop_id = #{shopId} </if>
+            <if test='userId!= null and userId !=""'> and d03.user_id = #{userId} </if>
+            <if test='orderId!= null and orderId !=""'> and d03.order_id = #{orderId} </if>
+            <if test='orderItemId!= null and orderItemId !=""'> and d03.order_item_id = #{orderItemId} </if>
+            <if test='orderNo!= null and orderNo !=""'> and d03.order_no = #{orderNo} </if>
+            <if test='serviceNo!= null and serviceNo !=""'> and d03.service_no = #{serviceNo} </if>
+            <if test='type!= null and type !=""'> and d03.type = #{type} </if>
+            <if test='money!= null and money !=""'> and d03.money = #{money} </if>
+            <if test='isReturnGoods!= null and isReturnGoods !=""'> and d03.is_return_goods = #{isReturnGoods} </if>
+            <if test='reason!= null and reason !=""'> and d03.reason = #{reason} </if>
+            <if test='time!= null  '> and d03.time = #{time} </if>
+            <if test='status!= null and status !=""'> and d03.status = #{status} </if>
+            <if test='examineStatus!= null and examineStatus !=""'> and d03.examine_status = #{examineStatus} </if>
+            <if test='examineTime!= null  '> and d03.examine_time = #{examineTime} </if>
+            <if test='createPerson!= null and createPerson !=""'> and d03.create_person = #{createPerson} </if>
+            <if test='createTime!= null   '> and d03.create_time = #{createTime} </if>
+            <if test='updatePerson!= null and updatePerson !=""'> and d03.update_person = #{updatePerson} </if>
+            <if test='refuseReason!= null and refuseReason !=""'> and d03.refuse_reason = #{refuseReason} </if>
+            <if test='updateTime!= null    '> and d03.update_time = #{updateTime} </if>
+            <if test='deleteFlag!= null and deleteFlag !=""'> and d03.delete_flag = #{deleteFlag} </if>
+            <if test='refundNo!= null and refundNo !=""'> and d03.refund_no = #{refundNo} </if>
+            <if test='refundType!= null and refundType !=""'> and d03.refund_type = #{refundType} </if>
+            <if test='explain!= null and explain !=""'> and d03.explain = #{explain} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by d03.id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from d03_customer_service
+        <where>
+                    <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='orderId!= null and orderId !=""'> and order_id = #{orderId} </if>
+        <if test='orderNo!= null and orderNo !=""'> and order_no = #{orderNo} </if>
+        <if test='orderItemId!= null and orderItemId !=""'> and order_item_id = #{orderItemId} </if>
+        <if test='serviceNo!= null and serviceNo !=""'> and service_no = #{serviceNo} </if>
+        <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='money!= null and money !=""'> and money = #{money} </if>
+        <if test='isReturnGoods!= null and isReturnGoods !=""'> and is_return_goods = #{isReturnGoods} </if>
+        <if test='reason!= null and reason !=""'> and reason = #{reason} </if>
+        <if test='time!= null  '> and time = #{time} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='examineStatus!= null and examineStatus !=""'> and examine_status = #{examineStatus} </if>
+        <if test='examineTime!= null  '> and examine_time = #{examineTime} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='refuseReason!= null and refuseReason !=""'> and refuse_reason = #{refuseReason} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='refundNo!= null and refundNo !=""'> and refund_no = #{refundNo} </if>
+        <if test='refundType!= null and refundType !=""'> and refund_type = #{refundType} </if>
+        <if test='explain!= null and explain !=""'> and explain = #{explain} </if>
+        </where>
+    </select>
+
+
+    <insert id="insertBatch">
+        INSERT INTO d03_customer_service(
+                        user_id,
+            order_id,
+            order_no,
+            service_no,
+            type,
+            money,
+            is_return_goods,
+            reason,
+            time,
+            status,
+            examine_status,
+            examine_time,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+        refuse_reason,
+        order_item_id,
+        refund_no,
+        refund_type,
+        explain,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="d03CustomerService" separator =",">
+        (
+                        #{d03CustomerService.userId},
+            #{d03CustomerService.orderId},
+            #{d03CustomerService.orderNo},
+            #{d03CustomerService.serviceNo},
+            #{d03CustomerService.type},
+            #{d03CustomerService.money},
+            #{d03CustomerService.isReturnGoods},
+            #{d03CustomerService.reason},
+            #{d03CustomerService.time},
+            #{d03CustomerService.status},
+            #{d03CustomerService.examineStatus},
+            #{d03CustomerService.examineTime},
+            #{d03CustomerService.createPerson},
+            #{d03CustomerService.createTime},
+            #{d03CustomerService.updatePerson},
+            #{d03CustomerService.updateTime},
+            #{d03CustomerService.refuseReason},
+            #{d03CustomerService.orderItemId},
+            #{d03CustomerService.refundNo},
+            #{d03CustomerService.refundType},
+            #{d03CustomerService.explain},
+            #{d03CustomerService.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE d03_customer_service
+            <set>
+                        <if test='item.userId !=null and item.userId !=""' >user_id = #{item.userId},</if>
+        <if test='item.orderId !=null and item.orderId !=""' >order_id = #{item.orderId},</if>
+        <if test='item.orderItemId !=null and item.orderItemId !=""' >order_item_id = #{item.orderItemId},</if>
+        <if test='item.orderNo !=null and item.orderNo !=""' >order_no = #{item.orderNo},</if>
+        <if test='item.serviceNo !=null and item.serviceNo !=""' >service_no = #{item.serviceNo},</if>
+        <if test='item.type !=null and item.type !=""' >type = #{item.type},</if>
+        <if test='item.money !=null and item.money !=""' >money = #{item.money},</if>
+        <if test='item.isReturnGoods !=null and item.isReturnGoods !=""' >is_return_goods = #{item.isReturnGoods},</if>
+        <if test='item.reason !=null and item.reason !=""' >reason = #{item.reason},</if>
+        <if test='item.time !=null  ' >time = #{item.time},</if>
+        <if test='item.status !=null and item.status !=""' >status = #{item.status},</if>
+        <if test='item.examineStatus !=null and item.examineStatus !=""' >examine_status = #{item.examineStatus},</if>
+        <if test='item.examineTime !=null        ' >examine_time = #{item.examineTime},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.refuseReason !=null and item.refuseReason !=""' >refuse_reason = #{item.refuseReason},</if>
+        <if test='item.createTime !=null      ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null       ' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+        <if test='item.refundNo !=null and item.refundNo !=""' >refund_no = #{item.refundNo},</if>
+        <if test='item.refundType !=null and item.refundType !=""' >refund_type = #{item.refundType},</if>
+        <if test='item.explain !=null and item.explain !=""' >explain = #{item.explain},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE d03_customer_service
+        <set>
+                    <if test='userId !=null and userId !=""' >user_id = #{userId},</if>
+        <if test='orderId !=null and orderId !=""' >order_id = #{orderId},</if>
+        <if test='orderItemId !=null and orderItemId !=""' >order_item_id = #{orderItemId},</if>
+        <if test='orderNo !=null and orderNo !=""' >order_no = #{orderNo},</if>
+        <if test='serviceNo !=null and serviceNo !=""' >service_no = #{serviceNo},</if>
+        <if test='type !=null and type !=""' >type = #{type},</if>
+        <if test='money !=null and money !=""' >money = #{money},</if>
+        <if test='isReturnGoods !=null and isReturnGoods !=""' >is_return_goods = #{isReturnGoods},</if>
+        <if test='reason !=null and reason !=""' >reason = #{reason},</if>
+        <if test='time !=null  ' >time = #{time},</if>
+        <if test='status !=null and status !=""' >status = #{status},</if>
+        <if test='examineStatus !=null and examineStatus !=""' >examine_status = #{examineStatus},</if>
+        <if test='examineTime !=null  ' >examine_time = #{examineTime},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='refuseReason !=null and refuseReason !=""' >refuse_reason = #{refuseReason},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        <if test='refundNo !=null and refundNo !=""' >refund_no = #{refundNo},</if>
+        <if test='refundType !=null and refundType !=""' >refund_type = #{refundType},</if>
+        <if test='explain !=null and explain !=""' >explain = #{explain},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+    <select id="getCustomerGroupByTime" parameterType="map" resultType="com.youqiancheng.vo.client.D03CustomerVo">
+        SELECT
+            user_id,
+            create_time,
+            count(*) as number
+        FROM
+            d03_customer_service
+        WHERE
+            user_id = #{userId}
+        GROUP BY
+            DATE_FORMAT(create_time, '%Y%m')
+        ORDER BY create_time desc;
+    </select>
+
+</mapper>

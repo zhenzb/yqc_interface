@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.F03MainProjectDao">
+
+    <resultMap id="f03MainProjectResultMap" type="com.youqiancheng.mybatis.model.F03MainProjectDO">
+        <id column="id" property="id"/>
+        <result column="type" property="type"/>
+        <result column="name" property="name"/>
+        <result column="pic_url" property="picUrl"/>
+        <result column="order_num" property="orderNum"/>
+        <result column="status" property="status"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+
+
+
+    </resultMap>
+
+    <sql id="f03MainProjectColumns">
+        f03_main_project.id AS "id",
+        f03_main_project.type AS "type",
+        f03_main_project.name AS "name",
+        f03_main_project.pic_url AS "picUrl",
+        f03_main_project.order_num AS "orderNum",
+        f03_main_project.status AS "status",
+        f03_main_project.create_person AS "createPerson",
+        f03_main_project.create_time AS "createTime",
+        f03_main_project.update_person AS "updatePerson",
+        f03_main_project.update_time AS "updateTime",
+        f03_main_project.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="f03MainProjectJoins">
+
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.F03MainProjectDO">
+        SELECT
+        <include refid="f03MainProjectColumns" />
+        FROM f03_main_project <include refid="f03MainProjectJoins" />
+        <where>
+        f03_main_project.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.F03MainProjectDO">
+        SELECT
+        <include refid="f03MainProjectColumns" />
+        FROM f03_main_project <include refid="f03MainProjectJoins" />
+        <where>
+                    <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='picUrl!= null and picUrl !=""'> and pic_url = #{picUrl} </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.F03MainProjectDO">
+        SELECT
+        <include refid="f03MainProjectColumns" />
+        FROM f03_main_project <include refid="f03MainProjectJoins" />
+        <where>
+                    <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='picUrl!= null and picUrl !=""'> and pic_url = #{picUrl} </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from f03_main_project
+        <where>
+                    <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='picUrl!= null and picUrl !=""'> and pic_url = #{picUrl} </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+    </select>
+
+    <select id="listMainProjectHDPage" resultType="com.youqiancheng.mybatis.model.F03MainProjectDO">
+        SELECT *
+        FROM f03_main_project
+        WHERE delete_flag = 1
+        ORDER BY id
+        DESC
+    </select>
+
+
+    <insert id="insertBatch">
+        INSERT INTO f03_main_project(
+                        type,
+            name,
+            pic_url,
+            order_num,
+            status,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="f03MainProject" separator =",">
+        (
+                        #{f03MainProject.type},
+            #{f03MainProject.name},
+            #{f03MainProject.picUrl},
+            #{f03MainProject.orderNum},
+            #{f03MainProject.status},
+            #{f03MainProject.createPerson},
+            #{f03MainProject.createTime},
+            #{f03MainProject.updatePerson},
+            #{f03MainProject.updateTime},
+            #{f03MainProject.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE f03_main_project
+            <set>
+                        <if test='item.type !=null and item.type !=""' >type = #{item.type},</if>
+        <if test='item.name !=null and item.name !=""' >name = #{item.name},</if>
+        <if test='item.picUrl !=null and item.picUrl !=""' >pic_url = #{item.picUrl},</if>
+        <if test='item.orderNum !=null and item.orderNum !=""' >order_num = #{item.orderNum},</if>
+        <if test='item.status !=null and item.status !=""' >status = #{item.status},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null      ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null       ' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE f03_main_project
+        <set>
+                    <if test='type !=null and type !=""' >type = #{type},</if>
+        <if test='name !=null and name !=""' >name = #{name},</if>
+        <if test='picUrl !=null and picUrl !=""' >pic_url = #{picUrl},</if>
+        <if test='orderNum !=null and orderNum !=""' >order_num = #{orderNum},</if>
+        <if test='status !=null and status !=""' >status = #{status},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.C02GoodsPicDao">
+
+    <resultMap id="c02GoodsPicResultMap" type="com.youqiancheng.mybatis.model.C02GoodsPicDO">
+        <id column="id" property="id"/>
+        <result column="pic_url" property="picUrl"/>
+        <result column="carousel_sort" property="carouselSort"/>
+        <result column="goods_id" property="goodsId"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="type" property="type"/>
+
+
+
+    </resultMap>
+
+    <sql id="c02GoodsPicColumns">
+        c02_goods_pic.id AS "id",
+        c02_goods_pic.pic_url AS "picUrl",
+        c02_goods_pic.carousel_sort AS "carouselSort",
+        c02_goods_pic.goods_id AS "goodsId",
+        c02_goods_pic.create_person AS "createPerson",
+        c02_goods_pic.create_time AS "createTime",
+        c02_goods_pic.update_person AS "updatePerson",
+        c02_goods_pic.update_time AS "updateTime",
+        c02_goods_pic.delete_flag AS "deleteFlag",
+        c02_goods_pic.type AS "type"
+    </sql>
+
+    <sql id="c02GoodsPicJoins">
+
+    </sql>
+
+    <!--  分页查询商品/宣传图列表-->
+    <select id="listGoodsPicHDPage" parameterType="java.util.Map" resultMap="c02GoodsPicResultMap">
+        SELECT * FROM c02_goods_pic WHERE delete_flag=1
+        ORDER BY id DESC
+    </select>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.C02GoodsPicDO">
+        SELECT
+        <include refid="c02GoodsPicColumns" />
+        FROM c02_goods_pic <include refid="c02GoodsPicJoins" />
+        <where>
+            c02_goods_pic.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.C02GoodsPicDO">
+        SELECT
+        <include refid="c02GoodsPicColumns" />
+        FROM c02_goods_pic <include refid="c02GoodsPicJoins" />
+        <where>
+            <if test='picUrl!= null and picUrl !=""'> and pic_url = #{picUrl} </if>
+            <if test='carouselSort!= null and carouselSort !=""'> and carousel_sort = #{carouselSort} </if>
+            <if test='goodsId!= null and goodsId !=""'> and goods_id = #{goodsId} </if>
+            <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+            <if test='createTime!= null'> and create_time = #{createTime} </if>
+            <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+            <if test='updateTime!= null'> and update_time = #{updateTime} </if>
+            <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+            <if test='type!= null and type !=""'> and type = #{type} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.C02GoodsPicDO">
+        SELECT
+        <include refid="c02GoodsPicColumns" />
+        FROM c02_goods_pic <include refid="c02GoodsPicJoins" />
+        <where>
+            <if test='picUrl!= null and picUrl !=""'> and pic_url = #{picUrl} </if>
+            <if test='carouselSort!= null and carouselSort !=""'> and carousel_sort = #{carouselSort} </if>
+            <if test='goodsId!= null and goodsId !=""'> and goods_id = #{goodsId} </if>
+            <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+            <if test='createTime!= null'> and create_time = #{createTime} </if>
+            <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+            <if test='updateTime!= null'> and update_time = #{updateTime} </if>
+            <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+            <if test='type!= null and type !=""'> and type = #{type} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from c02_goods_pic
+        <where>
+            <if test='picUrl!= null and picUrl !=""'> and pic_url = #{picUrl} </if>
+            <if test='carouselSort!= null and carouselSort !=""'> and carousel_sort = #{carouselSort} </if>
+            <if test='goodsId!= null and goodsId !=""'> and goods_id = #{goodsId} </if>
+            <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+            <if test='createTime!= null'> and create_time = #{createTime} </if>
+            <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+            <if test='updateTime!= null'> and update_time = #{updateTime} </if>
+            <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+            <if test='type!= null and type !=""'> and type = #{type} </if>
+        </where>
+    </select>
+
+
+
+    <insert id="insertBatch">
+        INSERT INTO c02_goods_pic(
+        pic_url,
+        carousel_sort,
+        goods_id,
+        create_person,
+        create_time,
+        update_person,
+        update_time,
+        delete_flag,
+        type
+        )
+        VALUES
+        <foreach collection ="list" item="c02GoodsPic" separator =",">
+            (
+            #{c02GoodsPic.picUrl},
+            #{c02GoodsPic.carouselSort},
+            #{c02GoodsPic.goodsId},
+            #{c02GoodsPic.createPerson},
+            #{c02GoodsPic.createTime},
+            #{c02GoodsPic.updatePerson},
+            #{c02GoodsPic.updateTime},
+            #{c02GoodsPic.deleteFlag},
+            #{c02GoodsPic.type}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE c02_goods_pic
+            <set>
+                <if test='item.picUrl !=null and item.picUrl !=""' >pic_url = #{item.picUrl},</if>
+                <if test='item.carouselSort !=null and item.carouselSort !=""' >carousel_sort = #{item.carouselSort},</if>
+                <if test='item.goodsId !=null and item.goodsId !=""' >goods_id = #{item.goodsId},</if>
+                <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+                <if test='item.createTime !=null' >create_time = #{item.createTime},</if>
+                <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+                <if test='item.updateTime !=null' >update_time = #{item.updateTime},</if>
+                <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+                <if test='item.type !=null and item.type !=""' >type = #{item.type},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE c02_goods_pic
+        <set>
+            <if test='picUrl !=null and picUrl !=""' >pic_url = #{picUrl},</if>
+            <if test='carouselSort !=null and carouselSort !=""' >carousel_sort = #{carouselSort},</if>
+            <if test='goodsId !=null and goodsId !=""' >goods_id = #{goodsId},</if>
+            <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+            <if test='createTime !=null' >create_time = #{createTime},</if>
+            <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+            <if test='updateTime !=null' >update_time = #{updateTime},</if>
+            <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+            <if test='type !=null and type !=""' >type = #{type},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

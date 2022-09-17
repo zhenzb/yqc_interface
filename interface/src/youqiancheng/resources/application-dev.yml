@@ -1,0 +1,67 @@
+# 开发环境
+# 端口设置
+server:
+  port: 8070
+
+spring:
+  # 数据源配置
+  datasource:
+         url: jdbc:mysql://rm-2ze60fb2v9293c4d2fm.mysql.rds.aliyuncs.com:3306/youqiancheng?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+         username: youqiancheng
+         password: yjt19212001
+#    url: jdbc:mysql://rm-2ze60fb2v9293c4d2fm.mysql.rds.aliyuncs.com:3306/youqiancheng_master?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+#    username: youqiancheng
+#    password: yjt19212001
+
+  # redis配置
+  redis:
+    #  数据库索引
+    database: 0
+    # 链接超时时间（毫秒）
+    timeout: 200
+    # Redis服务器地址
+    host: 127.0.0.1
+    # Redis服务器连接端口
+    port: 6379
+    # Redis服务器连接密码（默认为空）
+    password:
+    # 连接池最大连接数（使用负值表示没有限制）
+    pool:
+    max-active: 8
+    # 连接池最大阻塞等待时间（使用负值表示没有限制）
+    max-wait: -1
+    # 连接池中的最大空闲连接
+    max-idle: 8
+    # 连接池中的最小空闲连接
+    min-idle: 0
+
+# logger配置
+logging:
+  level:
+    #org.springframework.web: INFO,CONSOLE
+    #org.springframework.boot.autoconfigure: ERROR
+    org.springframework.boot.autoconfigure: ERROR
+  config: classpath:logback/logback-dev.xml
+app:
+  filePath: c:/var/uploaded_files/
+  pre: /files
+  ip: http://127.0.0.1:8070
+
+alicert:
+  #应用公钥证书
+  aliAppCertPublicKey: D:\project\yqc\919yqc\interface\src\youqiancheng\resources\alicert\appCertPublicKey_2021001163690789.crt
+
+  #支付宝公钥证书
+  aliCertPublicKey: D:\project\yqc\919yqc\interface\src\youqiancheng\resources\alicert\alipayCertPublicKey_RSA2.crt
+
+  #支付宝根证书
+  aliRootCert: D:\project\yqc\919yqc\interface\src\youqiancheng\resources\alicert\alipayRootCert.crt
+  #敏感词库
+violent:
+  violentVocabulary: D:\project\yqc\919yqc\interface\src\youqiancheng\resources\violentVocabulary.txt
+
+EQianBao:
+  #E签宝回调地址
+  notifyUrl: http://qudian.vaiwan.com/eNotify/psnWebVerify
+
+  contractNotifyUrl: http://qudian.vaiwan.com/eNotify/contractVerify

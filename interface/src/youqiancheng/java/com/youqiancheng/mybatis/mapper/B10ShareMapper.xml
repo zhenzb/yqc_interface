@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.B10ShareDao">
+
+    <resultMap id="b10ShareResultMap" type="com.youqiancheng.mybatis.model.B10ShareDO">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="type" property="type"/>
+        <result column="relation_id" property="relationId"/>
+        <result column="to_type" property="toType"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+
+
+
+    </resultMap>
+
+    <sql id="b10ShareColumns">
+        b10_share.id AS "id",
+        b10_share.user_id AS "userId",
+        b10_share.type AS "type",
+        b10_share.relation_id AS "relationId",
+        b10_share.to_type AS "toType",
+        b10_share.create_person AS "createPerson",
+        b10_share.create_time AS "createTime",
+        b10_share.update_person AS "updatePerson",
+        b10_share.update_time AS "updateTime",
+        b10_share.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="b10ShareJoins">
+
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.B10ShareDO">
+        SELECT
+        <include refid="b10ShareColumns" />
+        FROM b10_share <include refid="b10ShareJoins" />
+        <where>
+        b10_share.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.B10ShareDO">
+        SELECT
+        <include refid="b10ShareColumns" />
+        FROM b10_share <include refid="b10ShareJoins" />
+        <where>
+                    <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='relationId!= null and relationId !=""'> and relation_id = #{relationId} </if>
+        <if test='toType!= null and toType !=""'> and to_type = #{toType} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from b10_share
+        <where>
+                    <if test='userId!= null and userId !=""'> and user_id = #{userId} </if>
+        <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='relationId!= null and relationId !=""'> and relation_id = #{relationId} </if>
+        <if test='toType!= null and toType !=""'> and to_type = #{toType} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+    </select>
+
+
+    <insert id="insertBatch">
+        INSERT INTO b10_share(
+                        user_id,
+            type,
+            relation_id,
+            to_type,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="b10Share" separator =",">
+        (
+                        #{b10Share.userId},
+            #{b10Share.type},
+            #{b10Share.relationId},
+            #{b10Share.toType},
+            #{b10Share.createPerson},
+            #{b10Share.createTime},
+            #{b10Share.updatePerson},
+            #{b10Share.updateTime},
+            #{b10Share.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE b10_share
+            <set>
+                        <if test='item.userId !=null and item.userId !=""' >user_id = #{item.userId},</if>
+        <if test='item.type !=null and item.type !=""' >type = #{item.type},</if>
+        <if test='item.relationId !=null and item.relationId !=""' >relation_id = #{item.relationId},</if>
+        <if test='item.toType !=null and item.toType !=""' >to_type = #{item.toType},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null      ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null       ' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE b10_share
+        <set>
+                    <if test='userId !=null and userId !=""' >user_id = #{userId},</if>
+        <if test='type !=null and type !=""' >type = #{type},</if>
+        <if test='relationId !=null and relationId !=""' >relation_id = #{relationId},</if>
+        <if test='toType !=null and toType !=""' >to_type = #{toType},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

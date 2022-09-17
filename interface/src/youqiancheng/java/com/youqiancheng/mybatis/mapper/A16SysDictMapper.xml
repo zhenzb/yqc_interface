@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.A16SysDictDao">
+
+    <resultMap id="a16SysDictResultMap" type="com.youqiancheng.mybatis.model.A16SysDictDO">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="value" property="value"/>
+        <result column="type" property="type"/>
+        <result column="description" property="description"/>
+        <result column="order_num" property="orderNum"/>
+        <result column="pid" property="pid"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="remark" property="remark"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="status" property="status"/>
+
+
+
+    </resultMap>
+
+    <sql id="a16SysDictColumns">
+        a16_sys_dict.id AS "id",
+        a16_sys_dict.name AS "name",
+        a16_sys_dict.value AS "value",
+        a16_sys_dict.type AS "type",
+        a16_sys_dict.description AS "description",
+        a16_sys_dict.order_num AS "orderNum",
+        a16_sys_dict.pid AS "pid",
+        a16_sys_dict.create_person AS "createPerson",
+        a16_sys_dict.create_time AS "createTime",
+        a16_sys_dict.update_person AS "updatePerson",
+        a16_sys_dict.update_time AS "updateTime",
+        a16_sys_dict.remark AS "remark",
+        a16_sys_dict.delete_flag AS "deleteFlag",
+        a16_sys_dict.status AS "status"
+    </sql>
+
+    <sql id="a16SysDictJoins">
+
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.A16SysDictDO">
+        SELECT
+        <include refid="a16SysDictColumns" />
+        FROM a16_sys_dict <include refid="a16SysDictJoins" />
+        <where>
+        a16_sys_dict.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.A16SysDictDO">
+        SELECT
+        <include refid="a16SysDictColumns" />
+        FROM a16_sys_dict <include refid="a16SysDictJoins" />
+        <where>
+                    <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='value!= null and value !=""'> and value = #{value} </if>
+        <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='description!= null and description !=""'> and description = #{description} </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='pid!= null and pid !=""'> and pid = #{pid} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='remark!= null and remark !=""'> and remark = #{remark} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by type desc,  orderNum desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.A16SysDictDO">
+        SELECT
+        <include refid="a16SysDictColumns" />
+        FROM a16_sys_dict <include refid="a16SysDictJoins" />
+        <where>
+                    <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='value!= null and value !=""'> and value = #{value} </if>
+        <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='description!= null and description !=""'> and description like  CONCAT('%',#{description},'%') </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='pid!= null and pid !=""'> and pid = #{pid} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='remark!= null and remark !=""'> and remark = #{remark} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from a16_sys_dict
+        <where>
+                    <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='value!= null and value !=""'> and value = #{value} </if>
+        <if test='type!= null and type !=""'> and type = #{type} </if>
+        <if test='description!= null and description !=""'> and description = #{description} </if>
+        <if test='orderNum!= null and orderNum !=""'> and order_num = #{orderNum} </if>
+        <if test='pid!= null and pid !=""'> and pid = #{pid} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='remark!= null and remark !=""'> and remark = #{remark} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='status!= null and status !=""'> and status = #{status} </if>
+        </where>
+    </select>
+
+
+
+    <insert id="insertBatch">
+        INSERT INTO a16_sys_dict(
+                        name,
+            value,
+            type,
+            description,
+            order_num,
+            pid,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+            remark,
+            delete_flag,
+            status
+        )
+        VALUES
+        <foreach collection ="list" item="a16SysDict" separator =",">
+        (
+                        #{a16SysDict.name},
+            #{a16SysDict.value},
+            #{a16SysDict.type},
+            #{a16SysDict.description},
+            #{a16SysDict.orderNum},
+            #{a16SysDict.pid},
+            #{a16SysDict.createPerson},
+            #{a16SysDict.createTime},
+            #{a16SysDict.updatePerson},
+            #{a16SysDict.updateTime},
+            #{a16SysDict.remark},
+            #{a16SysDict.deleteFlag},
+            #{a16SysDict.status}
+        )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE a16_sys_dict
+            <set>
+                        <if test='item.name !=null and item.name !=""' >name = #{item.name},</if>
+        <if test='item.value !=null and item.value !=""' >value = #{item.value},</if>
+        <if test='item.type !=null and item.type !=""' >type = #{item.type},</if>
+        <if test='item.description !=null and item.description !=""' >description = #{item.description},</if>
+        <if test='item.orderNum !=null and item.orderNum !=""' >order_num = #{item.orderNum},</if>
+        <if test='item.pid !=null and item.pid !=""' >pid = #{item.pid},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null      ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null       ' >update_time = #{item.updateTime},</if>
+        <if test='item.remark !=null and item.remark !=""' >remark = #{item.remark},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+        <if test='item.status !=null and item.status !=""' >status = #{item.status},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE a16_sys_dict
+        <set>
+                    <if test='name !=null and name !=""' >name = #{name},</if>
+        <if test='value !=null and value !=""' >value = #{value},</if>
+        <if test='type !=null and type !=""' >type = #{type},</if>
+        <if test='description !=null and description !=""' >description = #{description},</if>
+        <if test='orderNum !=null and orderNum !=""' >order_num = #{orderNum},</if>
+        <if test='pid !=null and pid !=""' >pid = #{pid},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='remark !=null and remark !=""' >remark = #{remark},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        <if test='status !=null and status !=""' >status = #{status},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

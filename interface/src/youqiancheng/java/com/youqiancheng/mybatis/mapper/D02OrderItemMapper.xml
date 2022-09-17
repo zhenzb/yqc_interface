@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.D02OrderItemDao">
+
+    <resultMap id="d02OrderItemResultMap" type="com.youqiancheng.mybatis.model.D02OrderItemDO">
+        <id column="id" property="id"/>
+        <result column="order_id" property="orderId"/>
+        <result column="goods_id" property="goodsId"/>
+        <result column="icon" property="icon"/>
+        <result column="name" property="name"/>
+        <result column="price" property="price"/>
+        <result column="num" property="num"/>
+        <result column="total_price" property="totalPrice"/>
+        <result column="is_evaluate" property="isEvaluate"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="inventory" property="inventory"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="shop_name" property="shopName"/>
+        <result column="pay_order_id" property="payOrderId"/>
+        <result column="order_status" property="orderStatus"/>
+
+
+    </resultMap>
+
+    <sql id="d02OrderItemColumns">
+        d02_order_item.id AS "id",
+        d02_order_item.order_id AS "orderId",
+        d02_order_item.goods_id AS "goodsId",
+        d02_order_item.icon AS "icon",
+        d02_order_item.name AS "name",
+        d02_order_item.price AS "price",
+        d02_order_item.num AS "num",
+        d02_order_item.total_price AS "totalPrice",
+        d02_order_item.is_evaluate AS "isEvaluate",
+        d02_order_item.sku_id AS "skuId",
+        d02_order_item.inventory AS "inventory",
+        d02_order_item.create_person AS "createPerson",
+        d02_order_item.create_time AS "createTime",
+        d02_order_item.update_person AS "updatePerson",
+        d02_order_item.update_time AS "updateTime",
+        d02_order_item.shop_id AS "shopId",
+        d02_order_item.shop_name AS "shopName",
+        d02_order_item.pay_order_id AS "payOrderId",
+        d02_order_item.order_status AS "orderStatus",
+        d02_order_item.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="d02OrderItemJoins">
+
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.D02OrderItemDO">
+        SELECT
+        <include refid="d02OrderItemColumns" />
+        FROM d02_order_item <include refid="d02OrderItemJoins" />
+        <where>
+        d02_order_item.id = #{id}
+        </where>
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.D02OrderItemDO">
+        SELECT a.*,b.order_no,c.type
+        FROM d02_order_item a ,d01_order b,c01_goods c
+        where a.order_id=b.id and a.goods_id = c.id
+        <if test='orderId!= null and orderId !=""'> and a.order_id = #{orderId} </if>
+        <if test='goodsId!= null and goodsId !=""'> and a.goods_id = #{goodsId} </if>
+        <if test='payOrderId!= null and payOrderId !=""'> and a.pay_order_id = #{payOrderId} </if>
+        <if test='shopId!= null and shopId !=""'> and a.shop_id = #{shopId} </if>
+        <if test='shopName!= null and shopName !=""'> and a.shop_name = #{shopName} </if>
+        <if test='icon!= null and icon !=""'> and a.icon = #{icon} </if>
+        <if test='name!= null and name !=""'> and a.name = #{name} </if>
+        <if test='price!= null and price !=""'> and a.price = #{price} </if>
+        <if test='num!= null and num !=""'> and a.num = #{num} </if>
+        <if test='totalPrice!= null and totalPrice !=""'> and a.total_price = #{totalPrice} </if>
+        <if test='isEvaluate!= null and isEvaluate !=""'> and a.is_evaluate = #{isEvaluate} </if>
+        <if test='skuId!= null and skuId !=""'> and a.sku_id = #{skuId} </if>
+        <if test='inventory!= null and inventory !=""'> and a.inventory = #{inventory} </if>
+        <if test='createPerson!= null and createPerson !=""'> and a.create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and a.create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and a.update_time = #{updateTime} </if>
+         and a.delete_flag != 2
+        <if test='orderStatus!= null and orderStatus !=""'> and (a.order_status = #{orderStatus} or a.order_status = #{orderStatus1}) </if>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by a.id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listHDPage" resultType="com.youqiancheng.mybatis.model.D02OrderItemDO">
+        SELECT
+        <include refid="d02OrderItemColumns" />
+        FROM d02_order_item <include refid="d02OrderItemJoins" />
+        <where>
+                    <if test='orderId!= null and orderId !=""'> and order_id = #{orderId} </if>
+        <if test='goodsId!= null and goodsId !=""'> and goods_id = #{goodsId} </if>
+        <if test='payOrderId!= null and payOrderId !=""'> and pay_order_id = #{payOrderId} </if>
+        <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='shopName!= null and shopName !=""'> and shop_name = #{shopName} </if>
+        <if test='icon!= null and icon !=""'> and icon = #{icon} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='price!= null and price !=""'> and price = #{price} </if>
+        <if test='num!= null and num !=""'> and num = #{num} </if>
+        <if test='totalPrice!= null and totalPrice !=""'> and total_price = #{totalPrice} </if>
+        <if test='isEvaluate!= null and isEvaluate !=""'> and is_evaluate = #{isEvaluate} </if>
+        <if test='skuId!= null and skuId !=""'> and sku_id = #{skuId} </if>
+        <if test='inventory!= null and inventory !=""'> and inventory = #{inventory} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='orderStatus!= null and orderStatus !=""'> and order_status = #{orderStatus} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="listClientHDPage" resultType="com.youqiancheng.vo.client.D02OrderItemClientVO">
+        SELECT a.*,b.order_no
+        FROM d02_order_item a ,d01_order b
+        where a.order_id=b.id
+        <if test='orderStatus!= null and orderStatus !=""'> and a.order_status = #{orderStatus} </if>
+        <if test='userId!= null and userId !=""'> and b.user_id = #{userId} </if>
+        <if test='isEvaluate!= null and isEvaluate !=""'> and a.is_evaluate = #{isEvaluate} </if>
+        <if test='payOrderId!= null and payOrderId !=""'> and a.pay_order_id = #{payOrderId} </if>
+        and a.delete_flag != 2
+        <if test='shopId!= null and shopId !=""'> and a.shop_id = #{shopId} </if>
+         order by id desc
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listClient5tHDPage" resultType="com.youqiancheng.vo.client.D02OrderItemClientVO">
+        SELECT a.*,b.order_no
+        FROM d02_order_item a ,d01_order b
+        where a.order_id=b.id  and a.order_status &lt;&gt; 9
+        <if test='orderStatus!= null and orderStatus !=""'> and a.order_status &gt;=  #{orderStatus}</if>
+        <if test='userId!= null and userId !=""'> and b.user_id = #{userId} </if>
+        <if test='isEvaluate!= null and isEvaluate !=""'> and a.is_evaluate = #{isEvaluate} </if>
+        <if test='payOrderId!= null and payOrderId !=""'> and a.pay_order_id = #{payOrderId} </if>
+        and a.delete_flag != 2
+        <if test='shopId!= null and shopId !=""'> and a.shop_id = #{shopId} </if>
+         order by id desc
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listAppHDPage" resultType="com.youqiancheng.vo.app.D02OrderItemVO">
+        SELECT a.*,b.order_no
+        FROM d02_order_item a ,d01_order b
+        where a.order_id=b.id
+        <if test='orderStatus!= null and orderStatus !=""'> and a.order_status = #{orderStatus} </if>
+        <if test='isEvaluate!= null and isEvaluate !=""'> and a.is_evaluate = #{isEvaluate} </if>
+        <if test='userId!= null and userId !=""'> and b.user_id = #{userId} </if>
+        <if test='payOrderId!= null and payOrderId !=""'> and a.pay_order_id = #{payOrderId} </if>
+         order by id desc
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="listApp5HDPage" resultType="com.youqiancheng.vo.app.D02OrderItemVO">
+        SELECT a.*,b.order_no
+        FROM d02_order_item a ,d01_order b
+        where a.order_id=b.id and a.order_status &lt;&gt; 9
+        <if test='orderStatus!= null and orderStatus !=""'> and a.order_status &gt;= #{orderStatus} </if>
+        <if test='userId!= null and userId !=""'> and b.user_id = #{userId} </if>
+        <if test='shopId!= null and shopId !=""'> and a.shop_id = #{shopId} </if>
+        <if test='payOrderId!= null and payOrderId !=""'> and a.pay_order_id = #{payOrderId} </if>
+         order by id desc
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="getAppShopStatusOrderHDPage"  resultType="com.youqiancheng.vo.app.D01OrderStatusVo">
+          SELECT
+              b.id,
+                b.shop_name,
+                b.shipping_name,
+                b.shipping_phone,
+                b.shipping_address,
+                b.province,
+                b.city,
+                b.area,
+                a.id as orderItemId,
+                a.icon,
+                a.name,
+                a.inventory,
+                a.price,
+                a.num,
+                a.total_price,
+                a.goods_id,
+                a.order_status
+        FROM d02_order_item a ,d01_order b
+        where a.order_id=b.id and a.order_status &lt;&gt; 9
+        <if test='orderStatus!= null and orderStatus !=""'> and a.order_status &gt;= #{orderStatus} </if>
+        <if test='userId!= null and userId !=""'> and b.user_id = #{userId} </if>
+        <if test='shopId!= null and shopId !=""'> and a.shop_id = #{shopId} </if>
+        <if test='payOrderId!= null and payOrderId !=""'> and a.pay_order_id = #{payOrderId} </if>
+        order by id desc
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from d02_order_item
+        <where>
+                    <if test='orderId!= null and orderId !=""'> and order_id = #{orderId} </if>
+        <if test='goodsId!= null and goodsId !=""'> and goods_id = #{goodsId} </if>
+        <if test='payOrderId!= null and payOrderId !=""'> and pay_order_id = #{payOrderId} </if>
+        <if test='shopId!= null and shopId !=""'> and shop_id = #{shopId} </if>
+        <if test='shopName!= null and shopName !=""'> and shop_name = #{shopName} </if>
+        <if test='icon!= null and icon !=""'> and icon = #{icon} </if>
+        <if test='name!= null and name !=""'> and name = #{name} </if>
+        <if test='price!= null and price !=""'> and price = #{price} </if>
+        <if test='num!= null and num !=""'> and num = #{num} </if>
+        <if test='totalPrice!= null and totalPrice !=""'> and total_price = #{totalPrice} </if>
+        <if test='isEvaluate!= null and isEvaluate !=""'> and is_evaluate = #{isEvaluate} </if>
+        <if test='skuId!= null and skuId !=""'> and sku_id = #{skuId} </if>
+        <if test='inventory!= null and inventory !=""'> and inventory = #{inventory} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        <if test='orderStatus!= null and orderStatus !=""'> and order_status = #{orderStatus} </if>
+        </where>
+    </select>
+
+
+    <insert id="insertBatch">
+        INSERT INTO d02_order_item(
+                        order_id,
+            goods_id,
+        pay_order_id,
+        shop_id,
+        shop_name,
+            icon,
+            name,
+            price,
+            num,
+            total_price,
+            is_evaluate,
+            sku_id,
+            inventory,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+        order_status,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="d02OrderItem" separator =",">
+        (
+                        #{d02OrderItem.orderId},
+            #{d02OrderItem.goodsId},
+            #{d02OrderItem.payOrderId},
+            #{d02OrderItem.shopId},
+            #{d02OrderItem.shopName},
+            #{d02OrderItem.icon},
+            #{d02OrderItem.name},
+            #{d02OrderItem.price},
+            #{d02OrderItem.num},
+            #{d02OrderItem.totalPrice},
+            #{d02OrderItem.isEvaluate},
+            #{d02OrderItem.skuId},
+            #{d02OrderItem.inventory},
+            #{d02OrderItem.createPerson},
+            #{d02OrderItem.createTime},
+            #{d02OrderItem.updatePerson},
+            #{d02OrderItem.updateTime},
+            #{d02OrderItem.orderStatus},
+            #{d02OrderItem.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE d02_order_item
+            <set>
+                        <if test='item.orderId !=null and item.orderId !=""' >order_id = #{item.orderId},</if>
+        <if test='item.goodsId !=null and item.goodsId !=""' >goods_id = #{item.goodsId},</if>
+        <if test='item.payOrderId !=null and item.payOrderId !=""' >pay_order_id = #{item.payOrderId},</if>
+        <if test='item.shopId !=null and item.shopId !=""' >shop_id = #{item.shopId},</if>
+        <if test='item.shopName !=null and item.shopName !=""' >shop_name = #{item.shopName},</if>
+        <if test='item.icon !=null and item.icon !=""' >icon = #{item.icon},</if>
+        <if test='item.name !=null and item.name !=""' >name = #{item.name},</if>
+        <if test='item.price !=null and item.price !=""' >price = #{item.price},</if>
+        <if test='item.num !=null and item.num !=""' >num = #{item.num},</if>
+        <if test='item.totalPrice !=null and item.totalPrice !=""' >total_price = #{item.totalPrice},</if>
+        <if test='item.isEvaluate !=null and item.isEvaluate !=""' >is_evaluate = #{item.isEvaluate},</if>
+        <if test='item.skuId !=null and item.skuId !=""' >sku_id = #{item.skuId},</if>
+        <if test='item.inventory !=null and item.inventory !=""' >inventory = #{item.inventory},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null      ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null       ' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+        <if test='item.orderStatus !=null and item.orderStatus !=""' >order_status = #{item.orderStatus},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE d02_order_item
+        <set>
+                    <if test='orderId !=null and orderId !=""' >order_id = #{orderId},</if>
+        <if test='goodsId !=null and goodsId !=""' >goods_id = #{goodsId},</if>
+        <if test='payOrderId !=null and payOrderId !=""' >pay_order_id = #{payOrderId},</if>
+        <if test='shopId !=null and shopId !=""' >shop_id = #{shopId},</if>
+        <if test='orderStatus !=null and orderStatus !=""' >order_status = #{orderStatus},</if>
+        <if test='shopName !=null and shopName !=""' >shop_name = #{shopName},</if>
+        <if test='icon !=null and icon !=""' >icon = #{icon},</if>
+        <if test='name !=null and name !=""' >name = #{name},</if>
+        <if test='price !=null and price !=""' >price = #{price},</if>
+        <if test='num !=null and num !=""' >num = #{num},</if>
+        <if test='totalPrice !=null and totalPrice !=""' >total_price = #{totalPrice},</if>
+        <if test='isEvaluate !=null and isEvaluate !=""' >is_evaluate = #{isEvaluate},</if>
+        <if test='skuId !=null and skuId !=""' >sku_id = #{skuId},</if>
+        <if test='inventory !=null and inventory !=""' >inventory = #{inventory},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="getOrderItmeByOrderId" parameterType="java.lang.Long" resultType="com.youqiancheng.mybatis.model.D02OrderItemDO">
+     	SELECT * FROM d02_order_item  where order_id=#{id} and delete_flag=1;
+    </select>
+    <select id="getD02OrderItemDaoById" parameterType="java.lang.Long" resultType="com.youqiancheng.mybatis.model.D02OrderItemDO">
+     	SELECT * FROM d02_order_item  where shop_id=#{ShopId}
+    </select>
+
+    <select id="getOrderItmeAndOrder" parameterType="java.lang.Long" resultType="com.youqiancheng.vo.app.D02OrderItemVO">
+     	SELECT
+     		d02.*,
+            d01.order_no,
+            d01.express_name,
+            d01.express_number,
+            d01.express_code,
+            d01.invoice_flag,
+            d01.invoice_type,
+            d01.invoice_content,
+            d01.invoice_title,
+            d01.province,
+	        d01.city,
+	        d01.area,
+	        d01.shipping_address,
+	        d01.send_time,
+	        d01.shipping_name,
+	        d01.user_id,
+	        d01.shipping_phone,
+	        d01.flag
+     	 FROM d02_order_item d02 left join d01_order d01 on d02.order_id=d01.id where d02.id=#{id}
+    </select>
+
+
+
+</mapper>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqiancheng.mybatis.dao.F10WithdrawalRuleDao">
+
+    <resultMap id="f10WithdrawalRuleResultMap" type="com.youqiancheng.mybatis.model.F10WithdrawalRuleDO">
+        <id column="id" property="id"/>
+        <result column="lower_limit" property="lowerLimit"/>
+        <result column="upper_limit" property="upperLimit"/>
+        <result column="service_ratio" property="serviceRatio"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_person" property="updatePerson"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_flag" property="deleteFlag"/>
+
+
+
+    </resultMap>
+
+    <sql id="f10WithdrawalRuleColumns">
+        f10_withdrawal_rule.id AS "id",
+        f10_withdrawal_rule.lower_limit AS "lowerLimit",
+        f10_withdrawal_rule.upper_limit AS "upperLimit",
+        f10_withdrawal_rule.service_ratio AS "serviceRatio",
+        f10_withdrawal_rule.create_person AS "createPerson",
+        f10_withdrawal_rule.create_time AS "createTime",
+        f10_withdrawal_rule.update_person AS "updatePerson",
+        f10_withdrawal_rule.update_time AS "updateTime",
+        f10_withdrawal_rule.delete_flag AS "deleteFlag"
+    </sql>
+
+    <sql id="f10WithdrawalRuleJoins">
+
+    </sql>
+
+    <select id="get" resultType="com.youqiancheng.mybatis.model.F10WithdrawalRuleDO">
+        SELECT
+        <include refid="f10WithdrawalRuleColumns" />
+        FROM f10_withdrawal_rule <include refid="f10WithdrawalRuleJoins" />
+        <where>
+        f10_withdrawal_rule.id = #{id}
+        </where>
+    </select>
+    <select id="getServiceRatio" resultType="decimal">
+        SELECT service_ratio
+        FROM f10_withdrawal_rule
+       where
+        lower_limit &lt;= #{money} and upper_limit &gt; #{money}
+        limit 0,1
+    </select>
+
+
+    <select id="list" resultType="com.youqiancheng.mybatis.model.F10WithdrawalRuleDO">
+        SELECT
+        <include refid="f10WithdrawalRuleColumns" />
+        FROM f10_withdrawal_rule <include refid="f10WithdrawalRuleJoins" />
+        <where>
+                    <if test='lowerLimit!= null and lowerLimit !=""'> and lower_limit = #{lowerLimit} </if>
+        <if test='upperLimit!= null and upperLimit !=""'> and upper_limit = #{upperLimit} </if>
+        <if test='serviceRatio!= null and serviceRatio !=""'> and service_ratio = #{serviceRatio} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from f10_withdrawal_rule
+        <where>
+                    <if test='lowerLimit!= null and lowerLimit !=""'> and lower_limit = #{lowerLimit} </if>
+        <if test='upperLimit!= null and upperLimit !=""'> and upper_limit = #{upperLimit} </if>
+        <if test='serviceRatio!= null and serviceRatio !=""'> and service_ratio = #{serviceRatio} </if>
+        <if test='createPerson!= null and createPerson !=""'> and create_person = #{createPerson} </if>
+        <if test='createTime!= null   '> and create_time = #{createTime} </if>
+        <if test='updatePerson!= null and updatePerson !=""'> and update_person = #{updatePerson} </if>
+        <if test='updateTime!= null    '> and update_time = #{updateTime} </if>
+        <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
+        </where>
+    </select>
+
+
+    <insert id="insertBatch">
+        INSERT INTO f10_withdrawal_rule(
+                        lower_limit,
+            upper_limit,
+            service_ratio,
+            create_person,
+            create_time,
+            update_person,
+            update_time,
+            delete_flag
+        )
+        VALUES
+        <foreach collection ="list" item="f10WithdrawalRule" separator =",">
+        (
+                        #{f10WithdrawalRule.lowerLimit},
+            #{f10WithdrawalRule.upperLimit},
+            #{f10WithdrawalRule.serviceRatio},
+            #{f10WithdrawalRule.createPerson},
+            #{f10WithdrawalRule.createTime},
+            #{f10WithdrawalRule.updatePerson},
+            #{f10WithdrawalRule.updateTime},
+            #{f10WithdrawalRule.deleteFlag}
+        )
+        </foreach>
+    </insert>
+
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE f10_withdrawal_rule
+            <set>
+                        <if test='item.lowerLimit !=null and item.lowerLimit !=""' >lower_limit = #{item.lowerLimit},</if>
+        <if test='item.upperLimit !=null and item.upperLimit !=""' >upper_limit = #{item.upperLimit},</if>
+        <if test='item.serviceRatio !=null and item.serviceRatio !=""' >service_ratio = #{item.serviceRatio},</if>
+        <if test='item.createPerson !=null and item.createPerson !=""' >create_person = #{item.createPerson},</if>
+        <if test='item.createTime !=null      ' >create_time = #{item.createTime},</if>
+        <if test='item.updatePerson !=null and item.updatePerson !=""' >update_person = #{item.updatePerson},</if>
+        <if test='item.updateTime !=null       ' >update_time = #{item.updateTime},</if>
+        <if test='item.deleteFlag !=null and item.deleteFlag !=""' >delete_flag = #{item.deleteFlag},</if>
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateStatus">
+        UPDATE f10_withdrawal_rule
+        <set>
+                    <if test='lowerLimit !=null and lowerLimit !=""' >lower_limit = #{lowerLimit},</if>
+        <if test='upperLimit !=null and upperLimit !=""' >upper_limit = #{upperLimit},</if>
+        <if test='serviceRatio !=null and serviceRatio !=""' >service_ratio = #{serviceRatio},</if>
+        <if test='createPerson !=null and createPerson !=""' >create_person = #{createPerson},</if>
+        <if test='createTime !=null   ' >create_time = #{createTime},</if>
+        <if test='updatePerson !=null and updatePerson !=""' >update_person = #{updatePerson},</if>
+        <if test='updateTime !=null    ' >update_time = #{updateTime},</if>
+        <if test='deleteFlag !=null and deleteFlag !=""' >delete_flag = #{deleteFlag},</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

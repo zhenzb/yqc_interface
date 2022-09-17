@@ -1,0 +1,172 @@
+#server:
+#  tomcat:
+#    uri-encoding: UTF-8
+spring:
+  # 静态资源路径配置
+  resources:
+    static-locations: classpath:/META-INF/resources/,class path:/resources/,classpath:/cert/,classpath:/public/
+  profiles:
+    active: dev
+  # 配置返回时间戳
+  jackson:
+    serialization:
+      write-dates-as-timestamps: true
+  # 应用名称
+  application:
+    name: youqiancheng
+  http:
+    # 编码设置
+    encoding:
+      force: true
+      charset: UTF-8
+      enable: true
+#   # 上传文件配置
+#   multipart:
+        ##     enabled: true
+        ##     file-size-threshold: 5MB
+        ##     max-request-size: 20MB
+        ##   # spring mvc 视图解析器
+        ##    mvc:
+        ##      view:
+        ##        prefix: /WEB-INF/
+      ##        suffix: .jsp
+      #  # 开启aop
+  aop: true
+
+  #数据源配置
+  datasource:
+      driverClassName: com.mysql.cj.jdbc.Driver
+      #用来设置一个connection在连接池中的存活时间，默认是1800000，即30分钟。如果设置为0，表示存活时间无限大。如果不等于0且小于30秒则会被重置回30分钟。
+      druid:
+        max-lifetime: 0
+  mail:
+    host: smtp.126.com
+    username: ww5869@126.com
+    password: SYTSZNIZJVPXLRSB
+    port: 465
+    default-encoding: UTF-8
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          socketFactory:
+           class: javax.net.ssl.SSLSocketFactory
+           port: 465
+          auth: true
+          starttls:
+            enable: true
+            required: true
+########################## Druid连接池的配置信息  #################
+spring.druid.initialSize: 5                                 #初始化连接大小
+spring.druid.minIdle: 5                                     #最小连接池数量
+spring.druid.maxActive: 800                                 #最大连接池数量
+spring.druid.maxWait: 60000                                 #获取连接时最大等待时间，单位毫秒
+spring.druid.timeBetweenEvictionRunsMillis: 60000           #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+spring.druid.minEvictableIdleTimeMillis: 300000             #配置一个连接在池中最小生存的时间，单位是毫秒
+spring.druid.validationQuery: SELECT 1 FROM DUAL            #测试连接
+spring.druid.testWhileIdle: true                            #申请连接的时候检测，建议配置为true，不影响性能，并且保证安全性
+spring.druid.testOnBorrow: true                             #指明是否在从池中取出连接前进行检验,如果检验失败,则从池中去除连接并尝试取出另一个
+spring.druid.testOnReturn: false                            #归还连接时执行检测，建议关闭，影响性能
+spring.druid.poolPreparedStatements: false                  #是否开启PSCache，PSCache对支持游标的数据库性能提升巨大，oracle建议开启，mysql下建议关闭
+spring.druid.maxPoolPreparedStatementPerConnectionSize: 20  #开启poolPreparedStatements后生效
+spring.druid.filters: stat,wall,log4j                       #配置扩展插件，常用的插件有=>stat:监控统计  log4j:日志  wall:防御sql注入
+spring.druid.connectionProperties: 'druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000'  #通过connectProperties属性来打开mergeSql功能;慢SQL记录
+
+# mybatis mapper扫描设置
+mybatis:
+  mapper-locations: classpath:com/youqiancheng/mybatis/mapper/*.xml
+  global-config:
+    #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+    id-type: 0
+    #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+    field-strategy: 2
+    #驼峰下划线转换
+    db-column-underline: true
+    #刷新mapper 调试神器
+    refresh-mapper: true
+    #数据库大写下划线转换
+    capital-mode: true
+  # mybatis配置
+  configuration:
+    use-generated-keys: true
+    use-column-label: true
+    map-underscore-to-camel-case: false
+
+file.staticAccessPath: /youqianchengupload/**
+file.uploadFolder: D:/youqiancheng/youqianchengupload/
+
+
+alisms:
+#  accessKeyId: LTAI4GBsoGsqjdaMTZKjpMPg
+#  accessSecret: UuXWKvjjx9Cvi1HJmg5na5Uo7wMzM6
+#  signName: 腾飞读书
+#  templateCode: SMS_187936569
+  accessKeyId: LTAI4GBfcabnhQgLmk5xWWYt
+  accessSecret: XYEkrDmqmoUPKjCoUbpnp46geWBjpm
+  signName: 有钱城
+  templateCode: "无效"
+#  idCardCode: SMS_187595674   #身份验证验证码
+#  LoginCode: SMS_187595673    #登录确认验证码
+#  LoginExceptionCode: SMS_187595672   #登录异常验证码
+#  userRegisterCode: SMS_187595671   #用户注册验证码
+#  updatePwdCode: SMS_187595670   #修改密码验证码
+#  changeInfoCode: SMS_187595669   #信息变更验证码
+
+#mybatis-plus:
+#   global-config:
+#      #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+#     field-strategy: 1
+
+#aliPay:
+#  APP_ID: 2021001163690789
+#  APP_PRIVATE_KEY: MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCnF/khU9aUKbGJvWt5JreYqZ8d7+oAMQzraBUJyJbIE760i/GXkmvLIarmdfzMXVLWWZH1E3NX6hlgjDBFr/xFyMntJL2qmwJylcai89EFpUV2T7IoUEj+OooYscR+Pnlhk5kzNENpfDXfADSt1iHuH9qLa82vAbRRAC5TnRemNQ3vdtXGg09Y0F1WxdRMWVA6juhEhH8Jm+rER6btR9JH4rmgpcOs8Rdc3AZnk/viyUmC1Ueyy5Q+u4FLLtdpF50j8Vuey4ZTjHmrHjSS+y3LbiSIDVucitEeRFprhal8HfVvB0zJXJQm6aFgAC4HCGI+pnEQlOcYe2k3CT00163zAgMBAAECggEAHOw5Y1tvuRW+dWkkQURCY1p5AGWWy5Gx+s15Vsgx0VAZoobWurXNksuxGVMy/uzoedHnQdSsEnujCOM7N9TOhgXLbhD+A5nxQoRKbcpmU+PXsjL5U6ESAW+Al+WtbWzC9fDmg8Z4JLorWP5gH/cAyIca/Scb4z8YRy0Q18hJX6tns++Khwwvte8G0TvYiNYcgWFv/zs7e3rhrHoUdkWDICQ9X3b13pBlV+f9+0TxrHKTFU7cGVWpGvA4HlvXNO8UOZr3O0Lcy1saYVxWjAEPt3cyfQ2nEqyZJVpc993MAk0rAGzd8dRtAwxRC2TRxg8bUW6IU9MIVNShEbrIdThgAQKBgQDQQXeQJDN2xTzPGcQ80aBw+SiCQx420JMwvaTOmKyiWyEQmfVYWXYGLeZbBeSwluHOW5HP9OEA/iSJRYAvEfmhnmqx5i9I+FCVJ9a84HNrovuZPv6RINTYS3V2Lt4JcX7Q92eLQ3gWPPJUMBPuvjpuAc1/PG3EIe2Ip4CB9c0I8wKBgQDNZrPXuC+O3rU1aKLFOtfNwUQQxwN3u5k4PCurjLVVWUXeYZTbfqsAYwOeTzQ80nz5tjRFXjFKTWC9MxaFTIESErkxtGklkNr+82vB49NRrBUpszWxj9kXHAbOKUZoy5aJnyoVUjStC7I+kgCH+bW7LRlbNWLM2byu80iXgAQHAQKBgFvjlxLltkOAsd0bnGfNgwJ2HbakUM+U5m1KME7sNLgKh6Ngm03ZY2dEl3CwQADfAlFgPA1LGoCqoopjPTUHtGLomGFYlKKY1k2J34lFbAghSOyMTBzTJLcvTGvSMCxwhKlFkM10/qapS69z60ebbgKeDwNGMZSp97olVmGBiG+bAoGAMJ6j6Wcu0rnC2Q6YoOkJ1iluTC5fksL0RMxxZd0bu0Uzda1RiBdWsPO/EoUbD16fuJg5jUX7kuP4BzEFnq36S2XlMm/LB9pfDERgeHfOOKHsLH/AMPSk5YR70+cPRJUUYCUt1/gqgd+n5Im42HbyXokRXHapmWXc9OifgUULLwECgYA/9wz5ud6fEcKoqNEVijGq04IqZy4Gw4509S0vO1+dNARHACIM1EoUMa9tIJBXVfgotTmeb4gXxuR3zFN0SzXomQ/0rjDZEJoZRhQEzLRlu5o26CCiDngjGfw3w9kufCT2U916henQmy/lvPGdUb3YGm/bUQNO2fzBID1p2vn1rw==
+#  ALIPAY_PUBLIC_KEY: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu0rpFmfQoTTu2Z5vJdf2HGg2gSfq1UfH7cIuLNUZSyNYjTHyJ0+8MjxpBDRGvhagfFLncwEzOdqDDsZtt9ycA4lCkKJdyT02fXKNTXsQ5HCyl9YaY+xi1joif38PRNPgOSe0wLvuFdp+v8SKmxsXBKYPksuKjTH9bNmBiV5wc4nG2QHpADzsKiJiuYX7BmEsRq1KKFe+3riYi1bMX0uL7Yvvr8Cs1RZVWkYIeF0RV6s+tB9b00Bhp+Ow+3m3hpq7ERT+QES/3hWvxsVS4jH2lvllJ2MTv6bRuo7NO5APu/tnonP0Idn2DqtkqTp/xG49xFliHg5tih6jBFF0jrhwCwIDAQAB
+#  notify_url: http://192.168.1.36:8080/alipay/notifyalipay
+#  #notify_url:  http://49.233.136.163:8070/alipay/notifyalipay
+#  #正式环境回调地址
+#  #notify_url: http://client.youqiancheng.vip/alipay/notifyalipay
+#  return_url: http://www.youqiancheng.vip/
+#  sign_type: RSA2
+#  CHARSET: utf-8
+#  gatewayUrl: https://openapi.alipay.com/gateway.do
+#  log_path: C:\\
+aliPay:
+  APP_ID: 2021001163690789
+  APP_PRIVATE_KEY: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCemHG3xgc2mhA4IysFr70KaeArRN8yydYFf02SJm2PJYp/sXS4LgDBRaSTVsa8cC8zqrKGJ47eDacKBv3XnywuzuUgfZMlOkUq3BdRThaXxyUAqZ11f5+mJ/3G/zJI1S5E56fR4Oz3okHpAGzaOYPvLDPrnb6Bn3qIUbzzLCRam20PmNPgKEx2eFB08VKzut0bV/IrvNXXzGrE6TWed32Q31rz+R0FfsWIZaFGNaMHHMCZaRu9HAimAflseBvC1/h0GJYQ21aOd8cK7K8oPeJ1jdD1AwkIVLOuvvnzfkxDoXI6YpZ3diXyFdxjIH2FtuUtHivX8b7sDvBimh4G7r/RAgMBAAECggEAItZhxHifhQL6pRo0jR85a1wufdK3JLTpanO4Wm5Oiq84aSxV809HoyzlJehd527NL5BDfuyZmXVuR+mZQRAZ6H5SHnz3IapXHz8RcC6zD8wS+L5JdFIAg8MtH9VW+mC5tTEd0CCUbSEbUU9imd0geh0/mnYgLuEVTXSHCPOdWLmLAWrW+gZYfxt5+d3f3B0pt7GhEq1uVJlWeNt5bUI2dUXSCjyPxTXamwCaZrt/58z94V/lEi8qsLPBFUzSGDsFemduptWPkobTDMr+jtqKC7ov7fE2kn6+gLpQ4jKbcQqNzvgZ1tuscuL5Ro1k1SwjdRaFB4ZdEj1P9i+t+GOncQKBgQDO8WCIaVxkcGEwvkmTyBrjQrMGdxbwKqT2LLh2qJJ7ie0dYK5yEmOjT9Hy4/aAmWQ1I8yyus9gvCA366wbuTf1E/3TxWO0thQxLyfks8oITdn+PZgjzbEMZ4xgAgNebtWl0/ERbUD+vqe8VhmyJ2q3mx6bVVBu1q8MsX58x62/5wKBgQDEMQlpm7CeTm5Pob7VJiW9lUt+3raGHI0L/jqFeUeZr/LAK63J3CxHjKrqgE0ZsSMRpCuNmrqJnTr+TR876T2b2soBtAaiMwnKSeoA+rpl4w6XmrtDn/ozsyjmHYTt6JsqVkNFLtAo3M2UdwkCqZuet7vPbLuMrSAd9Pkg7P9rhwKBgQDHM0hV5v293QNhNTqEG7HuIu1LguU8qAAEy8WAywG+E2WAyukA+zyYHqSdJtzIq17vXBeV0AcBOfXVfnE8eo0nx2elKzOv5zkGozrGhl4qoi398nJ5vGz54M8aN7Xgd9YGez5pJP7UeNfjjgnMGO878ACFS5lSKCt2j4CPQnK47wKBgBj7SYCKE5ZE1GUNanhHsDyQuxk/kKxJDGi/iYIfbE+UiOuRZEK052qA7e6IQckItjdz2Rvh3OjS/YUOGvENBQxIcrp+yu1yZEe+264ePwfkPqJtUHUO9NQKdyW+EoQcv01HyK8Rg+4AF6lU8u/E2wz9xktmRAdosBNAc0yPAQMXAoGAQCiL87ueTgFNR7iS3tZ1QaQ025b9h3eLgxtRK5JcCz4EkGzlEAOHsvqT0Xyz/QSPeYOTN+FCG1kwx1awkNIj64D1GJp6zRqB0Z1Il1uqLu54oyQXxcdBOAwl9k3ReywgdOqekJEPjihIdnGnE8mOpFl0sYVf//NEg3wvDH+MDlc=
+  ALIPAY_PUBLIC_KEY: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu0rpFmfQoTTu2Z5vJdf2HGg2gSfq1UfH7cIuLNUZSyNYjTHyJ0+8MjxpBDRGvhagfFLncwEzOdqDDsZtt9ycA4lCkKJdyT02fXKNTXsQ5HCyl9YaY+xi1joif38PRNPgOSe0wLvuFdp+v8SKmxsXBKYPksuKjTH9bNmBiV5wc4nG2QHpADzsKiJiuYX7BmEsRq1KKFe+3riYi1bMX0uL7Yvvr8Cs1RZVWkYIeF0RV6s+tB9b00Bhp+Ow+3m3hpq7ERT+QES/3hWvxsVS4jH2lvllJ2MTv6bRuo7NO5APu/tnonP0Idn2DqtkqTp/xG49xFliHg5tih6jBFF0jrhwCwIDAQAB
+  #线上环境
+  notify_url: https://client.youqiancheng.vip/alipay/notifyalipay
+  #notify_url:  http://3zj1001660.qicp.vip:16867/alipay/notifyalipay
+  #notify_url:  http://32k02955w0.qicp.vip:80/alipay/notifyalipay
+  return_url: https://www.youqiancheng.vip/
+  sign_type: RSA2
+  CHARSET: utf-8
+  gatewayUrl: https://openapi.alipay.com/gateway.do
+  log_path: C:\\
+qr:
+  code:
+    charset: utf-8
+    width: 300
+    height: 300
+    logoWidth: 60
+    logoHeight: 60
+    picType: jpg
+#  物流的配置信息
+logistics:
+  AppKey: bae933a5-2ebe-4683-9ae1-47c5dcfaf100 #电商加密私钥，快递鸟提供，注意保管，不要泄漏
+  ReqURL: http://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx
+  EBusinessID: 1366652
+#  联系客服配置信息
+contactCustomerApp:
+  sdkappid: 1400351931
+  key: 6422880a5dae9ff75c9d28b1c06976af4386f7d383694a21183cd4c93545634e
+
+# 默认头像
+pics:
+  pic: http://client.youqiancheng.vip/files/100/78/1596792278791.png
+
+AES.KEY:
+  aaDJL2d9DfhLZO0z
+AES.IV:
+  412ADDSSFA342442
+
