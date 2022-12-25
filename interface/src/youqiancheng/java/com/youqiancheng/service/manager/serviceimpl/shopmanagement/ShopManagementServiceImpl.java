@@ -189,7 +189,7 @@ public class ShopManagementServiceImpl implements ShopManagementService {
 
                 JSONObject json = new JSONObject();
                 json.put("name",f01ShopDO.getContacts());
-                json.put("shop","");//f01ShopDO.getName()
+                json.put("shop","店铺");//f01ShopDO.getName()
                 json.put("password",numeral);
                 String information = sendSmsUtil.aliSendSmsTwo(b01UserDO1.getMobile(), json.toJSONString(), TypeConstant.ShortMessageType.checkbusinessCode.getCode());
                 String key=f01ShopDO.getPhone()+TypeConstant.ShortMessageType.userRegisterCode.getCode()+TypeConstant.PlatformType.pc.getCode();

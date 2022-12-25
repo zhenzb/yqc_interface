@@ -25,7 +25,7 @@ public class F01ShopAppSaveForm {
     @Min(value = 1,message = "商家类型不能为空")
     private int type;
     @ApiModelProperty(value = "主营项目",name ="mainProject")
-    @Min(value = 1,message = "主营项目不能为空")
+    @Min(value = 1,message = "该ip段禁止访问")//主营项目不能为空
     private long mainProject;
     @ApiModelProperty(value = "国家ID（商品一级分类）",name ="countryId")
     private int countryId;

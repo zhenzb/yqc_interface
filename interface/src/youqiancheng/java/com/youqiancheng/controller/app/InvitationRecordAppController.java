@@ -100,6 +100,9 @@ public class InvitationRecordAppController {
         b11InvitationRecordList.stream().forEach(item -> {
             List userIdList = new ArrayList();
             userIdList.add(item.getBeUserId());
+            if(item.getMobile() !=null && !"".equalsIgnoreCase(item.getMobile())){
+                item.setMobile(item.getMobile().replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
+            }
             List<B01UserDO> b01UserDOS = b01UserDao.listUserByUserIds(userIdList);
             b01UserDOS.stream().forEach(items ->{
                 if(items.getIsShop()==2){
@@ -278,7 +281,5 @@ public class InvitationRecordAppController {
         map.put("url","https://www.youqiancheng.vip/share/downpages/GoodsDetails.html");
         return ResultVOUtils.success(map);
     }
-
-
 
 }

@@ -65,3 +65,8 @@ EQianBao:
   notifyUrl: http://qudian.vaiwan.com/eNotify/psnWebVerify
 
   contractNotifyUrl: http://qudian.vaiwan.com/eNotify/contractVerify
+wechat:
+  #微信小程序商户API私钥路径
+  apiclientKey: D:\project\yqc\919yqc\interface\src\youqiancheng\resources\cert\apiclient_key.pem
+  #微信小程序微信支付平台证书路径
+  apiclientCert: D:\project\yqc\919yqc\interface\src\youqiancheng\resources\alicert\apiclient_cert.p12

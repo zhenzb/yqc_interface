@@ -135,7 +135,7 @@ public class F01ShopClientServiceImpl implements F01ShopClientService {
         } catch (InvocationTargetException e) {
             throw new JsonException(ResultEnum.CHANGE_FAIL,e.getMessage());
         }
-        f01Shop.setMainProject(3);
+        f01Shop.setMainProject(dto.getMainProject());
         f01Shop.setDeleteFlag(StatusConstant.DeleteFlag.un_delete.getCode());
         f01Shop.setStatus(StatusConstant.enable.getCode());
         f01Shop.setExamineStatus(StatusConstant.ExamineStatus.un_examine.getCode());
@@ -145,6 +145,7 @@ public class F01ShopClientServiceImpl implements F01ShopClientService {
         f01Shop.setCreateTime(LocalDateTime.now());
         f01Shop.setUpdateTime(LocalDateTime.now());
         f01Shop.setHide(StatusConstant.Ishide.un_hide.getCode());
+        f01Shop.setCountryId(1);
         int insert = f01ShopDao.insert(f01Shop);
         //修改实名认证
         authenticationAbility.updateAuthentication(dto);

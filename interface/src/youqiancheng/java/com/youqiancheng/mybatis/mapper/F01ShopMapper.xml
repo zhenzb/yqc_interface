@@ -204,6 +204,7 @@
         <if test='deleteFlag!= null and deleteFlag !=""'> and delete_flag = #{deleteFlag} </if>
         <if test='alipayUrl!= null and alipayUrl !=""'> and alipay_url = #{alipayUrl} </if>
         <if test='wechatUrl!= null and wechatUrl !=""'> and wechat_url = #{wechatUrl} </if>
+            and examine_status = 2
         </where>
         <choose>
             <when test="sort != null and sort.trim() != ''">

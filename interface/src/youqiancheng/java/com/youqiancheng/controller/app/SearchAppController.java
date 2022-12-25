@@ -7,6 +7,7 @@ import com.handongkeji.util.EntyPage;
 import com.handongkeji.util.manager.ResultVOUtils;
 import com.youqiancheng.form.app.C01GoodsAppSearchForm;
 import com.youqiancheng.form.app.F01ShopAppSearchForm;
+import com.youqiancheng.form.app.F01ShopAppTypeSearchForm;
 import com.youqiancheng.mybatis.model.A16SysDictDO;
 import com.youqiancheng.mybatis.model.C01GoodsDO;
 import com.youqiancheng.mybatis.model.F01ShopDO;
@@ -92,6 +93,20 @@ public class                                                                    
     ResultVo<List<A16SysDictDO>> getShopType() {
         List<A16SysDictDO> sysDictByType = initDataService.getSysDictByType(DictTypeConstants.SHOP_TYPE);
         return ResultVOUtils.success(sysDictByType);
+    }
+
+    @ApiOperation(value = "按类型返回商家 1、个人店铺 2、企业店铺3、实体店铺")
+    @GetMapping("/searchTypeShopList")
+    ResultVo<PageSimpleVO<F01ShopDO>> searchTypeShopList(@Valid F01ShopAppTypeSearchForm form  , @Valid EntyPage page) {
+        form.setType(1);
+        QueryMap map = new QueryMap(form,page, StatusConstant.CreatFlag.delete.getCode());
+        List<F01ShopDO> f01ShopList = f01ShopService.listHDPage(map);
+        //封装到分页
+        PageSimpleVO<F01ShopDO> f01ShopSimpleVO = new PageSimpleVO<>();
+        f01ShopSimpleVO.setTotalNumber(page.getTotalNumber());
+        f01ShopSimpleVO.setList(f01ShopList);
+
+        return ResultVOUtils.success(f01ShopSimpleVO);
     }
 
 }

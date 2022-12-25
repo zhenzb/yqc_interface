@@ -69,6 +69,7 @@ public class ShopDetailClientController {
     //存储进入店铺的实时人数
     Map<Integer,Integer> peopleNumberMap = new HashMap<Integer,Integer>();
     Map<String,String> peopleIpMap = new HashMap<String,String>();
+    int totalPeopleNum = 0;
 //    Map<Integer,List<String>> userMap = new HashMap<>();
 //    List<String> userList = new ArrayList<>();
 
@@ -166,6 +167,39 @@ public class ShopDetailClientController {
     }
 
 
+    /**
+     * @api {GET} /pc/shop/getYqcPeopleNumber 100平台内实时在线人数
+     * @apiGroup 007 2020新增接口
+     * @apiVersion 0.0.1
+     * @apiDescription APP- 获取店铺内实时在线人数
+     * @apiParam {int} type 请求类型 1：进入店铺 2：退出店铺 3：循环调用
+     * @apiParam {int} shopId 店铺Id
+     * @apiSuccessExample {json} 返回示例:
+     * {
+     *   "code": 0,           请求成功
+     *   "message": "success",
+     *   "data": 1            店铺内实时在线人数
+     * }
+     */
+    @GetMapping("/getYqcPeopleNumber")
+    ResultVo getYqcPeopleNumber(Integer type,String userId){
+        synchronized(this){
+            if(3 != type){
+                logger.info("进入/退出平台: {}",type);
+            }
+            if(type == 1){ //进入店铺
+                logger.info("进入平台userId,{}",userId);
+                totalPeopleNum++;
+                logger.info("进入平台后的人数：{}",totalPeopleNum);
+            }else if(type == 2){ //退出店铺
+                logger.info("退出平台userId,{}",userId);
+                totalPeopleNum--;
+                logger.info("退出平台后的人数：{}",totalPeopleNum);
+            }
+            return ResultVOUtils.success(totalPeopleNum);
+        }
+    }
+
     @ApiOperation(value = "更新商家店铺浏览量；参数——商家ID")
     @GetMapping("/updateShopBrowseVolume")
     ResultVo updateShopBrowseVolume(Long id) {
@@ -205,7 +239,7 @@ public class ShopDetailClientController {
 
     @ApiOperation(value = "收藏商家;参数——商家ID,用户ID")
     @PostMapping("/collectionShop")
-    @AuthRuleAnnotation()
+    //@AuthRuleAnnotation()
     ResultVo collectionShop(@RequestBody @Valid B05CollectionSaveForm dto ) {
 
         B05CollectionDO b05Collection= new B05CollectionDO();
@@ -236,7 +270,7 @@ public class ShopDetailClientController {
     }
     @ApiOperation(value = "获取商家是否被用户收藏数量——数量为0 则为未收藏;参数——商家ID,用户ID")
     @GetMapping("/getIsCollectionShop")
-    @AuthRuleAnnotation()
+    //@AuthRuleAnnotation()
     ResultVo getIsCollectionShop(@Valid B05CollectionSearchIsForm form , @Valid EntyPage page ) {
 
         QueryMap map = new QueryMap(form, StatusConstant.CreatFlag.delete.getCode());
@@ -248,7 +282,7 @@ public class ShopDetailClientController {
 
     @ApiOperation(value = "取消收藏商家;参数——商家ID,用户ID")
     @PostMapping("/cancelCollectionShop")
-    @AuthRuleAnnotation()
+    //@AuthRuleAnnotation()
     ResultVo cancelCollectionShop(@RequestBody @Valid B05CollectionSaveForm dto ) {
 
         B05CollectionDO b05Collection= new B05CollectionDO();

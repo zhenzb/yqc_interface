@@ -216,7 +216,7 @@ public class HomePageClientController {
 
     @ApiOperation(value = "商家入驻申请；参数——商家保存实体")
     @PostMapping("/shopApplyEnters")
-    @AuthRuleAnnotation()
+    //@AuthRuleAnnotation()
     ResultVo applyEnters(@RequestBody @Valid F01ShopAppSaveForm f01Shop ) {
 
         int shopApplyEnters = f01ShopService.isShopApplyEnters(f01Shop.getUserId());
@@ -234,7 +234,7 @@ public class HomePageClientController {
 
     @ApiOperation(value = "是否可以商家入驻——返回结果:1:无商家可以申请入驻，2已入驻待审核，3已入驻审核通过，4已入驻审核拒绝；参数——用户ID")
     @PostMapping("/isShopApplyEnters")
-    @AuthRuleAnnotation()
+    //@AuthRuleAnnotation()
     ResultVo isShopApplyEnters(Long userId) {
         if(userId==null||userId==0){
             return ResultVOUtils.error(ResultEnum.PARAM_VERIFY_FAIL,"用户ID不能为空");
@@ -245,7 +245,7 @@ public class HomePageClientController {
 
    @ApiOperation(value = "根据地理位置获取经纬度——商家入驻申请；参数——地理位置")
     @PostMapping("/getCoordinate")
-    @AuthRuleAnnotation()
+    //@AuthRuleAnnotation()
     ResultVo getCoordinate(String address) {
         if(StringUtils.isBlank(address)){
             return ResultVOUtils.error(ResultEnum.PARAM_VERIFY_FAIL,"地址不能为空");

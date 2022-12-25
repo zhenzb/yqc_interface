@@ -29,4 +29,6 @@ public class UserWechatForm implements Serializable {
     private int sex;
     @ApiModelProperty(value = "用户头像",name ="headimgurl")
     private String headimgurl;
+    @ApiModelProperty(value = "邀请者id",name ="invitedUserId")
+    private String invitedUserId;
 }

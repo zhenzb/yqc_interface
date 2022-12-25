@@ -3,13 +3,14 @@ package com.youqiancheng.ability;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.handongkeji.config.exception.JsonException;
 import com.handongkeji.constants.StatusConstant;
+import com.handongkeji.util.Constants;
 import com.youqiancheng.form.app.E04GrantRecordSearchForm;
+import com.youqiancheng.mybatis.dao.B02UserAccountDao;
 import com.youqiancheng.mybatis.dao.E01RedenvelopesStreetDao;
 import com.youqiancheng.mybatis.dao.E04RedenvelopesGrantRecordDao;
 import com.youqiancheng.mybatis.dao.E05RedenvelopesReceiveRecordDao;
-import com.youqiancheng.mybatis.model.E01RedenvelopesStreetDO;
-import com.youqiancheng.mybatis.model.E04RedenvelopesGrantRecordDO;
-import com.youqiancheng.mybatis.model.E05RedenvelopesReceiveRecordDO;
+import com.youqiancheng.mybatis.model.*;
+import com.youqiancheng.service.app.service.B01UserAppService;
 import com.youqiancheng.util.RandomSplit;
 import com.youqiancheng.vo.result.ResultEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,10 @@ public class ShopSendRedEnvelopesAbility {
     private E05RedenvelopesReceiveRecordDao e5RedenvelopesReceiveRecordDao;
     @Resource
     private E01RedenvelopesStreetDao e01RedenvelopesStreetDao;
+    @Autowired
+    private B01UserAppService b01UserAppService;
+    @Resource
+    private B02UserAccountDao b02UserAccountDao;
 
     public long saveShopSendRedEnvelopesRecord(E04GrantRecordSearchForm form){
 
@@ -72,14 +77,31 @@ public class ShopSendRedEnvelopesAbility {
                 }
             }
         }
-
-
         //保存红包发放记录
         E04RedenvelopesGrantRecordDO e04RedenvelopesGrantRecord=new E04RedenvelopesGrantRecordDO();
+        if("2".equalsIgnoreCase(form.getModel())){
+            //判断余额是否足够
+            BigDecimal money = e01RedenvelopesStreetDO1.getMoney();
+            List<B02UserAccountDO> accountBalanceByUserId = b02UserAccountDao.getAccountBalanceByUserId(form.getUserId());
+            BigDecimal withdrawalBalance = accountBalanceByUserId.get(0).getWithdrawalBalance();
+            if(withdrawalBalance.compareTo(money)<1){
+                throw new JsonException(Constants.$Failure, "可用余额不足");
+            }
+            //更新用户流量余额
+            BigDecimal multiply = withdrawalBalance.subtract(money);
+            B02UserAccountDO b02UserAccountDO = accountBalanceByUserId.get(0);
+            b02UserAccountDO.setWithdrawalBalance(multiply);
+            b02UserAccountDao.updateById(b02UserAccountDO);
+            //流量余额支付
+            e04RedenvelopesGrantRecord.setEndFlag(StatusConstant.EndFlag.un_end.getCode());
+
+        }else{
+            e04RedenvelopesGrantRecord.setEndFlag(StatusConstant.EndFlag.un_start.getCode());
+        }
+
         e04RedenvelopesGrantRecord.setShopId(form.getShopId());
         e04RedenvelopesGrantRecord.setCreatePerson(form.getCreatePerson());
         e04RedenvelopesGrantRecord.setStreetId(form.getStreetId());
-        e04RedenvelopesGrantRecord.setEndFlag(StatusConstant.EndFlag.un_start.getCode());
         e04RedenvelopesGrantRecord.setUpdateTime(LocalDateTime.now());
         e04RedenvelopesGrantRecord.setUpdatePerson(form.getCreatePerson());
         e04RedenvelopesGrantRecord.setCreateTime(LocalDateTime.now());

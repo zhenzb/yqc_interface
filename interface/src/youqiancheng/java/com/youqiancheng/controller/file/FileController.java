@@ -15,11 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -257,5 +260,39 @@ public class FileController {
 //        return R.ok();
 //    }
 
+    @PostMapping("/appletUpload")
+    @ApiOperation(value = "小程序文件上传")
+    public R appletUpload(String filePath, String name) {
+        try {
+            InputStream inputStream = new URL(filePath).openStream();
+            OSSClientUtil ossClientUtil = new OSSClientUtil();
+            Map<String, Object> map = ossClientUtil.uploadFile(inputStream, name);
+            if (map == null)
+            {
+               // throw new Exception("返回结果map为null");
+                return R.error( "上传失败！请重新上传");
+            }
+            return R.ok().put("imgUrlPath", map.get("url"));
 
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return R.error( "上传失败！请稍后再上传");
+    }
+
+
+    @RequestMapping("/appletUploads")
+    @ApiOperation(value = "小程序文件上传")
+    public String appletUpload(HttpServletRequest request, @RequestParam("file") MultipartFile files) {
+        try {
+            //String resPath = FileUtils.saveFile(files.getBytes(), filePath, "11");
+            //return R.ok().put("imgUrlPath",ip + filePre + "/"+resPath);
+            R r = uploaOss(files, "wchart.jpg", null);
+            return String.valueOf(r.get("imgUrlPath"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new JsonException(ResultEnum.DATA_NOT_EXIST, "文件上传失败");
+        }
+    }
 }

@@ -15,8 +15,10 @@ import com.youqiancheng.form.client.B01UserSaveForm;
 import com.youqiancheng.form.client.UserWechatForm;
 import com.youqiancheng.initdata.UserEnity;
 import com.youqiancheng.mybatis.model.B01UserDO;
+import com.youqiancheng.mybatis.model.B11InvitationRecordDO;
 import com.youqiancheng.mybatis.model.F01ShopDO;
 import com.youqiancheng.service.app.service.B01UserAppService;
+import com.youqiancheng.service.app.service.B11InvitationRecordAppService;
 import com.youqiancheng.service.client.service.F01ShopClientService;
 import com.youqiancheng.util.code.CodeUtil;
 import com.youqiancheng.util.sendMessage.SendSmsUtil;
@@ -49,6 +51,8 @@ import java.util.*;
 public class ClientLoginController {
     @Autowired
     private B01UserAppService b01UserService;
+    @Autowired
+    private B11InvitationRecordAppService b11InvitationRecordService;
     @Autowired
     private F01ShopClientService f01ShopClientService;
     @Autowired
@@ -341,6 +345,16 @@ public class ClientLoginController {
                return ResultVOUtils.error(ResultEnum.INSERT_FAIL,"用户新增失败");
             }
             log.info("保存微信用户授权信息成功，openid：{}",userWechatForm.getOpenid());
+            //如果是被邀请进来的用户增加一条邀请关系
+            String invitedUserId = userWechatForm.getInvitedUserId();
+            if(invitedUserId !=null && !"".equals(invitedUserId)){
+                log.info("被邀请进来小程序用户，邀请者id：{}",invitedUserId);
+                B11InvitationRecordDO b11InvitationRecordDO = new B11InvitationRecordDO();
+                b11InvitationRecordDO.setUserId(Long.valueOf(invitedUserId));
+                b11InvitationRecordDO.setBeUserId(b01UserDO.getId());
+                b11InvitationRecordDO.setCreateTime(LocalDateTime.now());
+                b11InvitationRecordService.insert(b11InvitationRecordDO);
+            }
         }
         return ResultVOUtils.success(b01UserDO);
     }
@@ -396,6 +410,7 @@ public class ClientLoginController {
         b01UserDO.setSex(userWechatForm.getSex());
         b01UserDO.setCreateTime(now);
         b01UserDO.setUpdateTime(now);
+        b01UserDO.setDeleteFlag(1);
         return b01UserDO;
     }
 }

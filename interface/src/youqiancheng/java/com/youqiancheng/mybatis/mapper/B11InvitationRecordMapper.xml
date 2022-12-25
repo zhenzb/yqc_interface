@@ -58,6 +58,7 @@
         SELECT
         b11.*,
         b01.nick,
+        b01.mobile,
         b01.pic
         FROM b11_Invitation_Record  as b11
         left join b01_user as b01 on b01.id = b11.be_user_id

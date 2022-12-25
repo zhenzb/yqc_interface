@@ -89,7 +89,7 @@ public class MyClientController {
 
     @ApiOperation(value = "根据当前用户ID获取用户信息")
     @GetMapping("/getUerInfoByUserId")
-    @AuthRuleAnnotation()
+    //@AuthRuleAnnotation()
     ResultVo getUerInfoByUserId(Long id){
         if(id==null||id==0){
             return ResultVOUtils.error(ResultEnum.DATA_NOT_EXIST,"参数不能为空");
@@ -101,6 +101,7 @@ public class MyClientController {
         vo.setPic(b01UserDO.getPic());
         vo.setUserId(b01UserDO.getId());
         vo.setIsShop(b01UserDO.getIsShop());
+        vo.setShopId(b01UserDO.getShopId());
         if(TypeConstant.isShop.yes.getCode()==b01UserDO.getIsShop() ){
             F01ShopDO f01ShopDO = f01ShopClientService.get(b01UserDO.getShopId());
             if(f01ShopDO==null){
@@ -123,7 +124,7 @@ public class MyClientController {
     /****************************我要上街***********************************/
     @ApiOperation(value = "获取街区列表——我要上街")
     @GetMapping("/getStreetList")
-    @AuthRuleAnnotation()
+    //@AuthRuleAnnotation()
     ResultVo getStreetList(@Valid E01RedenvelopesStreetSearchForm form){
         QueryMap map = new QueryMap(form, StatusConstant.CreatFlag.delete.getCode());
         map.put("status",1);
@@ -134,7 +135,7 @@ public class MyClientController {
 
     @ApiOperation(value = "保存红包发放记录——我要上街")
     @PostMapping("/saveGrantInfo")
-    @AuthRuleAnnotation()
+    //@AuthRuleAnnotation()
     ResultVo getStreetList(@Valid E04RedenvelopesGrantRecordSaveForm form ){
        //在上街之前先判断下这个商家是否被冻结
         QueryMap map = new QueryMap();
@@ -182,7 +183,7 @@ public class MyClientController {
 
     @ApiOperation(value = "获取账户流水；参数——账户ID")
     @GetMapping("/getAccountFlowByAccountId")
-    @AuthRuleAnnotation()
+    //@AuthRuleAnnotation()
     ResultVo<PageSimpleVO<B02UserAccountDO>> getAccountFlowByAccountId(@Valid B03UserAccountFlowSearchForm form , @Valid EntyPage page ) {
 
         QueryMap map = new QueryMap(form,page, StatusConstant.CreatFlag.delete.getCode());
@@ -298,7 +299,7 @@ public class MyClientController {
 
     @ApiOperation(value = "获取收藏商家列表;参数——用户ID；分页参数")
     @GetMapping("/getShopList")
-    @AuthRuleAnnotation()
+    //@AuthRuleAnnotation()
     ResultVo<PageSimpleVO<B05CollectionDO>> getShopList(@Valid B05CollectionSearchForm form ,@Valid EntyPage page ) {
 
         QueryMap map = new QueryMap(form,page, StatusConstant.CreatFlag.delete.getCode());
@@ -333,7 +334,7 @@ public class MyClientController {
 
     @ApiOperation(value = "获取收藏商品列表;参数——用户ID；分页参数")
     @GetMapping("/getGoodsList")
-    @AuthRuleAnnotation()
+    //@AuthRuleAnnotation()
     ResultVo<PageSimpleVO<B05CollectionDO>> getGoodsList(@Valid B05CollectionSearchForm form ,@Valid EntyPage page ) {
 
         QueryMap map = new QueryMap(form,page, StatusConstant.CreatFlag.delete.getCode());

@@ -29,6 +29,7 @@ public class B11InvitationRecordDO implements Serializable {
     @ApiModelProperty(value = "邀请时间",name ="createTime")
     private LocalDateTime createTime;
 
+      private String mobile;
       private String nick;
       private String pic;
     @TableField(exist = false )

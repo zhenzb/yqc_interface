@@ -22,4 +22,9 @@ public class E04RedenvelopesGrantRecordSaveForm  {
     private long shopId;
     @ApiModelProperty(value = "创建人",name ="createPerson")
     private String createPerson;
+    @ApiModelProperty(value = "支付模式1:微信，2：流量值",name ="model")
+    private String model;
+
+    @ApiModelProperty(value = "用户Id",name ="userId")
+    private long userId;
 }

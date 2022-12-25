@@ -20,6 +20,7 @@ import io.jsonwebtoken.*;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.security.PublicKey;
 
 /**
@@ -79,5 +80,12 @@ public class AppleUtil {
     }
 
 
+    public static void main(String[] args) {
+        BigDecimal one = new BigDecimal(10);
+        BigDecimal two = new BigDecimal(9);
+        int i = one.compareTo(two);
+        BigDecimal multiply = one.subtract(two);
+        System.out.println(multiply);
+    }
 
 }
