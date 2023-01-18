@@ -62,4 +62,7 @@ public class D06PayOrderSearchForm {
      */
     private Integer moneyType;
 
+    @ApiModelProperty(value = "平台帮你付",name ="bangnifu")
+    private BigDecimal bangnifu;
+
 }

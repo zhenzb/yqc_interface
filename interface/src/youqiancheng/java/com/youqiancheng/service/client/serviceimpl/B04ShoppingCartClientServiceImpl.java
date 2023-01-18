@@ -2,9 +2,11 @@ package com.youqiancheng.service.client.serviceimpl;
 
 import com.handongkeji.config.exception.JsonException;
 import com.handongkeji.constants.StatusConstant;
+import com.youqiancheng.ability.UserAccountFlowAbility;
 import com.youqiancheng.mybatis.dao.B04ShoppingCartDao;
 import com.youqiancheng.mybatis.dao.C01GoodsDao;
 import com.youqiancheng.mybatis.dao.C09GoodsSkuDao;
+import com.youqiancheng.mybatis.model.B02UserAccountDO;
 import com.youqiancheng.mybatis.model.B04ShoppingCartDO;
 import com.youqiancheng.mybatis.model.C01GoodsDO;
 import com.youqiancheng.mybatis.model.C09GoodsSkuDO;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -28,12 +31,14 @@ import java.util.*;
 @Service
 @Transactional
 public class B04ShoppingCartClientServiceImpl implements B04ShoppingCartClientService {
-    @Autowired
+    @Resource
     private B04ShoppingCartDao b04ShoppingCartDao;
-    @Autowired
+    @Resource
     private C09GoodsSkuDao c09GoodsSkuDao;
-    @Autowired
+    @Resource
     private C01GoodsDao c01GoodsDao;
+    @Autowired
+    private UserAccountFlowAbility userAccountFlowAbility;
 
     @Override
     public B04ShoppingCartDO get(Long id){
@@ -101,6 +106,9 @@ public class B04ShoppingCartClientServiceImpl implements B04ShoppingCartClientSe
 
     @Override
     public int insert(B04ShoppingCartDO b04ShoppingCart) {
+        //用户可用流量
+//        B02UserAccountDO userAccount = userAccountFlowAbility.getUserAccount(b04ShoppingCart.getUserId());
+//        BigDecimal withdrawalBalance = userAccount.getWithdrawalBalance();
         //更新库存和价格
         C09GoodsSkuDO c09GoodsSkuDO = c09GoodsSkuDao.get(b04ShoppingCart.getSkuId());
         if(c09GoodsSkuDO==null){
@@ -133,9 +141,34 @@ public class B04ShoppingCartClientServiceImpl implements B04ShoppingCartClientSe
             map.put("skuId",b04ShoppingCart.getSkuId());
         }
         map.put("userId",b04ShoppingCart.getUserId());
-        List<B04ShoppingCartDO> list = b04ShoppingCartDao.list(map);
+//        int commodityNumber = b04ShoppingCart.getCommodityNumber();
+//        if(commodityNumber>1){
+//            String inventory = b04ShoppingCart.getInventory();
+//            BigDecimal newInventory = new BigDecimal(inventory);
+//            BigDecimal newTotalPrice = newInventory.multiply(new BigDecimal(String.valueOf(commodityNumber)));
+//            BigDecimal subTotalPrice = newTotalPrice.subtract(withdrawalBalance);
+//            b04ShoppingCart.setTotalPrice(subTotalPrice);
+//        }
+        //List<B04ShoppingCartDO> list = b04ShoppingCartDao.list(map);
+        List<B04ShoppingCartDO> list = new ArrayList<>();
         if(CollectionUtils.isEmpty(list)){
-            return b04ShoppingCartDao.insert(b04ShoppingCart);
+            Integer insert = b04ShoppingCartDao.insert(b04ShoppingCart);
+//            if(1 == insert){
+//                //商品原价
+//                BigDecimal totalPrice = b04ShoppingCart.getTotalPrice();
+//                //1、如果商品原价大于可用流量or商品单价等于可用流量
+//                if(totalPrice.compareTo(withdrawalBalance)==1 || totalPrice.compareTo(withdrawalBalance)==0){
+//                    userAccount.setWithdrawalBalance(new BigDecimal("0"));
+//                    userAccountFlowAbility.updateUserAccount(userAccount);
+//                }
+//                //2、如果商品单价小于可用流量
+//                if(totalPrice.compareTo(withdrawalBalance)==-1){
+//                    BigDecimal subtract = withdrawalBalance.subtract(totalPrice);
+//                    userAccount.setWithdrawalBalance(subtract);
+//                    userAccountFlowAbility.updateUserAccount(userAccount);
+//                }
+//            }
+            return 1;
         }else{
             B04ShoppingCartDO b04ShoppingCartDO = list.get(0);
             int num=b04ShoppingCartDO.getCommodityNumber()+b04ShoppingCart.getCommodityNumber();

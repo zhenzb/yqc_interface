@@ -75,7 +75,8 @@
         c01_goods.reason AS "reason",
         c01_goods.introduction AS "introduction",
         c01_goods.delete_flag AS "deleteFlag",
-        c01_goods.goods_postage AS "goodsPostage"
+        c01_goods.goods_postage AS "goodsPostage",
+        c01_goods.special_price AS "specialPrice"
     </sql>
 
     <sql id="c01GoodsJoins">

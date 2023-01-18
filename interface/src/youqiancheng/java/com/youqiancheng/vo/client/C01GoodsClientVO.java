@@ -96,4 +96,7 @@ public class C01GoodsClientVO implements Serializable {
     @TableField(exist = false )
     @ApiModelProperty(value = "是否收藏",name ="spsc")
     private Integer spsc;
+
+    @ApiModelProperty(value = "优惠价",name ="specialPrice")
+    private BigDecimal specialPrice;
 }

@@ -114,6 +114,24 @@ public class ShoppingCartClientController {
         List<Long> idList=new ArrayList<>();
         idList.add(id);
         int num= b04ShoppingCartService.delete(idList);
+//        B04ShoppingCartDO b04ShoppingCartDO = b04ShoppingCartService.get(id);
+//        String inventory = b04ShoppingCartDO.getInventory();
+//        //商品原价
+//        BigDecimal yuanInventory = new BigDecimal(inventory);
+//        //数量
+//        int commodityNumber = b04ShoppingCartDO.getCommodityNumber();
+//        //优惠前总价
+//        BigDecimal yuanTotalPrice = yuanInventory.subtract(new BigDecimal(String.valueOf(commodityNumber)));
+//        //优惠后总价
+//        BigDecimal totalPrice = b04ShoppingCartDO.getTotalPrice();
+//        BigDecimal multiply = yuanTotalPrice.multiply(totalPrice);
+//        if(multiply.compareTo(new BigDecimal("0")) == 1){
+//            B02UserAccountDO userAccount = userAccountFlowAbility.getUserAccount(b04ShoppingCartDO.getUserId());
+//            BigDecimal withdrawalBalance = userAccount.getWithdrawalBalance();
+//            BigDecimal add = withdrawalBalance.add(multiply);
+//            userAccount.setWithdrawalBalance(add);
+//            userAccountFlowAbility.updateUserAccount(userAccount);
+//        }
         if(num<=0){
         return ResultVOUtils.error(ResultEnum.DELETE_FAIL,"购物车删除失败");
         }

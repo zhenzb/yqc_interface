@@ -6,6 +6,7 @@ import com.handongkeji.constants.StatusConstant;
 import com.handongkeji.util.EntyPage;
 import com.handongkeji.util.manager.ResultVOUtils;
 import com.youqiancheng.ability.ConfirmReceiveAbility;
+import com.youqiancheng.ability.UserAccountFlowAbility;
 import com.youqiancheng.form.client.*;
 import com.youqiancheng.form.client.my.PayBalanceForm;
 import com.youqiancheng.mybatis.dao.F17PromotionIncomeDao;
@@ -54,6 +55,10 @@ public class OrderController {
     private ConfirmReceiveAbility confirmReceiveAbility;
     @Resource
     private F17PromotionIncomeDao f17PromotionIncomeDao;
+    @Resource
+    D06PayOrderClientService d06PayOrderClientService;
+    @Resource
+    private UserAccountFlowAbility userAccountFlowAbility;
     /**************************订单 **************************************/
 
 //
@@ -95,7 +100,12 @@ public class OrderController {
             map.put("invoiceType",999999);
             List<D01OrderVO> list = d01OrderService.list(map);
             for(int i=0;i<list.size();i++){
-                List<D02OrderItemDO> orderItem = list.get(i).getOrderItem();
+                D01OrderVO d01OrderVO = list.get(i);
+                List<D02OrderItemDO> orderItem = d01OrderVO.getOrderItem();
+                D02OrderItemDO d02OrderItemDO = orderItem.get(i);
+                D06PayOrderDO d06PayOrderDO = d06PayOrderClientService.get(d02OrderItemDO.getPayOrderId());
+                d02OrderItemDO.setSetOffFund(d06PayOrderDO.getSetOffFund());
+                d01OrderVO.setSetOffFund(d06PayOrderDO.getSetOffFund());
                 if(orderItem.size()==0){
                     list.remove(i);
                 }
@@ -204,7 +214,7 @@ public class OrderController {
 
     @ApiOperation(value = "取消订单")
     @GetMapping("/cancleOrder")
-    @AuthRuleAnnotation()
+    //@AuthRuleAnnotation()
     ResultVo cancleOrder(Long id) {
         if(id==null||id==0){
             return ResultVOUtils.error(ResultEnum.PARAM_VERIFY_FAIL,"订单编码不能为空或者0");
@@ -218,6 +228,13 @@ public class OrderController {
         }
         payOrderById.setOrderStatus(StatusConstant.OrderStatus.cancel.getCode());
         int i = d01OrderService.updatePayOrderById(payOrderById);
+        //查看是否有平台帮你付流量，进行退回
+        BigDecimal setOffFund = payOrderById.getSetOffFund();
+        if(setOffFund.compareTo(BigDecimal.ZERO) == 1){
+            B02UserAccountDO userAccount = userAccountFlowAbility.getUserAccount(payOrderById.getUserId());
+            userAccount.setWithdrawalBalance(userAccount.getWithdrawalBalance().add(setOffFund));
+            userAccountFlowAbility.updateUserAccount(userAccount);
+        }
         return ResultVOUtils.success(i);
     }
 
@@ -310,7 +327,7 @@ public class OrderController {
 
     @ApiOperation(value = "保存用户商品评价记录；参数——评价保存实体")
     @PostMapping("/saveEvaluate")
-    @AuthRuleAnnotation()
+   //@AuthRuleAnnotation()
     ResultVo saveEvaluate(@RequestBody @Valid D04GoodsEvaluateSaveForm d04GoodsEvaluate ) {
         int num=d04GoodsEvaluateService.save(d04GoodsEvaluate);
         if(num<=0){

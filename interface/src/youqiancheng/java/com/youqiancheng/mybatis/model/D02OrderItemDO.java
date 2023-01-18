@@ -68,7 +68,8 @@ public class D02OrderItemDO implements Serializable {
     @TableField(exist = false)
     @ApiModelProperty(value = "商品类型",name ="type")
     private String type;
-
-
+    @TableField(exist = false)
+    @ApiModelProperty(value = "平台帮你付",name ="setOffFund")
+    private BigDecimal setOffFund;
 
 }

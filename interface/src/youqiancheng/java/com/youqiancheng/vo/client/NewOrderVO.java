@@ -43,4 +43,7 @@ public class NewOrderVO {
     private int flag;
     @ApiModelProperty(value = "是否实体店商品",name = "type")
     private int type;
+
+    @ApiModelProperty(value = "抵用金",name ="setOffFund")
+    private BigDecimal setOffFund;
 }

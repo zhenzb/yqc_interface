@@ -116,4 +116,6 @@ public class C01GoodsDO implements Serializable {
     private String goods_desc;
     @ApiModelProperty(value = "邮费",name ="goodsPostage")
     private BigDecimal goodsPostage;
+    @ApiModelProperty(value = "优惠价",name ="specialPrice")
+    private BigDecimal specialPrice;
 }

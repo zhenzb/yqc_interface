@@ -85,5 +85,8 @@ public class D06PayOrderDO implements Serializable {
     @ApiModelProperty(value = "商品总数",name ="count")
     private int count;
 
+    @ApiModelProperty(value = "抵用金",name ="setOffFund")
+    private BigDecimal setOffFund;
+
 
 }

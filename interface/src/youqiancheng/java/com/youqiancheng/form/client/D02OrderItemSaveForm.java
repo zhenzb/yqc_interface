@@ -39,6 +39,8 @@ public class D02OrderItemSaveForm {
     private Long streetId;
     @ApiModelProperty(value = "邮费",name ="goodsPostage")
     private BigDecimal goodsPostage;
+    @ApiModelProperty(value = "平台帮付",name ="bangnifu")
+    private BigDecimal bangnifu;
 
 
 }

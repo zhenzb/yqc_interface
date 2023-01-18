@@ -91,6 +91,9 @@ public class D01OrderVO implements Serializable {
     @ApiModelProperty(value = "是否面对面",name = "flag")
     private int flag;
 
+    @ApiModelProperty(value = "平台帮你付",name ="setOffFund")
+    private BigDecimal setOffFund;
+
 
 
 

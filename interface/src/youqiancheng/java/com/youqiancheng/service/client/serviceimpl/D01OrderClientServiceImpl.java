@@ -9,6 +9,7 @@ import com.handongkeji.constants.TypeConstant;
 import com.handongkeji.push.UmengPush;
 import com.handongkeji.util.DecimalUtil;
 import com.handongkeji.util.NoUtil;
+import com.youqiancheng.ability.UserAccountFlowAbility;
 import com.youqiancheng.controller.websocket.GreetingController;
 import com.youqiancheng.form.client.D02OrderItemSaveForm;
 import com.youqiancheng.form.client.D06PayOrderSearchForm;
@@ -41,15 +42,15 @@ import java.util.*;
 @Service
 @Transactional
 public class D01OrderClientServiceImpl implements D01OrderClientService {
-    @Autowired
+    @Resource
     private D01OrderDao d01OrderDao;
-    @Autowired
+    @Resource
     private D02OrderItemDao d02OrderItemDao;
-    @Autowired
+    @Resource
     private B04ShoppingCartDao b04ShoppingCartDao;
-    @Autowired
+    @Resource
     private D06PayOrderDao d06PayOrderDao;
-    @Autowired
+    @Resource
     private F05ShopAccountDao f05ShopAccountDao;
     @Resource
     private A15MessageDao a15MessageDao;
@@ -61,12 +62,14 @@ public class D01OrderClientServiceImpl implements D01OrderClientService {
     private F15ShopProfitDao f15ShopProfitDao;
     @Resource
     private B01UserDao b01UserDao;
-    @Autowired
+    @Resource
     private C09GoodsSkuDao  c09GoodsSkuDao;
-    @Autowired
+    @Resource
     private C01GoodsDao c01GoodsDao;
-    @Autowired
+    @Resource
     private F07ShopAccountFlowDao f07ShopAccountFlowDao;
+    @Autowired
+    private UserAccountFlowAbility userAccountFlowAbility;
     @Override
     public D01OrderClientVO get(Long id){
         D01OrderClientVO dto=new D01OrderClientVO();
@@ -177,6 +180,7 @@ public class D01OrderClientServiceImpl implements D01OrderClientService {
                     vo.setOrderNo(d06PayOrder.getOrderNo());
                     vo.setOrderStatus(d06PayOrder.getOrderStatus());
                     vo.setOrderPrice(d06PayOrder.getOrderPrice());
+                    vo.setSetOffFund(d06PayOrder.getSetOffFund());
                     //获取订单明细
                     List<D02OrderItemDO> itemList=new ArrayList<>();
                     //根据支付订单查询商家订单
@@ -211,6 +215,7 @@ public class D01OrderClientServiceImpl implements D01OrderClientService {
                             vo.setExpressName(d01OrderDO.getExpressName());
                             vo.setExpressNumber(d01OrderDO.getExpressNumber());
                             vo.setOrderStatus(d01OrderDO.getOrderStatus());
+                            vo.setSetOffFund(d06PayOrder.getSetOffFund());
                             //根据商家订单ID查询订单明细
                             QueryMap map2=new QueryMap(StatusConstant.CreatFlag.delete.getCode());
                             map2.put("orderId",d01OrderDO.getId());
@@ -374,7 +379,7 @@ public class D01OrderClientServiceImpl implements D01OrderClientService {
     }
 
     @Override
-    public D06PayOrderDO save(D06PayOrderSearchForm dto) {
+    public synchronized D06PayOrderDO save(D06PayOrderSearchForm dto) {
         //保存支付订单信息
         D06PayOrderDO d06Order=new D06PayOrderDO();
         BeanUtils.copyProperties(dto,d06Order);
@@ -386,23 +391,91 @@ public class D01OrderClientServiceImpl implements D01OrderClientService {
             BigDecimal postage = new BigDecimal("0");
             List<Long> goodsIdList = new ArrayList();
             List<D02OrderItemSaveForm> orderItem = dto.getOrderItem();
+            int n = 1;
             for(D02OrderItemSaveForm item:orderItem){
-                C09GoodsSkuDO c09GoodsSkuDO = c09GoodsSkuDao.get(item.getSkuId());
-                if(c09GoodsSkuDO == null){
-                    //新增 查询面对面商品
-                    C01GoodsDO c01GoodsDO = c01GoodsDao.get(item.getGoodsId());
-                    item.setPrice(c01GoodsDO.getPrice());
-                    orderPrice = orderPrice.add(c01GoodsDO.getPrice().multiply(new BigDecimal(item.getNum())));
+                long skuId = item.getSkuId();
+                if(9999999 == skuId){
+                    //小程序下单
+                    BigDecimal bangnifu = item.getBangnifu();
+                    if(bangnifu.compareTo(new BigDecimal("0"))==1){
+                        //查询用户可用流量
+                        B02UserAccountDO userAccount = userAccountFlowAbility.getUserAccount(dto.getUserId());
+                        BigDecimal withdrawalBalance = userAccount.getWithdrawalBalance();
+                        BigDecimal subtract1 = withdrawalBalance.subtract(bangnifu);
+                        BigDecimal subtract = withdrawalBalance.subtract(bangnifu);
+                        if(subtract.compareTo(new BigDecimal("0")) == -1){
+                            subtract = new BigDecimal("0");
+                        }
+                        if(subtract.compareTo(new BigDecimal("0")) == 0 || subtract.compareTo(new BigDecimal("0")) == 1){
+                            userAccount.setWithdrawalBalance(subtract);
+                            userAccountFlowAbility.updateUserAccount(userAccount);
+                            if(subtract.compareTo(new BigDecimal("0")) == 0 && n>=2){
+                                BigDecimal price = item.getPrice();
+                                BigDecimal add = price.add(bangnifu);
+                                item.setPrice(add);
+                                orderPrice = orderPrice.add(add);
+                                d06Order.setSetOffFund(item.getBangnifu());
+                            }else if(subtract.compareTo(new BigDecimal("0")) == 1){
+                                item.setPrice(item.getPrice());
+                                orderPrice = orderPrice.add(item.getPrice().multiply(new BigDecimal(item.getNum())));
+                                d06Order.setSetOffFund(item.getBangnifu());
+                            }else{
+                                int num = item.getNum();
+                                if(num>1){
+                                    for(int t=0;t<num;t++){
+                                        item.setPrice(item.getPrice());
+                                        if(t>0){
+                                            BigDecimal price = item.getPrice();
+                                            BigDecimal adds = price.add(bangnifu);
+                                            item.setPrice(adds);
+                                            orderPrice = orderPrice.add(adds);
+                                            d06Order.setSetOffFund(item.getBangnifu());
+                                        }else{
+                                            orderPrice = orderPrice.add(item.getPrice());
+                                            d06Order.setSetOffFund(item.getBangnifu());
+                                        }
+
+                                    }
+                                }else{
+                                    item.setPrice(item.getPrice());
+                                    orderPrice = orderPrice.add(item.getPrice());
+                                    d06Order.setSetOffFund(item.getBangnifu());
+                                }
+
+                            }
+
+                        }else{
+                            BigDecimal price = item.getPrice();
+                            BigDecimal add = price.add(bangnifu);
+                            item.setPrice(add);
+                            orderPrice = orderPrice.add(add.multiply(new BigDecimal(item.getNum())));
+                            d06Order.setSetOffFund(new BigDecimal("0"));
+                        }
+                    }else{
+                        item.setPrice(item.getPrice());
+                        orderPrice = orderPrice.add(item.getPrice().multiply(new BigDecimal(item.getNum())));
+                        d06Order.setSetOffFund(item.getBangnifu());
+                    }
+
                 }else{
-                    item.setPrice(c09GoodsSkuDO.getGoodsPrice());
-                    item.setInventory(c09GoodsSkuDO.getGoodsDesc());//商品规格
-                    orderPrice = orderPrice.add(c09GoodsSkuDO.getGoodsPrice().multiply(new BigDecimal(item.getNum())));
+                    C09GoodsSkuDO c09GoodsSkuDO = c09GoodsSkuDao.get(item.getSkuId());
+                    if(c09GoodsSkuDO == null){
+                        //新增 查询面对面商品
+                        C01GoodsDO c01GoodsDO = c01GoodsDao.get(item.getGoodsId());
+                        item.setPrice(c01GoodsDO.getPrice());
+                        orderPrice = orderPrice.add(c01GoodsDO.getPrice().multiply(new BigDecimal(item.getNum())));
+                    }else{
+                        item.setPrice(c09GoodsSkuDO.getGoodsPrice());
+                        item.setInventory(c09GoodsSkuDO.getGoodsDesc());//商品规格
+                        orderPrice = orderPrice.add(c09GoodsSkuDO.getGoodsPrice().multiply(new BigDecimal(item.getNum())));
+                    }
+                    if(!goodsIdList.contains(item.getGoodsId())){
+                        goodsIdList.add(item.getGoodsId());
+                        BigDecimal goodsPostage = item.getGoodsPostage()==null?new BigDecimal("0"):item.getGoodsPostage();
+                        postage = postage.add(goodsPostage);
+                    }
                 }
-                 if(!goodsIdList.contains(item.getGoodsId())){
-                     goodsIdList.add(item.getGoodsId());
-                     BigDecimal goodsPostage = item.getGoodsPostage()==null?new BigDecimal("0"):item.getGoodsPostage();
-                     postage = postage.add(goodsPostage);
-                 }
+                    n++;
             }
             d06Order.setOrderPrice(orderPrice.add(postage));
             goodsIdList.clear();
@@ -485,14 +558,14 @@ public class D01OrderClientServiceImpl implements D01OrderClientService {
             d01OrderDO.setDeleteFlag(StatusConstant.DeleteFlag.un_delete.getCode());
 
             BigDecimal money=new BigDecimal("0");
-            for (D02OrderItemSaveForm item : map.get(aLong)) {
-                if(null !=item.getTotalPrice()){
-                    money=money.add(item.getTotalPrice());
-                }else{
+            //for (D02OrderItemSaveForm item : map.get(aLong)) {
+//                if(null !=item.getTotalPrice()){
+//                    money=money.add(item.getTotalPrice());
+//                }else{
                     money=money.add(d06Order.getOrderPrice());
-                }
+               // }
 
-            }
+          //  }
             //快销街区的需要多付1.6%
 
             if(dto.getOrderItem().get(0).getStreetId()!=null && 201==dto.getOrderItem().get(0).getStreetId()){
@@ -510,9 +583,10 @@ public class D01OrderClientServiceImpl implements D01OrderClientService {
             for (D02OrderItemSaveForm item : map.get(aLong)) {
                 D02OrderItemDO d02OrderItemDO=new D02OrderItemDO();
                 BeanUtils.copyProperties(item,d02OrderItemDO);
-                if(item.getTotalPrice() == null){
+                //if(item.getTotalPrice() == null){
                     d02OrderItemDO.setTotalPrice(d06Order.getOrderPrice());
-                }
+                //}
+
                 d02OrderItemDO.setOrderId(d01OrderDO.getId());
                 d02OrderItemDO.setPayOrderId(d06Order.getId());
                 d02OrderItemDO.setIsEvaluate(StatusConstant.IsEvaluate.un_evaluated.getCode());

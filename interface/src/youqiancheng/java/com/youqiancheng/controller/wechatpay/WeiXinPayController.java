@@ -277,7 +277,7 @@ public class WeiXinPayController {
 
 
 
-    PayInfo getPayInfo(Long id,Integer type){
+    public PayInfo getPayInfo(Long id,Integer type){
         PayInfo payInfo=new PayInfo();
         if(id==null||id==0){
             throw new JsonException(ResultEnum.PARAM_VERIFY_FAIL,"id不能为空");
@@ -294,6 +294,7 @@ public class WeiXinPayController {
             D06PayOrderDO d06PayOrderDO = d06PayOrderClientService.deductInventory(id);
             orderNo=d06PayOrderDO.getOrderNo();
             money=d06PayOrderDO.getOrderPrice();
+
         }//如果商家发红包则创建红包订单号:HB+时间流水+id，查询金额
         else if(type==TypeConstant.PayObjectType.shop.getCode()){
             orderNo="HB";

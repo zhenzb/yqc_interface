@@ -3,12 +3,16 @@ package com.youqiancheng.ability;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.handongkeji.constants.StatusConstant;
 import com.handongkeji.constants.TypeConstant;
+import com.handongkeji.util.manager.ResultVOUtils;
 import com.youqiancheng.mybatis.dao.*;
 import com.youqiancheng.mybatis.model.*;
+import com.youqiancheng.service.client.service.B02UserAccountClientService;
+import com.youqiancheng.util.QueryMap;
 import com.youqiancheng.vo.result.ResultEnum;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -30,7 +34,8 @@ public class UserAccountFlowAbility {
     private B01UserDao b01UserDao;
     @Resource
     private F07ShopAccountFlowDao f07ShopAccountFlowDao;
-
+    @Resource
+    private B02UserAccountClientService b02UserAccountClientService;
     /**
      * 增加用户账号流水记录
      * @param b02UserAccountDO
@@ -126,5 +131,36 @@ public class UserAccountFlowAbility {
         f07ShopAccountFlowDo.setIsFace(3);
         f07ShopAccountFlowDao.insert(f07ShopAccountFlowDo);
         return true;
+    }
+
+    /**
+     * 获取用户账户信息
+     * @param userId
+     * @return
+     */
+    public B02UserAccountDO getUserAccount(Long userId){
+        QueryMap map=new QueryMap(StatusConstant.CreatFlag.delete.getCode());
+        map.put("userId",userId);
+        //map.put("countryId",1);
+        List<B02UserAccountDO> list = b02UserAccountClientService.list(map);
+        if(CollectionUtils.isEmpty(list)){
+            return new B02UserAccountDO();
+        }
+        B02UserAccountDO b02UserAccountDO = list.get(0);
+        return b02UserAccountDO;
+    }
+
+    /**
+     * 修改用户账户资金
+     * @param b02UserAccountDO
+     * @return
+     */
+    public boolean updateUserAccount(B02UserAccountDO b02UserAccountDO){
+        int update = b02UserAccountClientService.update(b02UserAccountDO);
+        if(1 == update){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

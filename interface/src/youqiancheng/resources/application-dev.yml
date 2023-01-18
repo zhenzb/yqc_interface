@@ -70,3 +70,22 @@ wechat:
   apiclientKey: D:\project\yqc\919yqc\interface\src\youqiancheng\resources\cert\apiclient_key.pem
   #微信小程序微信支付平台证书路径
   apiclientCert: D:\project\yqc\919yqc\interface\src\youqiancheng\resources\alicert\apiclient_cert.p12
+wxpay:
+  #应用编号
+  appId: wxeb5de11b49702a70
+  #商户号
+  mchId: 1604148735
+  # APIv2密钥
+  apiKey: xxxx
+  # APIv3密钥
+  apiV3Key: 1111111
+  # 微信支付V3-url前缀
+  baseUrl: https://api.mch.weixin.qq.com/v3
+  # 支付通知回调, pjm6m9.natappfree.cc 为内网穿透地址
+  combineNotifyUrl: http://pjm6m9.natappfree.cc/pay/payNotify
+  # 退款通知回调, pjm6m9.natappfree.cc 为内网穿透地址
+  refundNotifyUrl: http://pjm6m9.natappfree.cc/pay/refundNotify
+  # 密钥路径,resources根目录下
+  keyPemPath: D:\\project\\yqc\\919yqc\\interface\\src\\youqiancheng\\resources\\apiclient_key.pem
+  #商户证书序列号
+  serialNo: 1BEB8DBF9F7AFF7325EC740C211F3C9AF665CC87

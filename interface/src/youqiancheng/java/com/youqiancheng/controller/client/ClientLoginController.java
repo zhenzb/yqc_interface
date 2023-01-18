@@ -336,7 +336,7 @@ public class ClientLoginController {
         Map<String, Object> map = new HashMap<>();
         map.put("wechatOpenid",userWechatForm.getOpenid());
         List<B01UserDO> list = b01UserService.list(map);
-        B01UserDO b01UserDO = new B01UserDO();
+        B01UserDO b01UserDO;
         if(list.isEmpty()){
              b01UserDO = buildWechatUserDo(userWechatForm);
             int num=b01UserService.insert(b01UserDO);
@@ -355,6 +355,8 @@ public class ClientLoginController {
                 b11InvitationRecordDO.setCreateTime(LocalDateTime.now());
                 b11InvitationRecordService.insert(b11InvitationRecordDO);
             }
+        }else{
+            b01UserDO = list.get(0);
         }
         return ResultVOUtils.success(b01UserDO);
     }

@@ -56,7 +56,8 @@
         d06_pay_order.create_time AS "createTime",
         d06_pay_order.pay_time AS "payTime",
         d06_pay_order.delete_flag AS "deleteFlag",
-        d06_pay_order.end_time AS "endTime"
+        d06_pay_order.end_time AS "endTime",
+        d06_pay_order.set_off_fund AS "setOffFund"
     </sql>
 
     <sql id="d06PayOrderJoins">
@@ -215,7 +216,8 @@
             create_time,
         delete_flag,
             pay_time,
-            end_time
+            end_time,
+        set_off_fund
         )
         VALUES
         <foreach collection ="list" item="d06PayOrder" separator =",">
@@ -243,6 +245,7 @@
             #{d06PayOrder.delete_flag},
             #{d06PayOrder.payTime},
             #{d06PayOrder.endTime}
+            #{d06PayOrder.setOffFund}
         )
         </foreach>
     </insert>

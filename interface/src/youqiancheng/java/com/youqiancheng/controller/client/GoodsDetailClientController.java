@@ -6,6 +6,7 @@ import com.handongkeji.util.EntyPage;
 import com.handongkeji.util.manager.ResultVOUtils;
 import com.youqiancheng.form.client.*;
 import com.youqiancheng.mybatis.dao.C09GoodsSkuDao;
+import com.youqiancheng.mybatis.dao.D05EvaluatePicDao;
 import com.youqiancheng.mybatis.model.*;
 import com.youqiancheng.service.client.service.*;
 import com.youqiancheng.util.QueryMap;
@@ -46,6 +47,8 @@ public class GoodsDetailClientController {
     private B05CollectionClientService b05CollectionService;
     @Autowired
     private B04ShoppingCartClientService b04ShoppingCartService;
+    @Resource
+    private D05EvaluatePicDao d05EvaluatePicDao;
 
     @Resource
     private C09GoodsSkuDao c09GoodsSkuDao;
@@ -126,6 +129,14 @@ public class GoodsDetailClientController {
 
         QueryMap map = new QueryMap(form,page, StatusConstant.CreatFlag.delete.getCode());
         List<D04GoodsEvaluateDO> d04GoodsEvaluateList = d04GoodsEvaluateService.listHDPage(map);
+        for(D04GoodsEvaluateDO d04:d04GoodsEvaluateList){
+            if(d04.getHasPic() ==2){
+                Map<String,Object> d05Map = new HashMap<>();
+                d05Map.put("evaluateId",d04.getId());
+                List<D05EvaluatePicDO> list = d05EvaluatePicDao.list(d05Map);
+                d04.setD05EvaluatePicDO(list);
+            }
+        }
         //封装到分页
         PageSimpleVO<D04GoodsEvaluateDO> d04GoodsEvaluateSimpleVO = new PageSimpleVO<>();
         d04GoodsEvaluateSimpleVO.setTotalNumber(page.getTotalNumber());

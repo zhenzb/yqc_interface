@@ -155,7 +155,7 @@ public class ShopGoodsServiceImpl implements ShopGoodsService {
 //            }
             reBack = goodsDao.insert(goods);
             //新增属性
-            addGoodsSku(goods);
+            //addGoodsSku(goods);
 
             String[] picArr = goods.getPicArr();
             if (!ArrayUtils.isEmpty(picArr)){

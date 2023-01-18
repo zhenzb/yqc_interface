@@ -105,7 +105,7 @@ public class D04GoodsEvaluateClientServiceImpl implements D04GoodsEvaluateClient
             List<D05EvaluatePicDO> d05EvaluatePics =new ArrayList<>();
             for (String str : dto.getPicList()) {
                 D05EvaluatePicDO entity=new D05EvaluatePicDO();
-                entity.setEvaluateId(insert);
+                entity.setEvaluateId(d04GoodsEvaluate.getId());
                 entity.setPicUrl(str);
                 d05EvaluatePics.add(entity);
             }
